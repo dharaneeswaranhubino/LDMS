@@ -29,7 +29,7 @@ const ProofOfDelivery = () => {
   return (
     <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-white via-indigo-50 to-blue-50 p-5 shadow-xl">
       <div className="mb-4">
-        <h2 className="text-xl font-bold text-slate-800">Proof of Delivery</h2>
+        <h2 className="font-semibold text-slate-700">Proof of Delivery</h2>
         <p className="mt-1 text-sm text-slate-500">
           Verify delivery securely using OTP confirmation and delivery proof.
         </p>

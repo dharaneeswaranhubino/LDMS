@@ -16,10 +16,14 @@ export const validateShipmentAddress = (
 
   if (!pickUpAddress.fullAddress.trim()) {
     errors.pickUpFullAddress = "PickUp full address is required";
+  }else if(pickUpAddress.fullAddress.length <5){
+    errors.pickUpFullAddress = "please enter atleast 5 letters"
   }
 
   if (!pickUpAddress.city.trim()) {
     errors.pickUpCity = "PickUp City is required";
+  }else if(pickUpAddress.city.length <2){
+    errors.pickUpCity = "please enter atleast 2 letters"
   }
 
   if (!pickUpAddress.pinCode.trim()) {
@@ -41,10 +45,14 @@ export const validateShipmentAddress = (
 
   if (!deliveryAddress.fullAddress.trim()) {
     errors.deliveryFullAddress = "Delivery full address is required";
+  }else if(deliveryAddress.fullAddress.length <5){
+    errors.deliveryFullAddress = "please enter atleast 5 letters"
   }
 
   if (!deliveryAddress.city.trim()) {
     errors.deliveryCity = "Delivery city is required";
+  }else if(deliveryAddress.city.length <2){
+    errors.deliveryCity = "please enter atleast 2 letters"
   }
 
   if (!deliveryAddress.pinCode.trim()) {

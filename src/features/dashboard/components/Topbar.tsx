@@ -34,12 +34,12 @@ const Topbar = () => {
       </div>
 
       <div className="flex items-center gap-3">
-        {user?.role == "admin" && (
+        {/* {user?.role == "admin" && (
+        )} */}
           <button className="text-2xl flex">
             <i className="fa-regular fa-bell"></i>
             <span className="absolute rounded-lg ml-4 w-[10px] h-[10px] bg-red-500"></span>
           </button>
-        )}
         <div className="ring-2 ring-blue-100 rounded-full">
           <ProfileDropdown />
         </div>

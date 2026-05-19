@@ -40,8 +40,8 @@ const ShipmentAddress = ({
     });
 
     const errorKeyMap: Record<string, string> = {
-      name:"pickUpName",
-      phone:"pickUpPhone",
+      name: "pickUpName",
+      phone: "pickUpPhone",
       fullAddress: "pickUpFullAddress",
       city: "pickUpCity",
       pinCode: "pickUpPinCode",
@@ -61,8 +61,8 @@ const ShipmentAddress = ({
     });
 
     const errorKeyMap: Record<string, string> = {
-      name:"deliveryName",
-      phone:"deliveryPhone",
+      name: "deliveryName",
+      phone: "deliveryPhone",
       fullAddress: "deliveryFullAddress",
       city: "deliveryCity",
       pinCode: "deliveryPinCode",
@@ -192,6 +192,7 @@ const ShipmentAddress = ({
               placeholder="Pin code"
               value={pickUpAddress.pinCode}
               name="pinCode"
+              maxLength={6}
               onChange={handlePickUpAddressChange}
               className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
             />
@@ -247,6 +248,7 @@ const ShipmentAddress = ({
               placeholder="Receiver Phone No"
               value={deliveryAddress.phone}
               name="phone"
+              maxLength={10}
               onChange={handleDeliveryAddressChange}
               className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
             />
@@ -306,6 +308,7 @@ const ShipmentAddress = ({
               placeholder="Pin code"
               value={deliveryAddress.pinCode}
               name="pinCode"
+              maxLength={6}
               onChange={handleDeliveryAddressChange}
               className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
             />
