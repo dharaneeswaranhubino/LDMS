@@ -15,6 +15,7 @@ import CreateAgent from "../features/adminShipment/pages/CreateAgent";
 import AgentManagement from "../features/adminShipment/pages/AgentManagement";
 import AdminAllShipments from "../features/adminShipment/pages/Adminallshipments";
 import AdminLiveTracking from "../features/adminShipment/pages/AdminLiveTracking";
+import DeliveryDetail from "../features/agentShipment/pages/DeliveryDetail";
 
 const AppRoutes = () => {
   return (
@@ -44,6 +45,8 @@ const AppRoutes = () => {
           <Route path="/agentManagement" element={<AgentManagement/>}/>
           <Route path="/allShipment" element={<AdminAllShipments/>}/>
           <Route path="/liveTracking" element={<AdminLiveTracking/>}/>
+
+          <Route path="/deliveryDetail" element={<DeliveryDetail/>}/>
 
         </Route>
       </Routes>

@@ -44,7 +44,7 @@ const AgentDashboard = () => {
 
   // ─── Render ───────────────────────────────────────────────────────────────────
   return (
-    <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 p-5">
+    <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 p-5">
 
       {/* Page header */}
       <div className="flex items-start justify-between mb-5">
