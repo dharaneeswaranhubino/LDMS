@@ -3,17 +3,17 @@ import DetailRow from "./DetailRow";
 const ReceiverDetails = () => {
   return (
     <>
-      <div className="rounded-3xl border border-zinc-800 bg-[#151515] p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">Receiver details</h2>
+      <div className="rounded-3xl border border-indigo-200 bg-white p-4 shadow-lg">
+        <h2 className="text-slate-500 font-semibold">Receiver details</h2>
 
-        <div className="mt-6 flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-500/20 font-bold text-blue-400">
             JD
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold">John Doe</h3>
-            <p className="text-sm text-zinc-400">Receiver • Customer</p>
+            <h3 className="text-slate-500 font-semibold">John Doe</h3>
+            <p className="text-sm text-slate-400">Receiver • Customer</p>
           </div>
         </div>
 

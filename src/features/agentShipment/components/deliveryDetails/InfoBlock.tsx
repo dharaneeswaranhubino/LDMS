@@ -7,15 +7,9 @@ interface InfoBlockProps {
 const InfoBlock = ({ label, value, success }: InfoBlockProps) => {
   return (
     <>
-      <div className="rounded-2xl border border-zinc-700 bg-zinc-900/40 p-4">
-        <p className="text-xs uppercase tracking-wider text-zinc-500">
-          {label}
-        </p>
-        <p
-          className={`mt-2 font-semibold ${
-            success ? "text-green-400" : "text-white"
-          }`}
-        >
+      <div className="flex px-3 items-center gap-1">
+        <p className="text-slate-700">{label} :</p>
+        <p className={`${success ? "text-green-500" : "text-slate-500"}`}>
           {value}
         </p>
       </div>

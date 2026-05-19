@@ -1,54 +1,55 @@
 import InfoBlock from "./InfoBlock";
-import LocationCard from "./LocationCard";
 
 const ShipmentDetails = () => {
   return (
     <>
-      <div className="rounded-3xl border border-zinc-800 bg-[#151515] p-6 shadow-lg">
+      <div className="rounded-2xl border border-indigo-200 bg-white p-4 shadow-lg">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold">Shipment details</h2>
+            <div>
+              <h2 className="font-semibold text-slate-500">Shipment details</h2>
 
-              <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-300">
-                Fragile
-              </span>
+              <div className="flex gap-2 mt-2">
+                <span className="rounded-full border border-yellow-300 bg-yellow-50 px-3 py-1 text-xs font-medium text-yellow-500">
+                  Fragile
+                </span>
 
-              <span className="rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
-                Same day
-              </span>
+                <span className="rounded-full border border-purple-300 bg-purple-50 px-3 py-1 text-xs font-medium text-purple-500">
+                  Same day
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="text-right">
-            <p className="text-sm text-zinc-500">Tracking ID</p>
-            <p className="font-semibold text-green-400">TRK-001-XYZ</p>
+          <div className="text-right gap-2 items-center">
+            <p className="text-sm text-slate-700">Tracking ID :</p>
+            <p className="font-semibold text-slate-500">TRK-001-XYZ</p>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <LocationCard
-            title="Pickup from"
-            address="No.12, MG Road"
-            city="Bangalore - 560001"
-          />
-
-          <LocationCard
-            title="Deliver to"
-            address="No.45, Indiranagar"
-            city="Bangalore - 560038"
-          />
+        <div className="flex justify-between items-center my-3 py-1 px-4 rounded-lg border border-indigo-300 shadow-sm">
+          <div className="text-slate-500">
+            <p>Pickup</p>
+            <p>No. 12, MG Road Bangalore – 560001</p>
+          </div>
+          <i className="fa-solid fa-arrow-right text-slate-500"></i>
+          <div className="text-right text-slate-500">
+            <p>Delivery</p>
+            <p>No. 45, Indiranagar Bangalore – 560038</p>
+          </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-5 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2">
           <InfoBlock label="Item" value="Laptop" />
           <InfoBlock label="Weight" value="2.5 kg" />
           <InfoBlock label="Payment" value="Paid — ₹620" success />
           <InfoBlock label="Type" value="Electronic" />
         </div>
 
-        <div className="mt-6 rounded-2xl border border-zinc-700 bg-zinc-900/50 p-4 text-sm text-zinc-300">
-          <span className="font-medium text-white">Special instruction:</span>{" "}
+        <div className="mt-2 rounded-xl bg-indigo-100 py-2 px-4 text-sm text-indigo-400">
+          <span className="font-medium text-indigo-500">
+            Special instruction:
+          </span>{" "}
           Call before arriving. Handle with care.
         </div>
       </div>

@@ -74,7 +74,7 @@ const menu: MenuItem[] = [
     path: "/deliveryDetail",
     section: "MAIN",
     allowedRole: "deliveryAgent",
-    icon: <i className="fa-solid fa-table-cells-large text-[13px]"></i>,
+    icon: <i className="fa-solid fa-road-circle-check text-[13px]"></i>,
   },
 
   //customer role

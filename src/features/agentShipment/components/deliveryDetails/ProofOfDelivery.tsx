@@ -1,48 +1,100 @@
+import { useState } from "react";
+import delivery_proof from "../../../../assets/delivery_box.jfif";
+
 const ProofOfDelivery = () => {
-  const otp = ["4", "8", "2", "", "", ""];
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
+  const handleChange = (value, index) => {
+    if (!/^\d*$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+
+    if (value && index < otp.length - 1) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const isOtpComplete = otp.every((digit) => digit !== "");
+
   return (
-    <>
-      <div className="rounded-3xl border border-zinc-800 bg-[#151515] p-6 shadow-lg">
-        <h2 className="text-lg font-semibold">Proof of delivery</h2>
-
-        <p className="mt-2 text-sm text-zinc-400">
-          Send OTP to customer's phone, then enter it below to confirm delivery.
-        </p>
-
-        <button className="mt-6 w-full rounded-2xl border border-blue-500/30 bg-blue-500/10 py-4 font-medium text-blue-300 transition-all hover:bg-blue-500/20">
-          Send OTP to customer
-        </button>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              value={digit}
-              readOnly
-              className="h-14 w-14 rounded-2xl border border-zinc-700 bg-zinc-900 text-center text-xl font-bold outline-none focus:border-blue-500"
-            />
-          ))}
-        </div>
-
-        <div className="mt-6 flex min-h-[180px] flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/40 p-6 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-800 text-2xl">
-            📷
-          </div>
-
-          <h3 className="mt-4 font-medium">Upload delivery photo</h3>
-
-          <p className="mt-1 text-sm text-zinc-500">Optional — tap to attach</p>
-        </div>
-
-        <button className="mt-6 w-full cursor-not-allowed rounded-2xl border border-zinc-700 bg-zinc-800 py-4 font-medium text-zinc-500">
-          Confirm delivery
-        </button>
-
-        <p className="mt-3 text-center text-xs text-zinc-500">
-          Enter full OTP to activate confirm button
+    <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-white via-indigo-50 to-blue-50 p-5 shadow-xl">
+      <div className="mb-4">
+        <h2 className="text-xl font-bold text-slate-800">Proof of Delivery</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Verify delivery securely using OTP confirmation and delivery proof.
         </p>
       </div>
-    </>
+      <button className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 py-2 font-semibold text-white shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-lg">
+        Send OTP to Customer
+      </button>
+
+      <div className="mt-5 flex items-center justify-center gap-3">
+        {otp.map((digit, index) => (
+          <input
+            key={index}
+            id={`otp-${index}`}
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
+            value={digit}
+            onChange={(e) => handleChange(e.target.value, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            className="h-14 w-14 rounded-2xl border-2 border-indigo-200 bg-white text-center text-2xl font-bold text-slate-800 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+          />
+        ))}
+      </div>
+
+      <div className="relative mt-5 overflow-hidden rounded-3xl border border border-indigo-300 text-center shadow-inner">
+        <div
+          className=" brightness-80 w-full hover:scale-110 transition duration-700"
+          style={{
+            backgroundImage: `url(${delivery_proof})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="relative z-10 flex flex-col items-center justify-center py-2 text-white">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20">
+              <i className="fa-solid fa-camera text-2xl"></i>
+            </div>
+
+            <h3 className="mt-4 text-lg font-semibold">
+              Upload Delivery Photo
+            </h3>
+
+            <p className="mt-1 text-sm text-slate-200">
+              Optional — Tap to attach proof image
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button
+        disabled={!isOtpComplete}
+        className={`mt-6 w-full rounded-2xl py-2 font-semibold text-white shadow-md transition-all duration-300 ${
+          isOtpComplete
+            ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-[1.01] hover:shadow-lg"
+            : "cursor-not-allowed bg-slate-300"
+        }`}
+      >
+        Confirm Delivery
+      </button>
+      <p className="mt-3 text-center text-xs text-slate-500">
+        {isOtpComplete
+          ? "OTP verified. Ready to confirm delivery."
+          : "Enter full OTP to activate confirmation"}
+      </p>
+    </div>
   );
 };
 
