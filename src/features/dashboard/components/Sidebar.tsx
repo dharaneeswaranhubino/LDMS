@@ -17,13 +17,15 @@ interface MenuItem {
 }
 
 const roleColors = {
-  admin: "bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 text-cyan-800",
-  deliveryAgent: "bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 text-indigo-600 ",
+  admin:
+    "bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 text-cyan-800",
+  deliveryAgent:
+    "bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 text-indigo-600 ",
   customer: "bg-blue-500 text-white",
 };
 
 const menu: MenuItem[] = [
-  //customer role
+  //admin role
   {
     name: "Admin Dashboard",
     path: "/adminDashboard",
@@ -76,6 +78,21 @@ const menu: MenuItem[] = [
     allowedRole: "deliveryAgent",
     icon: <i className="fa-solid fa-road-circle-check text-[13px]"></i>,
   },
+  {
+    name: "Customer Chat",
+    path: "/customerChat",
+    section: "SUPPORT",
+    allowedRole: "deliveryAgent",
+    icon: <i className="fa-regular fa-comment text-[13px]"></i>,
+    badge: 2,
+  },
+  {
+    name: "My profile",
+    path: "/profile",
+    section: "ACCOUNT",
+    allowedRole: "deliveryAgent",
+    icon: <i className="fa-regular fa-user text-[13px]"></i>,
+  },
 
   //customer role
   {
@@ -122,8 +139,8 @@ const menu: MenuItem[] = [
     icon: <i className="fa-regular fa-file-lines text-[13px]"></i>,
   },
   {
-    name: "Chat",
-    path: "/chat",
+    name: "Agent Chat",
+    path: "/agentChat",
     section: "SUPPORT",
     allowedRole: "customer",
     icon: <i className="fa-regular fa-comment text-[13px]"></i>,
@@ -190,9 +207,11 @@ const Sidebar = () => {
       }`}
     >
       <div className="px-3 py-4">
-      <div className="text-xl font-bold ml-10 mb-4 whitespace-nowrap">{`${getFirstLetterCapital(user?.role)} Panel`}</div>
+        <div className="text-xl font-bold ml-10 mb-4 whitespace-nowrap">{`${getFirstLetterCapital(user?.role)} Panel`}</div>
         {sections.map((section) => {
-          const sectionItems = filteredMenu.filter((item) => item.section === section);
+          const sectionItems = filteredMenu.filter(
+            (item) => item.section === section,
+          );
           return (
             <div key={section} className="mb-5">
               <p className="text-[11px] text-slate-400 font-semibold uppercase mb-2 px-2">
@@ -221,7 +240,6 @@ const Sidebar = () => {
                         >
                           {item.icon}
                         </div>
-
                         <span>{item.name}</span>
                       </div>
 

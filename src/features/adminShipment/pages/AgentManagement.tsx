@@ -49,6 +49,33 @@ const agentsData = [
   },
 ];
 
+const headerCards = [
+  {
+    name: "Total Agents",
+    count: "4",
+    icon: <i className="fa-solid fa-users text-lg text-sky-600"></i>,
+    bgColor: "bg-sky-100",
+  },
+  {
+    name: "Available",
+    count: "2",
+    icon: <i className="fa-solid fa-user-check text-lg text-lime-600"></i>,
+    bgColor: "bg-lime-100",
+  },
+  {
+    name: "Busy Today",
+    count: "2",
+    icon: <i className="fa-solid fa-clock text-lg text-orange-600"></i>,
+    bgColor: "bg-orange-100",
+  },
+  {
+    name: "Inactive",
+    count: "0",
+    icon: <i className="fa-solid fa-user-slash text-lg text-slate-500"></i>,
+    bgColor: "bg-slate-100",
+  },
+];
+
 const getStatusStyle = (status: string) => {
   switch (status) {
     case "Available":
@@ -106,81 +133,57 @@ const AgentManagement = () => {
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-cyan-100 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
+      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {headerCards.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white border border-slate-200 rounded-2xl py-2 px-4 shadow-sm flex items-center justify-between"
+          >
             <div>
-              <h2 className="text-[32px] font-bold text-slate-800">
-                {agentsData.length}
+              <h2 className="text-2xl font-semibold text-slate-800">
+                {item.count}
               </h2>
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                Total Agents
+              <p className="text-[11px] text-slate-400 uppercase tracking-wide mt-1">
+                {item.name}
               </p>
             </div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100">
-              <i className="fa-solid fa-users text-lg text-sky-600"></i>
+            <div
+              className={`flex h-14 w-14 items-center justify-center rounded-2xl ${item.bgColor}`}
+            >
+              {item.icon}
             </div>
           </div>
-        </div>
-
-        <div className="rounded-2xl border border-lime-100 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-[32px] font-bold text-slate-800">
-                {
-                  agentsData.filter((agent) => agent.status === "Available")
-                    .length
-                }
-              </h2>
-
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                Available
-              </p>
-            </div>
-
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-100">
-              <i className="fa-solid fa-user-check text-lg text-lime-600"></i>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-orange-100 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-[32px] font-bold text-slate-800">
-                {agentsData.filter((agent) => agent.status === "Busy").length}
-              </h2>
-
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                Busy Today
-              </p>
-            </div>
-
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100">
-              <i className="fa-solid fa-clock text-lg text-orange-600"></i>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-[32px] font-bold text-slate-800">0</h2>
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                Inactive
-              </p>
-            </div>
-
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100">
-              <i className="fa-solid fa-user-slash text-lg text-slate-500"></i>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="mt-5 flex gap-2">
-        <div className="flex h-11 w-full items-center justify-start rounded-xl border border-cyan-100 bg-white text-slate-500 shadow-sm px-2">
-          <i className="fa-solid fa-magnifying-glass"></i>
+        <div
+          className={`flex items-center gap-2 border bg-white rounded-xl h-10 px-3 shadow-sm
+              transition-all duration-300 overflow-hidden cursor-pointer flex-1 
+              `}
+          // ${searchFocused ? "border-indigo-400" : "border-slate-200 hover:border-indigo-300"}
+          // onClick={() => setSearchFocused(true)}
+        >
+          <i className="fa-solid fa-magnifying-glass text-slate-400 text-[14px] flex-shrink-0" />
+          <input
+            type="text"
+            // value={searchQuery}
+            // onChange={(e) => setSearchQuery(e.target.value)}
+            // onFocus={() => setSearchFocused(true)}
+            // onBlur={() => {
+            //   if (!searchQuery) setSearchFocused(false);
+            // }}
+            placeholder="Search by agent ID, agent name"
+            className={`bg-transparent outline-none text-[13px] text-slate-700 placeholder-slate-400 w-full`}
+            //   transition-all duration-300 ${searchFocused ? "w-full" : "w-0"}
+          />
+          {/* {searchQuery && (
+              <button
+                className="text-slate-400 hover:text-slate-600 flex-shrink-0"
+              >
+                <i className="fa-solid fa-xmark text-[13px]" />
+              </button>
+            )} */}
         </div>
 
         <select

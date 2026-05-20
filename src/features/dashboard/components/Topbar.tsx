@@ -36,10 +36,17 @@ const Topbar = () => {
       <div className="flex items-center gap-3">
         {/* {user?.role == "admin" && (
         )} */}
-          <button className="text-2xl flex">
-            <i className="fa-regular fa-bell"></i>
-            <span className="absolute rounded-lg ml-4 w-[10px] h-[10px] bg-red-500"></span>
-          </button>
+        <button className="text-2xl flex">
+          <i className="fa-regular fa-bell"></i>
+          {/* <span className="absolute rounded-lg ml-4 w-[10px] h-[10px] bg-red-500"></span> */}
+          <span className="absolute ml-4 flex items-center justify-center h-3 w-3">
+            {/* Ping animation */}
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400"></span>
+
+            {/* Solid dot */}
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+          </span>
+        </button>
         <div className="ring-2 ring-blue-100 rounded-full">
           <ProfileDropdown />
         </div>

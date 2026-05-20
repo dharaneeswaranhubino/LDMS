@@ -28,9 +28,32 @@ const shipments = [
   },
 ];
 
+const cardContent = [
+  {
+    shipmentStatus: "Active shipments",
+    count: 3,
+    statusName: "In progress",
+  },
+  {
+    shipmentStatus: "Delivered",
+    count: 12,
+    statusName: "All Time",
+  },
+  {
+    shipmentStatus: "Pending payment",
+    count: 1,
+    statusName: "Action neede",
+  },
+  {
+    shipmentStatus: "Total spent",
+    count: "₹4280",
+    statusName: "This month",
+  },
+];
+
 const CustomerDashboard = () => {
   const navigate = useNavigate();
-  const {user} = useAppSelector((state)=>state.auth)
+  const { user } = useAppSelector((state) => state.auth);
 
   const sendShipment = async () => {
     navigate("/sendShipment");
@@ -49,48 +72,25 @@ const CustomerDashboard = () => {
           </p>
         </div>
 
-        <button onClick={sendShipment} className="h-[42px] px-5 rounded-xl bg-blue-500 hover:bg-blue-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-sm">
+        <button
+          onClick={sendShipment}
+          className="h-[42px] px-5 rounded-xl bg-blue-500 hover:bg-blue-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-sm"
+        >
           <i className="fa-solid fa-plus text-[11px]"></i>
           Send new shipment
         </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4 mt-6">
-        <div className="bg-white border border-slate-200 rounded-2xl p-4">
-          <p className="text-[11px] text-slate-400 uppercase font-semibold">
-            Active shipments
-          </p>
-          <h2 className="text-[30px] font-bold text-slate-800 mt-2">3</h2>
-          <p className="text-[12px] text-slate-500 mt-1">In progress</p>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-2xl p-4">
-          <p className="text-[11px] text-slate-400 uppercase font-semibold">
-            Delivered
-          </p>
-          <h2 className="text-[30px] font-bold text-slate-800 mt-2">12</h2>
-          <p className="text-[12px] text-slate-500 mt-1">All time</p>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-2xl p-4">
-          <p className="text-[11px] text-slate-400 uppercase font-semibold">
-            Pending payment
-          </p>
-
-          <h2 className="text-[30px] font-bold text-slate-800 mt-2">1</h2>
-
-          <p className="text-[12px] text-slate-500 mt-1">Action needed</p>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-2xl p-4">
-          <p className="text-[11px] text-slate-400 uppercase font-semibold">
-            Total spent
-          </p>
-
-          <h2 className="text-[30px] font-bold text-slate-800 mt-2">₹4,280</h2>
-
-          <p className="text-[12px] text-slate-500 mt-1">This month</p>
-        </div>
+        {cardContent.map((item, index) => (
+          <div key={index} className="bg-white border border-slate-200 rounded-2xl py-2 px-4">
+            <p className="text-sm text-slate-500 font-semibold">
+              {item.shipmentStatus}
+            </p>
+            <h2 className="text-xl font-semibold text-slate-800">{item.count}</h2>
+            <p className="text-xs text-slate-500 mt-1">{item.statusName}</p>
+          </div>
+        ))}
       </div>
 
       <div className="mt-6">
