@@ -118,7 +118,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
             View
           </button>
 
-          {isPendingPayment && (
+          {/* {isPendingPayment && (
             <button
               onClick={() => navigate(`/payment/${item.id}`)}
               className="py-[7px] px-4 border border-amber-300 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all text-[12px] font-medium"
@@ -126,7 +126,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
               <i className="fa-solid fa-credit-card mr-1" />
               Pay now · ₹{item.amount}
             </button>
-          )}
+          )} */}
 
           {!["CANCELLED", "PENDING"].includes(status) && (
             <button

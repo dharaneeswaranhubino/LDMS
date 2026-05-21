@@ -3,6 +3,8 @@ import { type AgentFormData } from "../adminTypes";
 import { validateAgentDetails } from "../components/agentDetailsValidation";
 import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
 import { createAgentDetails } from "../adminSlice";
+import { toast } from "react-toastify";
+import notificationSound from "../../../assets/universfield-new-notification-051-494246.mp3"
 
 const vehicleTypes = ["Bike", "Scooter", "Van", "Mini Truck", "Truck"];
 
@@ -75,6 +77,10 @@ const CreateAgent = () => {
       licenseNumber: "",
       serviceZone: "",
     });
+
+    const audio = new Audio(notificationSound);
+    audio.play();
+    toast.success("new Agent added Successfully!");
   };
 
   return (

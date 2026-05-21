@@ -12,9 +12,9 @@ export const createAgentDetails = createAsyncThunk<
     "admin/createAgentDetails",
     async (data: AgentFormData, { rejectWithValue }) => {
         try {
-            console.log("data: ",data);
+            // console.log("data: ",data);
             const res = await api.post("/deliveryAgents", data);
-            return res.data.data;
+            return res.data?.data;
 
         } catch (err: unknown) {
             const error = err as AxiosError<{ message: string }>

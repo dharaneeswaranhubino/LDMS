@@ -3,7 +3,6 @@ import type { ShipmentResponse, ShipmentState } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
 
-
 export const createShipment = createAsyncThunk<
     ShipmentResponse,       // ← return type
     CreateShipmentPayload,  // ← arg type

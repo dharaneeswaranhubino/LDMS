@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
+import useSound from "use-sound";
+import notificationSound from "../../../../assets/universfield-new-notification-051-494246.mp3"
 interface PriceBreakdownProps {
   prevStep: () => void;
   onPaymentSuccess: (amount: number) => void;
@@ -73,6 +75,7 @@ const PriceBreakdown = ({
   }, []);
 
   const handlePayment = () => {
+    
     // if (!scriptLoaded) {
     //   alert("Payment gateway is loading. Please wait and try again.");
     //   return;
@@ -121,6 +124,10 @@ const PriceBreakdown = ({
 
     // const rzp = new window.Razorpay(options);
     // rzp.open();
+    const audio = new Audio(notificationSound);
+    // audio.volume = 0.7;
+    audio.play();
+    toast.success("Shipment Created Successfully!");
   };
 
   // SUCCESS SCREEN

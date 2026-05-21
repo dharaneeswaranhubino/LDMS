@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import shipmentReducer from "../features/shipment/shipmentSlice";
-import adminReducer from "../features/adminShipment/adminSlice"
+import adminReducer from "../features/adminShipment/adminSlice";
+import agentReducer from "../features/agentShipment/agentSlice";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         shipment: shipmentReducer,
         admin:adminReducer,
+        agent:agentReducer,
     }
 })
 
