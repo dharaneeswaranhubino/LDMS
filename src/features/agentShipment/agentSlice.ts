@@ -44,9 +44,9 @@ const agentSlice = createSlice({
                 console.log(state.statusState);
                 
             })
-            .addCase(updateTrackStatus.rejected, (state, action) => {
+            .addCase(updateTrackStatus.rejected, (state) => {
                 state.loading = false;
-                state.error = action.payload || "Failed to fetch agent details"
+                // state.error = action.payload || "Failed to fetch agent details"
             });
     }
 })

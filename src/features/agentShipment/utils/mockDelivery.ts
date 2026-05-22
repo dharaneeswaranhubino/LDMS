@@ -9,7 +9,7 @@ export const DELIVERY_STATUS = {
 export const deliveryMock = {
     id: 1,
     tracking_Id: "TRK-001-XYZ",
-    currentStatus: DELIVERY_STATUS.PICKED_UP,
+    currentStatus: DELIVERY_STATUS.IN_TRANSIT,
     timeline: [
         {
             key: DELIVERY_STATUS.OUT_FOR_PICKUP,

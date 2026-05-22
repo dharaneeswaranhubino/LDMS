@@ -3,21 +3,21 @@ import delivery_proof from "../../../../assets/delivery_box.jfif";
 
 const ProofOfDelivery = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-
-  const handleChange = (value, index) => {
+  const handleChange = (value: string, index: number) => {
     if (!/^\d*$/.test(value)) return;
-
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
     setOtp(newOtp);
-
     if (value && index < otp.length - 1) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       nextInput?.focus();
     }
   };
 
-  const handleKeyDown = (e, index) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       prevInput?.focus();

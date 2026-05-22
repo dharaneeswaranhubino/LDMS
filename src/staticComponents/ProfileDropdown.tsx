@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../shared/hooks/reduxHooks";
-import { logoutUser } from "../../auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../shared/hooks/reduxHooks";
+import { logoutUser } from "../features/auth/authSlice";
+
 
 const ProfileDropdown = () => {
   const dispatch = useAppDispatch();

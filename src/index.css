@@ -1,4 +1,8 @@
 @import "tailwindcss";
+
+body{
+  font-family: "Inter", sans-serif;
+}
 /* Hide scrollbar */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
@@ -35,7 +39,6 @@ aside {
 html {
   scroll-behavior: smooth;
 }
-
 
 /* :root {
   --text: #6b6375;

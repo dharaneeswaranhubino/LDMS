@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../shared/hooks/reduxHooks";
-import { logoutUser } from "../../auth/authSlice";
-import useRole from "../../../shared/hooks/useRole";
+import { useAppDispatch, useAppSelector } from "../shared/hooks/reduxHooks";
+import useRole from "../shared/hooks/useRole";
+import { logoutUser } from "../features/auth/authSlice";
 
 interface MenuItem {
   name: string;
@@ -207,7 +204,7 @@ const Sidebar = () => {
       }`}
     >
       <div className="px-3 py-4">
-        <div className="text-xl font-bold ml-10 mb-4 whitespace-nowrap">{`${getFirstLetterCapital(user?.role)} Panel`}</div>
+        <div className="text-xl font-bold flex justify-center item-center my-4 whitespace-nowrap">{`${getFirstLetterCapital(user?.role)} Panel`}</div>
         {sections.map((section) => {
           const sectionItems = filteredMenu.filter(
             (item) => item.section === section,

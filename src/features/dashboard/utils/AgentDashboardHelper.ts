@@ -7,7 +7,7 @@ export const MOCK_PROFILE: AgentProfile = {
     onTimePercent: 95,
     rating: 4.8,
     totalDelivered: 245,
-    todayAssigned: 4,
+    todayAssigned: 1,
     todayCompleted: 1,
     todayActive: 1,
 };
@@ -81,8 +81,6 @@ export const ALL_SLOTS = [
     { start: "03:00 PM", end: "04:00 PM" },
     { start: "04:00 PM", end: "05:00 PM" },
     { start: "05:00 PM", end: "06:00 PM" },
-    { start: "06:00 PM", end: "07:00 PM" },
-    { start: "08:00 PM", end: "09:00 PM" },
 ];
 
 export const STATUS_CONFIG: Record<ShipmentStatus, { label: string; style: string; icon: string }> = {
@@ -97,18 +95,18 @@ export const STATUS_CONFIG: Record<ShipmentStatus, { label: string; style: strin
 };
 
 export const isActive = (s: ShipmentStatus) =>
-  ["PICKED_UP", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELAYED"].includes(s);
+    ["PICKED_UP", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELAYED"].includes(s);
 
 export const isDone = (s: ShipmentStatus) =>
-  ["DELIVERED", "COMPLETED"].includes(s);
+    ["DELIVERED", "COMPLETED"].includes(s);
 
 export const getGreeting = () => {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 17) return "Good afternoon";
-  return "Good evening";
+    const h = new Date().getHours();
+    if (h < 12) return "Good morning";
+    if (h < 17) return "Good afternoon";
+    return "Good evening";
 };
 
 export const today = new Date().toLocaleDateString("en-IN", {
-  weekday: "long", day: "numeric", month: "long", year: "numeric",
+    weekday: "long", day: "numeric", month: "long", year: "numeric",
 });

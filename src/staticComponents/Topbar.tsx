@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../../shared/hooks/reduxHooks";
 import ProfileDropdown from "./ProfileDropdown";
+import { useAppSelector } from "../shared/hooks/reduxHooks";
 
 const Topbar = () => {
   const { user } = useAppSelector((state) => state.auth);
