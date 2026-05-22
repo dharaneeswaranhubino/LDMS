@@ -7,6 +7,8 @@ export const updateTrackStatus = createAsyncThunk(
     "agent/updateTrackStatus",
     async ({ id, data }: UpdateTrackStatus, { rejectWithValue }) => {
         try {
+            console.log("{ id, data } :",{ id, data });
+            
             const res = await api.patch(`shipments/status/${id}`, data)
             return res.data?.data
 
@@ -17,7 +19,7 @@ export const updateTrackStatus = createAsyncThunk(
     })
 
 const initialState = {
-    agents: [],
+    statusState: {},
     loading: false,
     error: null,
 }
@@ -37,8 +39,10 @@ const agentSlice = createSlice({
             })
             .addCase(updateTrackStatus.fulfilled, (state, action) => {
                 state.loading = false;
-                state.agents = action.payload;
+                state.statusState = action.payload;
                 state.error = null;
+                console.log(state.statusState);
+                
             })
             .addCase(updateTrackStatus.rejected, (state, action) => {
                 state.loading = false;

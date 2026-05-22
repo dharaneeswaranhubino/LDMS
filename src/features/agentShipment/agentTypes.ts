@@ -4,7 +4,7 @@ export interface StatusUpdate{
 }
 export interface UpdateTrackStatus{
     id:string;
-    data:string;
+    data:StatusUpdate;
 }
 export interface AgentState {
   shipments: AgentResponse[];
