@@ -1,73 +1,132 @@
-# React + TypeScript + Vite
+# LDMS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript + Vite dashboard for a logistics delivery management system. This front-end app provides role-based views for customers, administrators, and delivery agents.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Landing page with marketing and navigation sections
+- Authentication with login, registration, and refresh-token support
+- Protected dashboard layout with role-specific routes
+- Customer workflows:
+  - Send shipments
+  - View shipment history
+  - Track shipments
+  - Manage profile
+- Admin workflows:
+  - Register delivery agents
+  - Manage agents
+  - View all shipments
+  - Live tracking dashboard
+- Agent workflows:
+  - Delivery dashboard
+  - Delivery details and status updates
+  - Delivery history
+- Notification support via `react-toastify`
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- Redux Toolkit
+- React Router DOM 7
+- Axios with automatic auth token refresh
+- Tailwind CSS
+- React Toastify
+- React Select
+- Recharts
+- Framer Motion
+- Lucide React
+- FontAwesome
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/App.tsx` — root application component
+- `src/app/AppRoutes.tsx` — route definitions and lazy page loading
+- `src/app/store.ts` — Redux store configuration
+- `src/features/auth/` — authentication pages and state
+- `src/features/shipment/` — customer shipment flows
+- `src/features/adminShipment/` — admin agent management
+- `src/features/agentShipment/` — delivery agent workflows
+- `src/staticComponents/` — shared dashboard layout components
+- `src/shared/` — reusable UI components and hooks
+- `src/lib/axios.ts` — API client with interceptors and token handling
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Setup
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Install dependencies:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Create an environment file named `.env` or `.env.local` with:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_BASE_URL=http://localhost:5000/api/v1
 ```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+Run ESLint:
+
+```bash
+npm run lint
+```
+
+## Routing Overview
+
+Public routes:
+
+- `/` — Landing page
+- `/login` — Login page
+- `/register` — Registration page
+
+Protected routes (require authentication):
+
+- `/adminDashboard`
+- `/customerDashboard`
+- `/agentDashboard`
+- `/profile`
+- `/sendShipment`
+- `/myShipments`
+- `/trackShipments`
+- `/agentRegisteration`
+- `/agentManagement`
+- `/allShipment`
+- `/liveTracking`
+- `/deliveryDetail`
+- `/deliveryHistory`
+
+## API Integration
+
+The app uses Axios with `withCredentials: true`, so cookies are sent automatically.
+
+The API client handles:
+
+- attaching `Authorization: Bearer <token>` headers
+- refreshing access tokens on 401 responses
+- redirecting unauthenticated users to `/login`
+
+## Notes
+
+- Authentication is initialized automatically on page load via `src/features/auth/authSlice.ts`.
+- Dashboard content is wrapped in `ProtectedRoute` to ensure only authenticated users can access protected pages.
+- Tailwind CSS is configured using the `@tailwindcss/vite` plugin.
+

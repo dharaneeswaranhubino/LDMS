@@ -20,7 +20,7 @@ const CreateShipment = lazy(
   () => import("../features/shipment/pages/CreateShipment"),
 );
 const ProfilePage = lazy(() => import("../features/profile/ProfilePage"));
-const MyShipment = lazy(() => import("../features/shipment/pages/MyShipment"));
+const MyShipments = lazy(() => import("../features/shipment/pages/MyShipment"));
 const TrackShipment = lazy(
   () => import("../features/shipment/pages/TrackShipment"),
 );
@@ -38,6 +38,9 @@ const AdminLiveTracking = lazy(
 );
 const DeliveryDetail = lazy(
   () => import("../features/agentShipment/pages/DeliveryDetail"),
+);
+const DeliveryHistory = lazy(
+  () => import("../features/agentShipment/pages/DeliveryHistory"),
 );
 
 const AppRoutes = () => {
@@ -64,16 +67,20 @@ const AppRoutes = () => {
           >
             <Route path="/adminDashboard" element={<AdminDashboard />} />
             <Route path="/customerDashboard" element={<CustomerDashboard />} />
-            <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/profile" element={<ProfilePage />} />
+            {/* customer screens */}
             <Route path="/sendShipment" element={<CreateShipment />} />
-            <Route path="/myShipments" element={<MyShipment />} />
+            <Route path="/myShipments" element={<MyShipments />} />
             <Route path="/trackShipments" element={<TrackShipment />} />
+            {/* admin screens */}
             <Route path="/agentRegisteration" element={<CreateAgent />} />
             <Route path="/agentManagement" element={<AgentManagement />} />
             <Route path="/allShipment" element={<AdminAllShipments />} />
             <Route path="/liveTracking" element={<AdminLiveTracking />} />
+            {/* agent screens */}
+            <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/deliveryDetail" element={<DeliveryDetail />} />
+            <Route path="/deliveryHistory" element={<DeliveryHistory />} />
           </Route>
         </Routes>
       </Suspense>

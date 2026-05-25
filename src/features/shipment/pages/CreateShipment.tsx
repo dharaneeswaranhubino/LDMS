@@ -113,7 +113,7 @@ const CreateShipment = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen p-6 overflow-hidden">
+    <div className="rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-3 overflow-hidden">
       <div>
         <h1 className="text-2xl font-semibold text-slate-800">
           Send new shipment

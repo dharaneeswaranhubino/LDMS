@@ -60,7 +60,7 @@ const CustomerDashboard = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-slate-50 p-5 mt-2">
+    <div className="rounded-2xl bg-slate-50 bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-3">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-slate-800">

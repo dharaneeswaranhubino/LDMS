@@ -25,8 +25,8 @@ const ShipmentToolbar = ({
     <div className="flex gap-2 mt-3 mb-4">
       {/* Search */}
       <div
-        className="flex items-center gap-2 border bg-white rounded-lg h-10 px-3 shadow-sm
-        transition-all duration-300 overflow-hidden flex-1 border-violet-400"
+        className="flex items-center gap-2 border border-slate-300 focus-within:border-violet-400 bg-white rounded-lg h-10 px-3 shadow-sm
+        transition-all duration-300 overflow-hidden flex-1"
         onClick={() => {
           if (!searchFocused) {
             setSearchFocused(true);
@@ -64,7 +64,6 @@ const ShipmentToolbar = ({
         )}
       </div>
 
-      {/* Sort */}
       <select
         value={sortKey}
         onChange={(e) => setSortKey(e.target.value as SortKey)}

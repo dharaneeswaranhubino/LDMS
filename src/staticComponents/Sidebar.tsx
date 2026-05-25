@@ -3,6 +3,9 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../shared/hooks/reduxHooks";
 import useRole from "../shared/hooks/useRole";
 import { logoutUser } from "../features/auth/authSlice";
+import { TbListDetails, TbTruckDelivery } from "react-icons/tb";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaCubesStacked } from "react-icons/fa6";
 
 interface MenuItem {
   name: string;
@@ -66,14 +69,21 @@ const menu: MenuItem[] = [
     path: "/agentDashboard",
     section: "MAIN",
     allowedRole: "deliveryAgent",
-    icon: <i className="fa-solid fa-table-cells-large text-[13px]"></i>,
+    icon: <BiSolidDashboard size={18}/>,
   },
   {
     name: "Delivery Details",
     path: "/deliveryDetail",
     section: "MAIN",
     allowedRole: "deliveryAgent",
-    icon: <i className="fa-solid fa-road-circle-check text-[13px]"></i>,
+    icon: <TbTruckDelivery size={18}/>,
+  },
+  {
+    name: "Delivery History",
+    path: "/deliveryHistory",
+    section: "MAIN",
+    allowedRole: "deliveryAgent",
+    icon: <TbListDetails size={18}/>,
   },
   {
     name: "Customer Chat",
@@ -97,7 +107,7 @@ const menu: MenuItem[] = [
     path: "/customerDashboard",
     section: "MAIN",
     allowedRole: "customer",
-    icon: <i className="fa-solid fa-table-cells-large text-[13px]"></i>,
+    icon: <BiSolidDashboard size={18}/>,
   },
   {
     name: "Send shipment",
@@ -111,7 +121,7 @@ const menu: MenuItem[] = [
     path: "/myShipments",
     section: "MAIN",
     allowedRole: "customer",
-    icon: <i className="fa-solid fa-cube text-[13px]"></i>,
+    icon: <FaCubesStacked size={18}/>,
     badge: 3,
   },
   {
@@ -166,7 +176,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { hasRole } = useRole();
-  const { isInitialized, user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   const filteredMenu = menu.filter((item) => hasRole(item.allowedRole));
 

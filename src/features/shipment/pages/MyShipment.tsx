@@ -15,7 +15,7 @@ import ShipmentEmpty from "../components/myShipmentComponents/ShipmentEmpty";
 import ShipmentTabs from "../components/myShipmentComponents/ShipmentTabs";
 import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar";
 
-const MyShipment = () => {
+const MyShipments = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -103,7 +103,7 @@ const MyShipment = () => {
 
   return (
     <>
-      <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-slate-50 via-sky-50 to-purple-50 p-5">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h1 className="text-2xl font-semibold text-slate-800">
@@ -155,7 +155,7 @@ const MyShipment = () => {
             onCreate={() => navigate("/sendShipment")}
           />
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 space-y-3 max-h-[600px] overflow-y-hidden overflow-y-scroll scrollbar-none rounded-2xl">
             {displayed.map((item: ShipmentResponse) => {
               return (
                 <ShipmentCard
@@ -184,4 +184,4 @@ const MyShipment = () => {
   );
 };
 
-export default MyShipment;
+export default MyShipments;

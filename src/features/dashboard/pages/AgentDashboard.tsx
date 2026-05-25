@@ -65,9 +65,9 @@ const AgentDashboard = () => {
 
   return (
     <div className=" rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 p-5">
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-5"> 
         <div>
-          <h1 className="text-2xl font-semibold text-slate-800">
+          <h1 className="text-2xl font-semibold text-slate-600">
             {getGreeting()}, {profile.name.split(" ")[0]}!
           </h1>
           <p className="text-[13px] text-slate-500 mt-1">{today}</p>

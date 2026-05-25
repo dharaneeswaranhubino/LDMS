@@ -168,7 +168,7 @@ const TrackShipment = () => {
   };
   return (
     <>
-      <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-slate-50 via-sky-50 to-purple-50 p-5 mt-2">
+      <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
         <div className="flex items-center gap-3">
           <div className="flex items-center border border-slate-200 bg-white rounded-lg h-10 px-3 text-[18px] outline-none hover:border-violet-400 shadow-sm">
             <i className="fa-solid fa-arrow-left"></i>

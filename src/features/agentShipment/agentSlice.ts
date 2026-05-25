@@ -1,54 +1,121 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
 import type { UpdateTrackStatus } from "./agentTypes";
 import type { AxiosError } from "axios";
+import type { DeliveriesResponse } from "./agentTypes";
+import { mockDeliveries } from "./utils/mockDelivery";
 
 export const updateTrackStatus = createAsyncThunk(
-    "agent/updateTrackStatus",
-    async ({ id, data }: UpdateTrackStatus, { rejectWithValue }) => {
-        try {
-            console.log("{ id, data } :",{ id, data });
-            
-            const res = await api.patch(`shipments/status/${id}`, data)
-            return res.data?.data
+  "agent/updateTrackStatus",
+  async ({ id, data }: UpdateTrackStatus, { rejectWithValue }) => {
+    try {
+      console.log("{ id, data } :", { id, data });
 
-        } catch (err: unknown) {
-            const error = err as AxiosError<{ message: string }>;
-            return rejectWithValue(error.response?.data?.message || "Failed to update agent status")
-        }
-    })
+      const res = await api.patch(`shipments/status/${id}`, data);
+      return res.data?.data;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update agent status",
+      );
+    }
+  },
+);
+
+export const getMyDeliveries = createAsyncThunk(
+  "agent/getMyDeliveries",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get<DeliveriesResponse>(
+        "/api/v1/shipments/myDeliveries",
+      );
+      return res.data.data;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch deliveries",
+      );
+    }
+  },
+);
 
 const initialState = {
-    statusState: {},
-    loading: false,
-    error: null,
-}
+  deliveries: mockDeliveries,
+
+  statusState: {},
+  search: "",
+  priorityFilter: "ALL",
+  activeTab: "ALL",
+
+  currentPage: 1,
+  itemsPerPage: 6,
+
+  loading: false,
+  error: null,
+};
 
 const agentSlice = createSlice({
-    name: "agent",
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        // const pending = (state) => { state.loading = true; state.error = null; };
-        // const rejected = (state, action: PayloadAction<string | undefined>) => { state.loading = false; state.error = action.payload || "Failed to fetch agent details" };
+  name: "agent",
+  initialState,
+  reducers: {
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+      state.currentPage = 1;
+    },
 
-        builder
-            .addCase(updateTrackStatus.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(updateTrackStatus.fulfilled, (state, action) => {
-                state.loading = false;
-                state.statusState = action.payload;
-                state.error = null;
-                console.log(state.statusState);
-                
-            })
-            .addCase(updateTrackStatus.rejected, (state) => {
-                state.loading = false;
-                // state.error = action.payload || "Failed to fetch agent details"
-            });
-    }
-})
+    setPriorityFilter: (state, action: PayloadAction<string>) => {
+      state.priorityFilter = action.payload;
+      state.currentPage = 1;
+    },
 
+    setActiveTab: (state, action: PayloadAction<string>) => {
+      state.activeTab = action.payload;
+      state.currentPage = 1;
+    },
+
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateTrackStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTrackStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.statusState = action.payload;
+        state.error = null;
+        console.log(state.statusState);
+      })
+      .addCase(updateTrackStatus.rejected, (state) => {
+        state.loading = false;
+        // state.error = action.payload || "Failed to fetch agent details"
+      })
+
+      .addCase(getMyDeliveries.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getMyDeliveries.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deliveries = action.payload;
+      })
+
+      .addCase(getMyDeliveries.rejected, (state) => {
+        state.loading = false;
+        // state.error = (action.payload as string) || "Failed to fetch deliveries";
+      });
+  },
+});
+
+export const { setSearch, setPriorityFilter, setActiveTab, setCurrentPage } =
+  agentSlice.actions;
 export default agentSlice.reducer;

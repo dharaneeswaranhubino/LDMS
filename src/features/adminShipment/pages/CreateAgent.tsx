@@ -153,7 +153,7 @@ const CreateAgent = () => {
 
               <input
                 type="text"
-                placeholder="Enter phoneNumber number"
+                placeholder="Enter phone number"
                 value={agentForm.phoneNumber}
                 name="phoneNumber"
                 maxLength={10}
