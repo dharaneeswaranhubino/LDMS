@@ -4,11 +4,17 @@ import {
   MdOutlineProductionQuantityLimits,
 } from "react-icons/md";
 import type { DeliveryItem } from "../../agentTypes";
+import { PiUsersFill } from "react-icons/pi";
+import { useState } from "react";
+import DeliveryDetailsModal from "./DeliveryDetailsModal";
 
 interface Props {
   item: DeliveryItem;
 }
 const DeliveryCard = ({ item }: Props) => {
+
+  const [isView, setIsView] = useState<boolean>(false);
+
   const getPriorityColor = () => {
     switch (item.shipmentPriority) {
       case "SAME_DAY":
@@ -69,96 +75,113 @@ const DeliveryCard = ({ item }: Props) => {
     }
   };
 
+  const onView  =()=>{
+    setIsView(true);
+  }
+
   return (
-    <div className="rounded-2xl bg-white border border-slate-100 p-5 shadow-sm hover:shadow-md transition-all duration-300">
-      <div className="flex justify-between items-center">
-        <span className="font-mono text-[11px]">{item.trackingId}</span>
+    <>
+      <div className="rounded-2xl bg-white border border-slate-100 p-5 shadow-sm transition-all duration-300 hover:shadow">
+        <div>
+          <div className="flex justify-between items-center">
+            <span className="font-mono text-[13px]">{item.trackingId}</span>
 
-        <span
-          className={`flex-shrink-0 px-3 h-[26px] rounded-full text-[11px] font-semibold flex items-center border ${getStatusColor()}`}
-        >
-          <span
-            className={`w-2 h-2 rounded-full ${getStatusDotColor()} animate-pulse mr-2`}
-          />
-          {item.shipmentStatus.replaceAll("_", " ")}
-        </span>
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-3 mt-2">
-          <span
-            className={`flex-shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center border ${getPriorityColor()}`}
-          >
-            {item.shipmentPriority.replaceAll("_", " ")}
-          </span>
-
-          {item.isFragile && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">
-              <i className="fa-solid fa-triangle-exclamation mr-1 text-[10px]" />
-              Fragile
+            <span
+              className={`flex-shrink-0 px-3 h-[26px] rounded-full text-[11px] font-semibold flex items-center border ${getStatusColor()}`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${getStatusDotColor()} animate-pulse mr-2`}
+              />
+              {item.shipmentStatus.replaceAll("_", " ")}
             </span>
-          )}
-        </div>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-5 mt-2 text-sm text-slate-500">
-          <span className="flex items-center gap-2">
-            <MdOutlineInventory2 className="text-slate-400" />
-            {item.itemName}
-          </span>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <span
+                className={`flex-shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center border ${getPriorityColor()}`}
+              >
+                {item.shipmentPriority.replaceAll("_", " ")}
+              </span>
 
-          <span className="flex items-center gap-2">
-            <MdOutlineProductionQuantityLimits className="text-slate-400" />
-            Qty: {item.quantity}
-          </span>
+              {item.isFragile && (
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 border border-yellow-200">
+                  <i className="fa-solid fa-triangle-exclamation mr-1 text-[10px]" />
+                  Fragile
+                </span>
+              )}
+            </div>
 
-          <span className="flex items-center gap-2">
-            <FaWeightHanging className="text-slate-400" />
-            {item.packageWeight} kg
-          </span>
-        </div>
+            <div className="flex flex-wrap items-center gap-5 mt-2 text-sm text-slate-500">
+              <span className="flex items-center gap-2">
+                <MdOutlineInventory2 className="text-slate-400" />
+                {item.itemName}
+              </span>
 
-        <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
-          <span className="font-medium text-slate-700">
-            {item.pickupAddress || item.pickupCity}
-          </span>
-          <i className="fa-solid fa-arrow-right text-slate-300 text-xs" />
-          <span className="font-medium text-slate-700">
-            {item.deliveryAddress || item.deliveryCity}
-          </span>
-        </div>
+              <span className="flex items-center gap-2">
+                <MdOutlineProductionQuantityLimits className="text-slate-400" />
+                Qty: {item.quantity}
+              </span>
 
-        <div className="flex flex-wrap items-center gap-5 mt-2 text-sm text-slate-500">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <FaMapMarkerAlt className="text-slate-400" />
-
-              <span className="text-slate-600">Pickup:</span>
-
-              <span className="font-medium text-slate-700">
-                {item.senderName}
+              <span className="flex items-center gap-2">
+                <FaWeightHanging className="text-slate-400" />
+                {item.packageWeight} kg
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
               <FaMapMarkerAlt className="text-slate-400" />
-
-              <span className="text-slate-600">Receiver:</span>
-
               <span className="font-medium text-slate-700">
-                {item.receiverName}
+                {item.pickupAddress || item.pickupCity}
               </span>
+              <i className="fa-solid fa-arrow-right text-slate-300 text-xs" />
+              <span className="font-medium text-slate-700">
+                {item.deliveryAddress || item.deliveryCity}
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1 mt-2 text-sm text-slate-500">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <PiUsersFill size={18} style={{ opacity: "0.7" }} />
+                  <span className="text-slate-600">Pickup:</span>
+                  <span className="font-medium text-slate-700">
+                    {item.senderName}
+                  </span>
+                  <div className="w-px bg-black h-4 mx-4"></div>
+                  <span className="text-slate-600">Receiver:</span>
+                  <span className="font-medium text-slate-700">
+                    {item.receiverName}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <FaClock className="text-slate-400" />
+                <span>
+                  {item.assignedSlotStart} - {item.assignedSlotEnd}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <FaClock className="text-slate-400" />
-            <span>
-              {item.assignedSlotStart} - {item.assignedSlotEnd}
-            </span>
+          <hr className="mt-6 border-slate-200" />
+
+          <div className="flex flex-wrap gap-3 mt-3">
+            <button
+              onClick={onView}
+              className="py-[7px] px-4 border border-blue-200 bg-blue-50 text-blue-700 rounded-lg hover:bg-violet-100 transition-all text-[12px]"
+            >
+              <i className="fa-regular fa-eye mr-1" />
+              View
+            </button>
           </div>
         </div>
       </div>
-    </div>
+
+      {isView && <DeliveryDetailsModal setIsView={setIsView} item={item}/>}
+
+    </>
   );
 };
 

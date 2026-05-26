@@ -16,29 +16,19 @@ interface Props {
 
 const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
   if (!open || !shipment) return null;
-
   const priority = shipment.shipmentPriority;
   const status = shipment.shipmentStatus;
-
-  const deliveryFrom = formatTime(
-    shipment.preferredDeliveryFrom ?? null,
-  );
-
-  const deliveryTo = formatTime(
-    shipment.preferredDeliveryTo ?? null,
-  );
+  const deliveryFrom = formatTime(shipment.preferredDeliveryFrom ?? null);
+  const deliveryTo = formatTime(shipment.preferredDeliveryTo ?? null);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl border border-slate-200">
-
-        {/* Header */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm p-4">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto scrollbar-none rounded-3xl bg-white shadow-2xl border border-slate-200">
         <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-6 py-5 flex items-start justify-between">
           <div>
             <h2 className="text-2xl font-bold text-slate-800">
               Shipment Details
             </h2>
-
             <p className="text-sm text-slate-500 mt-1">
               {shipment.trackingId ?? `#SHP-${shipment.id}`}
             </p>
@@ -53,8 +43,6 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
         </div>
 
         <div className="p-6 space-y-5">
-
-          {/* Status + Priority */}
           <div className="flex flex-wrap gap-3">
             <span
               className={`px-4 py-2 rounded-full text-xs font-semibold border ${
@@ -79,14 +67,12 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             )}
           </div>
 
-          {/* Package Details */}
           <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
             <h3 className="text-lg font-semibold text-slate-800 mb-4">
               Package Details
             </h3>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
-
               <div>
                 <p className="text-slate-400">Item Name</p>
                 <p className="font-medium text-slate-700">
@@ -124,10 +110,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             </div>
           </div>
 
-          {/* Sender + Receiver */}
           <div className="grid grid-cols-2 gap-5">
-
-            {/* Sender */}
             <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
               <h3 className="text-lg font-semibold text-blue-700 mb-4">
                 Pickup Details
@@ -171,7 +154,6 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
               </div>
             </div>
 
-            {/* Receiver */}
             <div className="bg-violet-50 rounded-2xl p-5 border border-violet-100">
               <h3 className="text-lg font-semibold text-violet-700 mb-4">
                 Delivery Details
@@ -216,7 +198,6 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             </div>
           </div>
 
-          {/* Delivery Slot */}
           {(deliveryFrom || deliveryTo) && (
             <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
               <h3 className="text-lg font-semibold text-amber-700 mb-3">
@@ -229,7 +210,6 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             </div>
           )}
 
-          {/* Footer */}
           <div className="flex items-center justify-between pt-2">
             <p className="text-xs text-slate-400">
               Created on {formatDate(shipment.createdAt ?? "")}

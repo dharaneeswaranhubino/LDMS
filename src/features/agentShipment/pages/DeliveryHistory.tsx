@@ -88,7 +88,7 @@ const DeliveryHistory = () => {
             <i className="fa-solid fa-magnifying-glass absolute left-3 z-10 text-gray-500 pointer-events-none"></i>
             <input
               type="text"
-              placeholder="Search tracking ID, sender, receiver, city, item..."
+              placeholder="Search tracking ID, sender, receiver, item..."
               value={search}
               onChange={(e) => dispatch(setSearch(e.target.value))}
               className="w-full rounded-lg border border-indigo-100 bg-white py-2 pl-10 pr-10 outline-none backdrop-blur focus-within:border-violet-400"

@@ -4,7 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import type { UpdateTrackStatus,DeliveriesResponse } from "./agentTypes";
+import type { UpdateTrackStatus, DeliveriesResponse } from "./agentTypes";
 import { mockDeliveries } from "./utils/mockDelivery";
 import type { AxiosError } from "axios";
 
@@ -32,6 +32,8 @@ export const getMyDeliveries = createAsyncThunk(
       const res = await api.get<DeliveriesResponse>(
         "/api/v1/shipments/myDeliveries",
       );
+      console.log(res);
+
       return res.data.data;
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;

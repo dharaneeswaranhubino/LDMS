@@ -131,3 +131,13 @@ export const mockDeliveries: DeliveryItem[] = [
     updatedAt: "2026-05-17T05:10:00.000Z",
   },
 ];
+
+export const formatDate = (iso: string) => {
+  if (!iso) return "—";
+
+  return new Date(iso).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
