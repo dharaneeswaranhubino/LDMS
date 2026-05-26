@@ -49,7 +49,7 @@ const ProofOfDelivery = () => {
             value={digit}
             onChange={(e) => handleChange(e.target.value, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            className="h-14 w-14 rounded-2xl border-2 border-indigo-200 bg-white text-center text-2xl font-bold text-slate-800 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
+            className="w-9 lg:h-14 lg:w-14 rounded-2xl border-2 border-indigo-200 bg-white text-center text-2xl font-bold text-slate-800 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200"
           />
         ))}
       </div>

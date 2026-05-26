@@ -21,7 +21,7 @@ const ShipmentDetails = () => {
             </div>
           </div>
 
-          <div className="text-right gap-2 items-center">
+          <div className="flex lg:flex-col lg:text-right gap-2 items-center">
             <p className="text-sm text-slate-700">Tracking ID :</p>
             <p className="font-semibold text-slate-500">TRK-001-XYZ</p>
           </div>
@@ -39,7 +39,7 @@ const ShipmentDetails = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid lg:grid-cols-2 gap-2">
           <InfoBlock label="Item" value="Laptop" />
           <InfoBlock label="Weight" value="2.5 kg" />
           <InfoBlock label="Payment" value="Paid — ₹620" success />

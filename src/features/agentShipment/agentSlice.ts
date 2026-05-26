@@ -4,10 +4,9 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import type { UpdateTrackStatus } from "./agentTypes";
-import type { AxiosError } from "axios";
-import type { DeliveriesResponse } from "./agentTypes";
+import type { UpdateTrackStatus,DeliveriesResponse } from "./agentTypes";
 import { mockDeliveries } from "./utils/mockDelivery";
+import type { AxiosError } from "axios";
 
 export const updateTrackStatus = createAsyncThunk(
   "agent/updateTrackStatus",
@@ -46,15 +45,13 @@ export const getMyDeliveries = createAsyncThunk(
 
 const initialState = {
   deliveries: mockDeliveries,
-
+  // deliveries: [],
   statusState: {},
   search: "",
   priorityFilter: "ALL",
   activeTab: "ALL",
-
   currentPage: 1,
   itemsPerPage: 6,
-
   loading: false,
   error: null,
 };

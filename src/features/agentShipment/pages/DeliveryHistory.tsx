@@ -7,7 +7,7 @@ import {
   setPriorityFilter,
   setSearch,
 } from "../agentSlice";
-import DeliveryCard from "../components/MyShipments/DeliveryCard";
+import DeliveryCard from "../components/MyDeliveries/DeliveryCard";
 import {
   useAppDispatch,
   useAppSelector,
@@ -44,7 +44,8 @@ const DeliveryHistory = () => {
         const value = search.toLowerCase();
         return (
           item.trackingId.toLowerCase().includes(value) ||
-          item.customerName.toLowerCase().includes(value) ||
+          item.senderName.toLowerCase().includes(value) ||
+          item.receiverName.toLowerCase().includes(value) ||
           item.deliveryCity.toLowerCase().includes(value) ||
           item.itemName.toLowerCase().includes(value)
         );
@@ -64,7 +65,10 @@ const DeliveryHistory = () => {
     return filtered;
   }, [deliveries, search, priorityFilter, activeTab]);
 
-  const totalPages = Math.ceil(filteredDeliveries.length / itemsPerPage);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredDeliveries.length / itemsPerPage),
+  );
   const paginatedData = filteredDeliveries.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
@@ -84,7 +88,7 @@ const DeliveryHistory = () => {
             <i className="fa-solid fa-magnifying-glass absolute left-3 z-10 text-gray-500 pointer-events-none"></i>
             <input
               type="text"
-              placeholder="Search tracking ID, customer, city, item..."
+              placeholder="Search tracking ID, sender, receiver, city, item..."
               value={search}
               onChange={(e) => dispatch(setSearch(e.target.value))}
               className="w-full rounded-lg border border-indigo-100 bg-white py-2 pl-10 pr-10 outline-none backdrop-blur focus-within:border-violet-400"
@@ -113,51 +117,31 @@ const DeliveryHistory = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => dispatch(setActiveTab("ALL"))}
-            className={`rounded-full px-5 py-2 text-sm font-semibold ${
-              activeTab === "ALL"
-                ? "bg-green-500 text-white"
-                : "bg-white/70 text-gray-700"
-            }`}
-          >
-            All
-          </button>
-
-          <button
-            onClick={() => dispatch(setActiveTab("THIS_WEEK"))}
-            className={`rounded-full px-5 py-2 text-sm font-semibold ${
-              activeTab === "THIS_WEEK"
-                ? "bg-green-500 text-white"
-                : "bg-white/70 text-gray-700"
-            }`}
-          >
-            This week
-          </button>
-
-          <button
-            onClick={() => dispatch(setActiveTab("THIS_MONTH"))}
-            className={`rounded-full px-5 py-2 text-sm font-semibold ${
-              activeTab === "THIS_MONTH"
-                ? "bg-green-500 text-white"
-                : "bg-white/70 text-gray-700"
-            }`}
-          >
-            This month
-          </button>
-        </div>
         <p className="text-sm font-medium text-gray-700">
           Showing {filteredDeliveries.length} deliveries
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-hidden overflow-y-scroll scrollbar-none rounded-2xl">
-          {paginatedData.map((item) => (
-            <DeliveryCard key={item.id} item={item} />
-          ))}
+          {paginatedData.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white py-16">
+              <i className="fa-solid fa-box-open text-5xl text-slate-300 mb-4"></i>
+
+              <h2 className="text-lg font-semibold text-slate-700">
+                No deliveries assigned
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-500">
+                New assigned shipments will appear here.
+              </p>
+            </div>
+          ) : (
+            paginatedData.map((item) => (
+              <DeliveryCard key={item.shipmentId} item={item} />
+            ))
+          )}
         </div>
 
-        <div className="flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${paginatedData.length === 0 && "hidden"}`}>
           <p className="text-center text-sm text-slate-600 lg:text-left">
             Showing{" "}
             <span className="font-semibold">
@@ -172,7 +156,7 @@ const DeliveryHistory = () => {
             deliveries
           </p>
 
-          <div className="w-full overflow-x-auto lg:w-auto scrollbar-none">
+          <div className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${paginatedData.length === 0 && "hidden"}`}>
             <div className="flex min-w-max items-center justify-center gap-2 pb-1">
               <button
                 disabled={currentPage === 1}

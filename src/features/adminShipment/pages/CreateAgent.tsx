@@ -84,7 +84,7 @@ const CreateAgent = () => {
   };
 
   return (
-    <div className="rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen p-6 overflow-hidden">
+    <div className="rounded-lg w-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen py-4 px-2 lg:p-6 overflow-hidden">
       <div>
         <h1 className="text-2xl font-semibold text-slate-800">
           Create New Agent Details
@@ -124,7 +124,7 @@ const CreateAgent = () => {
           </div>
 
           {/* Email + phoneNumber */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid lg:grid-cols-2 gap-4 mt-4">
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
                 Email
@@ -168,7 +168,7 @@ const CreateAgent = () => {
           </div>
 
           {/* Password + Confirm Password */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid lg:grid-cols-2 gap-4 mt-4">
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
                 Password
@@ -238,7 +238,7 @@ const CreateAgent = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid lg:grid-cols-2 gap-4 mt-4">
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
                 Vehicle Type
@@ -283,7 +283,7 @@ const CreateAgent = () => {
           </div>
 
           {/* License + Service Zone */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid lg:grid-cols-2 gap-4 mt-4">
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
                 License Number

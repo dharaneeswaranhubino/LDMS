@@ -101,7 +101,7 @@ const ShipmentAddress = ({
           Pickup address
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               Sender Name
@@ -161,7 +161,7 @@ const ShipmentAddress = ({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               City
@@ -217,7 +217,7 @@ const ShipmentAddress = ({
           Delivery address
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               Receiver Name
@@ -277,7 +277,7 @@ const ShipmentAddress = ({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               City

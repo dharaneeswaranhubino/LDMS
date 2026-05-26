@@ -162,7 +162,7 @@ const PackageDetails = ({
             </span>
           </p>
 
-          <div className="grid grid-cols-3 gap-3 mt-2">
+          <div className="grid lg:grid-cols-3 gap-3 mt-2">
             {deliveryPriority.map(({ label, multiplier, days, value }) => (
               <div
                 key={value}
@@ -236,7 +236,7 @@ const PackageDetails = ({
             </span>
           </p>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid lg:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
                 FROM

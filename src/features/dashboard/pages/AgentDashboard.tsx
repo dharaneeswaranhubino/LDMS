@@ -64,7 +64,7 @@ const AgentDashboard = () => {
   }, [shipments]);
 
   return (
-    <div className=" rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 p-5">
+    <div className=" rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 px-2 py-4 lg:p-5">
       <div className="flex items-start justify-between mb-5"> 
         <div>
           <h1 className="text-2xl font-semibold text-slate-600">
@@ -79,7 +79,7 @@ const AgentDashboard = () => {
       </div>
       <DashboardStats profile={profile} />
 
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="grid lg:grid-cols-2 gap-4 mb-4">
         <ActiveShipments
           activeDelivery={activeDelivery}
           STATUS_CONFIG={STATUS_CONFIG}
@@ -90,7 +90,7 @@ const AgentDashboard = () => {
         <CustomerMessages messages={messages} unreadCount={unreadCount} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-4">
         <TodaySchedule slotMap={slotMap} ALL_SLOTS={ALL_SLOTS} STATUS_CONFIG={STATUS_CONFIG} isDone={isDone} isActive={isActive}/>
 
         <CompletedToday completedToday={completedToday} profile={profile} />
