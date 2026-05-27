@@ -7,6 +7,9 @@ export const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     // baseURL: "http://localhost:5000/api/v1/",
     withCredentials: true, // Cookie auto-send
+    headers: {
+        'ngrok-skip-browser-warning': 'true',  // add this
+    },
 });
 //inject pattern (circular dependency)
 let storeRef: Store<RootState> | null = null;

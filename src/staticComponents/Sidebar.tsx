@@ -85,7 +85,7 @@ const menu: MenuItem[] = [
     icon: <TbListDetails size={18} />,
   },
   {
-    name: "Customer Chat",
+    name: "Chat to Customer",
     path: "/customerChat",
     section: "SUPPORT",
     allowedRole: "deliveryAgent",

@@ -1,6 +1,6 @@
 interface InfoBlockProps {
   label: string;
-  value: string;
+  value: string | number | undefined;
   success?: boolean;
 }
 

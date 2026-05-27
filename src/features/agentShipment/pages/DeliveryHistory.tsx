@@ -136,7 +136,7 @@ const DeliveryHistory = () => {
             </div>
           ) : (
             paginatedData.map((item) => (
-              <DeliveryCard key={item.shipmentId} item={item} />
+              <DeliveryCard key={item?.shipmentId} item={item} />
             ))
           )}
         </div>

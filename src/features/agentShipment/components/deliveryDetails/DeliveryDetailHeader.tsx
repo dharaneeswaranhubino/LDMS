@@ -1,4 +1,15 @@
-const DeliveryDetailHeader = () => {
+interface Delivery {
+  trackingId: string;
+  receiverName: string;
+  deliveryAddress: string;
+  deliveryCity: string;
+  assignedSlotStart: string;
+  assignedSlotEnd: string;
+}
+interface DeliveryDetailHeaderProps {
+  data?: Delivery;
+}
+const DeliveryDetailHeader = ({ data }: DeliveryDetailHeaderProps) => {
   return (
     <>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -6,10 +17,12 @@ const DeliveryDetailHeader = () => {
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-2xl font-semibold text-slate-600">
-                Delivery detail - TRK-001-XYZ
+                {`Delivery detail - ${data?.trackingId}`}
               </h1>
-              <p className="text-[13px] text-slate-500 mt-1">
-                John Doe • MG Road → Indiranagar
+              <p className="flex gap-4 items-center text-[16px] text-slate-500 mt-1">
+                {data?.receiverName}
+                <i className="fa-solid fa-arrow-right"></i>
+                {`${data?.deliveryAddress}, ${data?.deliveryCity}`}
               </p>
             </div>
           </div>
@@ -34,7 +47,7 @@ const DeliveryDetailHeader = () => {
             </p>
           </div>
 
-          <div className="text-sm text-slate-700">10:00 AM - 11:00 AM</div>
+          <div className="text-sm text-slate-700">{`${data?.assignedSlotStart} - ${data?.assignedSlotEnd}`}</div>
         </div>
       </div>
     </>

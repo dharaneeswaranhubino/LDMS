@@ -2,8 +2,10 @@ import { useState } from "react";
 import { deliveryMock } from "../../utils/mockDelivery";
 import { getStatusState, statusOrder } from "../../utils/statusHelpers";
 import UpdateStatusModal from "./UpdateStatusModal";
+import { useAppDispatch, useAppSelector } from "../../../../shared/hooks/reduxHooks";
 
-const DeliveryCheckpoints = () => {
+const DeliveryCheckpoints = ({data}) => {
+  const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(
     deliveryMock.currentStatus,
   );
@@ -13,27 +15,31 @@ const DeliveryCheckpoints = () => {
 
   const currentIndex = statusOrder.indexOf(currentStatus);
 
+  const {updateTrackStatus} = useAppSelector((state)=>state.agent);
+
   const handleUpdate = (nextStatus: string) => {
-    setAnimatingIndex(currentIndex);
-    setTruckProgress(0);
+    dispatch(updateTrackStatus())
+    // setAnimatingIndex(currentIndex);
+    // setTruckProgress(0);
 
-    const start = performance.now();
-    const duration = 3000;
+    // const start = performance.now();
+    // const duration = 3000;
 
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      setTruckProgress(progress);
+    // const tick = (now: number) => {
+    //   const progress = Math.min((now - start) / duration, 1);
+    //   setTruckProgress(progress);
 
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        setCurrentStatus(nextStatus);
-        setAnimatingIndex(null);
-        setTruckProgress(0);
-      }
-    };
+    //   if (progress < 1) {
+    //     requestAnimationFrame(tick);
+    //   } else {
+    //     setCurrentStatus(nextStatus);
+    //     setAnimatingIndex(null);
+    //     setTruckProgress(0);
+    //   }
+    // };
 
-    requestAnimationFrame(tick);
+    // requestAnimationFrame(tick);
+
   };
 
   return (

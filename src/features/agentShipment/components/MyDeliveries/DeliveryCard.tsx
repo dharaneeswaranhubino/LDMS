@@ -7,12 +7,12 @@ import type { DeliveryItem } from "../../agentTypes";
 import { PiUsersFill } from "react-icons/pi";
 import { useState } from "react";
 import DeliveryDetailsModal from "./DeliveryDetailsModal";
+import { TbMinusVertical } from "react-icons/tb";
 
 interface Props {
   item: DeliveryItem;
 }
 const DeliveryCard = ({ item }: Props) => {
-
   const [isView, setIsView] = useState<boolean>(false);
 
   const getPriorityColor = () => {
@@ -75,9 +75,11 @@ const DeliveryCard = ({ item }: Props) => {
     }
   };
 
-  const onView  =()=>{
+  const onView = () => {
     setIsView(true);
-  }
+  };
+
+  const Separator = () => <span className="w-px h-4 bg-slate-300 shrink-0" />;
 
   return (
     <>
@@ -142,25 +144,29 @@ const DeliveryCard = ({ item }: Props) => {
 
             <div className="flex flex-col gap-1 mt-2 text-sm text-slate-500">
               <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <PiUsersFill size={18} style={{ opacity: "0.7" }} />
                   <span className="text-slate-600">Pickup:</span>
                   <span className="font-medium text-slate-700">
                     {item.senderName}
                   </span>
-                  <div className="w-px bg-black h-4 mx-4"></div>
+
+                  <i className="fa-solid fa-arrow-right"></i>
+
                   <span className="text-slate-600">Receiver:</span>
                   <span className="font-medium text-slate-700">
                     {item.receiverName}
                   </span>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <FaClock className="text-slate-400" />
-                <span>
-                  {item.assignedSlotStart} - {item.assignedSlotEnd}
-                </span>
+                  <TbMinusVertical size={20}/>
+
+                  <div className="flex items-center gap-2">
+                    <FaClock className="text-slate-400" />
+                    <span>
+                      {item.assignedSlotStart} - {item.assignedSlotEnd}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -179,8 +185,14 @@ const DeliveryCard = ({ item }: Props) => {
         </div>
       </div>
 
-      {isView && <DeliveryDetailsModal setIsView={setIsView} item={item}/>}
-
+      {isView && (
+        <DeliveryDetailsModal
+          setIsView={setIsView}
+          item={item}
+          getStatusColor={getStatusColor}
+          getPriorityColor={getPriorityColor}
+        />
+      )}
     </>
   );
 };

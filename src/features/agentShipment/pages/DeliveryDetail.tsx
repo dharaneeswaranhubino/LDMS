@@ -1,3 +1,10 @@
+import { useEffect } from "react";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../shared/hooks/reduxHooks";
+import { getMyDeliveries } from "../agentSlice";
+
 import DeliveryCheckpoints from "../components/deliveryDetails/DeliveryCheckpoints";
 import DeliveryDetailHeader from "../components/deliveryDetails/DeliveryDetailHeader";
 import ProofOfDelivery from "../components/deliveryDetails/ProofOfDelivery";
@@ -5,17 +12,46 @@ import ReceiverDetails from "../components/deliveryDetails/ReceiverDetails";
 import ShipmentDetails from "../components/deliveryDetails/ShipmentDetails";
 
 const DeliveryDetail = () => {
+  const dispatch = useAppDispatch();
+  const { deliveries } = useAppSelector((state) => state.agent);
+
+  useEffect(() => {
+    dispatch(getMyDeliveries());
+  }, [dispatch]);
+
+  const data = deliveries.find(
+    (item) =>
+      item.shipmentStatus !== "PENDING" && item.shipmentStatus !== "CONFIRMED" && item.shipmentStatus !== "ASSIGNED",
+  );
+  console.log(data);
+
+  if (!data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="rounded-2xl border border-slate-200 bg-white px-8 py-10 shadow-lg text-center">
+          <h2 className="text-xl font-semibold text-slate-700">
+            No Active Deliveries
+          </h2>
+
+          <p className="mt-2 text-slate-500">
+            There are no deliveries available to start right now.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br rounded-lg from-cyan-50 via-indigo-200 to-sky-50 text-white p-4 lg:p-6">
         <div className="mx-auto max-w-7xl space-y-4">
-          <DeliveryDetailHeader />
+          <DeliveryDetailHeader data={data} />
           <div className="grid lg:grid-cols-2 gap-4">
-            <ShipmentDetails />
-            <ReceiverDetails />
+            <ShipmentDetails data={data} />
+            <ReceiverDetails data={data}/>
           </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            <DeliveryCheckpoints />
+            <DeliveryCheckpoints data={data}/>
             <ProofOfDelivery />
           </div>
         </div>
