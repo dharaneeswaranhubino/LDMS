@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { ShipmentResponse, ShipmentState } from "./shipmentTypes";
+import type { Pagination, ShipmentResponse, ShipmentState } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
 
@@ -12,8 +12,6 @@ export const createShipment = createAsyncThunk<
     async (data: CreateShipmentPayload, { rejectWithValue }) => {
         try {
             const payload = mapToBackendPayload(data);
-            console.log(payload);
-
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
@@ -24,15 +22,19 @@ export const createShipment = createAsyncThunk<
 );
 
 export const fetchMyShipments = createAsyncThunk<
-    ShipmentResponse[],  // return type
-    void,                // no args
+    { shipments: ShipmentResponse[]; pagination: Pagination; },
+    { page?: number; limit?: number; },
     { rejectValue: string }
 >(
     "shipment/fetchMyShipments",
-    async (_, { rejectWithValue }) => {
+    async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
         try {
-            const res = await api.get("/shipments/myShipments");
-            return res.data.data as ShipmentResponse[];
+            const res = await api.get(`/shipments/myShipments?page=${page}&limit=${limit}`);
+
+            return {
+                shipments: res.data.data.shipments,
+                pagination: res.data.data.pagination,
+            };
         } catch (err: unknown) {
             const error = err as import("axios").AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to fetch shipments");
@@ -60,6 +62,7 @@ export const fetchShipmentById = createAsyncThunk<
 const initialState: ShipmentState = {
     shipments: [],
     currentShipment: null,
+    pagination: null,
     loading: false,
     error: null,
 };
@@ -73,21 +76,22 @@ const shipmentSlice = createSlice({
     },
     extraReducers: (builder) => {
         const pending = (state: ShipmentState) => { state.loading = true; state.error = null; };
-        const rejected = (state: ShipmentState, action: PayloadAction<string | undefined>) => { state.loading = false; state.error = action.payload || "Failed to create shipment"};
+        const rejected = (state: ShipmentState, action: PayloadAction<string | undefined>) => { state.loading = false; state.error = action.payload || "Failed to create shipment" };
 
         builder
             .addCase(createShipment.pending, pending)
             .addCase(createShipment.fulfilled, (state, action) => {
                 state.loading = false;
                 state.currentShipment = action.payload;
-                state.shipments.unshift(action.payload);
+                state.shipments=[action.payload,...state.shipments];
             })
             .addCase(createShipment.rejected, rejected)
 
             .addCase(fetchMyShipments.pending, pending)
             .addCase(fetchMyShipments.fulfilled, (state, action) => {
                 state.loading = false;
-                state.shipments = action.payload;
+                state.shipments = action.payload.shipments;
+                state.pagination = action.payload.pagination;
             })
             .addCase(fetchMyShipments.rejected, rejected)
 

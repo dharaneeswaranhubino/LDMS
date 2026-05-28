@@ -19,9 +19,10 @@ const MyShipments = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { shipments, loading, error } = useAppSelector(
+  const { shipments, loading, error, pagination } = useAppSelector(
     (state) => state.shipment,
   );
+  console.log(shipments);
 
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
@@ -36,7 +37,7 @@ const MyShipments = () => {
   const searchRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    dispatch(fetchMyShipments());
+    dispatch(fetchMyShipments({ page: 1 }));
   }, [dispatch]);
 
   const tabCounts = useMemo(() => {
@@ -101,6 +102,9 @@ const MyShipments = () => {
     );
   }
 
+  const currentPage = pagination?.page ?? 1;
+  const totalPages = pagination?.totalPages ?? 1;
+
   return (
     <>
       <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
@@ -159,7 +163,7 @@ const MyShipments = () => {
             {displayed.map((item: ShipmentResponse) => {
               return (
                 <ShipmentCard
-                  key={item.id ?? item.trackingId}
+                  key={item.shipmentId ?? item.trackingId}
                   item={item}
                   onView={handleView}
                 />
@@ -167,6 +171,104 @@ const MyShipments = () => {
             })}
           </div>
         )}
+
+        <div
+          className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${
+            shipments.length === 0 && "hidden"
+          }`}
+        >
+          <p className="text-center text-sm text-slate-600 lg:text-left">
+            Showing{" "}
+            <span className="font-semibold">{(currentPage - 1) * 10 + 1}</span>
+            {" - "}
+            <span className="font-semibold">
+              {Math.min(currentPage * 10, pagination?.total ?? 0)}
+            </span>{" "}
+            of <span className="font-semibold">{pagination?.total ?? 0}</span>{" "}
+            shipments
+          </p>
+
+          <div
+            className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${
+              shipments.length === 0 && "hidden"
+            }`}
+          >
+            <div className="flex min-w-max items-center justify-center gap-2 pb-1">
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  dispatch(
+                    fetchMyShipments({
+                      page: currentPage - 1,
+                      limit: 10,
+                    }),
+                  )
+                }
+                className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
+        transition-all hover:border-violet-300 hover:text-violet-600
+        disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((page) => {
+                  return (
+                    page === 1 ||
+                    page === totalPages ||
+                    Math.abs(page - currentPage) <= 1
+                  );
+                })
+                .map((page, index, arr) => {
+                  const prev = arr[index - 1];
+
+                  return (
+                    <div key={page} className="flex items-center gap-2">
+                      {prev && page - prev > 1 && (
+                        <span className="px-1 text-slate-400">...</span>
+                      )}
+
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            fetchMyShipments({
+                              page,
+                              limit: 10,
+                            }),
+                          )
+                        }
+                        className={`h-9 min-w-[36px] rounded-xl px-3 text-sm font-semibold transition-all
+                ${
+                  currentPage === page
+                    ? "bg-violet-600 text-white shadow-md"
+                    : "border border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:text-violet-600"
+                }`}
+                      >
+                        {page}
+                      </button>
+                    </div>
+                  );
+                })}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() =>
+                  dispatch(
+                    fetchMyShipments({
+                      page: currentPage + 1,
+                      limit: 10,
+                    }),
+                  )
+                }
+                className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
+        transition-all hover:border-violet-300 hover:text-violet-600
+        disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
 
         {loading && shipments.length > 0 && (
           <div className="flex justify-center py-6">

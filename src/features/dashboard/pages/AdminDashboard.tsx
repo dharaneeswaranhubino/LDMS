@@ -1,40 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../shared/hooks/reduxHooks";
+import DateRangePicker from "../components/adminDashboard/DateRangePicker";
+import { LuBoxes } from "react-icons/lu";
+import { FaRegCheckCircle } from "react-icons/fa";
 
-const shipments = [
+const stateCards = [
   {
-    id: "#SHP-001",
-    route: "MG Road > Indiranagar",
-    agent: "Rajesh Kumar",
-    time: "Slot: 10-11 AM today",
-    status: "In transit",
-    statusColor: "bg-blue-100 text-blue-700",
+    count: 248,
+    title: "Total Shipments",
+    statusIcon: <i className="fa-solid fa-arrow-trend-up"></i>,
+    status: "+12 today",
+    icon: <LuBoxes size={40} />,
+    iconColor:"text-cyan-700",
+    iconBgColor:"bg-cyan-100"
   },
   {
-    id: "#SHP-002",
-    route: "Koramangala > Whitefield",
-    agent: "Assigned",
-    time: "Slot: 2-3 PM today",
-    status: "Assigned",
-    statusColor: "bg-purple-100 text-purple-700",
-  },
-  {
-    id: "#SHP-003",
-    route: "BTM Layout > HSR",
-    agent: "Awaiting admin assignment",
-    time: "",
-    status: "Pending",
-    statusColor: "bg-amber-100 text-amber-700",
+    count: 186,
+    title: "Delivered",
+    statusIcon: <i className="fa-solid fa-arrow-trend-up"></i>,
+    status: "+12 today",
+    icon: <FaRegCheckCircle size={40} />,
+    iconColor:"text-lime-700",
+    iconBgColor:"bg-lime-100"
   },
 ];
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-    const {user} = useAppSelector((state)=>state.auth)
+  // const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
 
-
-  const createAgent = async () => {
-    navigate("/agentRegisteration");
-  };
+  // const createAgent = async () => {
+  //   navigate("/agentRegisteration");
+  // };
   return (
     <>
       <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5 mt-2">
@@ -45,37 +41,41 @@ const AdminDashboard = () => {
             </h1>
 
             <p className="text-[14px] text-slate-500 mt-1">
-              Here is your operations overview for today
+              Sunday, 25 May 2026 · Overview of all operations
             </p>
           </div>
-
-          <button
-            onClick={createAgent}
-            className="h-[42px] px-5 rounded-xl bg-blue-500 hover:bg-blue-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-sm"
-          >
-            <i className="fa-solid fa-plus text-[11px]"></i>
-            Add new Agent
-          </button>
+          <DateRangePicker />
         </div>
 
         <div className="grid grid-cols-4 gap-4 mt-6">
-          <div className="bg-white border border-slate-200 rounded-2xl p-4">
-            <p className="text-[11px] text-slate-400 uppercase font-semibold">
-              Total Shipments
-            </p>
-            <h2 className="text-[30px] font-bold text-slate-800 mt-2">248</h2>
-            <p className="text-[12px] text-slate-500 mt-1">
-              <i className="fa-solid fa-arrow-trend-up"></i>  +12 this week
-            </p>
+          {stateCards.map((item, index) => (
+            <div key={index} className="flex items-center justify-around bg-white border border-slate-200 rounded-2xl p-4 gap-5">
+              <div>
+                <h2 className="text-[30px] font-bold text-slate-800">{item.count}</h2>
+                <p className="text-[11px] text-slate-400 uppercase font-semibold">
+                  {item.title}
+                </p>
+                <p className="text-[12px] mt-1 text-green-500">
+                  {item.statusIcon} {item.status}
+                </p>
+              </div>
+              <div className={`${item.iconBgColor} p-2 rounded-lg ${item.iconColor}`}>
+                {item.icon}
+              </div>
+            </div>
+          ))}
+          {/* <div className="flex items-center justify-around bg-white border border-slate-200 rounded-2xl p-4">
+            <div>
+              <h2 className="text-[30px] font-bold text-slate-800">14</h2>
+              <p className="text-[11px] text-slate-400 uppercase font-semibold">
+                Active shipments
+              </p>
+              <p className="text-[12px] text-slate-500 mt-1">2 offline today</p>
+            </div>
+            <div className="bg-blue-200 p-2 rounded-lg text-cyan-700">
+              <i className="fa-regular fa-circle-check"></i>
+            </div>
           </div>
-          <div className="bg-white border border-slate-200 rounded-2xl p-4">
-            <p className="text-[11px] text-slate-400 uppercase font-semibold">
-              Active shipments
-            </p>
-            <h2 className="text-[30px] font-bold text-slate-800 mt-2">14</h2>
-            <p className="text-[12px] text-slate-500 mt-1">2 offline today</p>
-          </div>
-
 
           <div className="bg-white border border-slate-200 rounded-2xl p-4">
             <p className="text-[11px] text-slate-400 uppercase font-semibold">
@@ -99,7 +99,7 @@ const AdminDashboard = () => {
             <p className="text-[12px] text-slate-500 mt-1">
               <i className="fa-solid fa-arrow-trend-up"></i> +18% vs last
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* <div className="mt-6">

@@ -9,6 +9,8 @@ import type {
 export const STATUS_STYLES: Record<ShipmentStatus, string> = {
   PENDING: "bg-amber-100 text-amber-700 border-amber-200",
   CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200",
+  ASSIGNED: "bg-cyan-100 text-cyan-700 border-cyan-200",
+  OUT_FOR_PICKUP: "bg-cyan-100 text-cyan-700 border-cyan-200",
   PICKED_UP: "bg-sky-100 text-sky-700 border-sky-200",
   IN_TRANSIT: "bg-indigo-100 text-indigo-700 border-indigo-200",
   OUT_FOR_DELIVERY: "bg-violet-100 text-violet-700 border-violet-200",
@@ -19,6 +21,8 @@ export const STATUS_STYLES: Record<ShipmentStatus, string> = {
 export const STATUS_LABEL: Record<ShipmentStatus, string> = {
   PENDING: "Pending",
   CONFIRMED: "Confirmed",
+  ASSIGNED: "Assigned",
+  OUT_FOR_PICKUP: "Out for pickup",
   PICKED_UP: "Picked up",
   IN_TRANSIT: "In transit",
   OUT_FOR_DELIVERY: "Out for delivery",
@@ -42,25 +46,27 @@ export const FILTER_TABS: {
   key: FilterTab;
   label: string;
 }[] = [
-  { key: "ALL", label: "All" },
-  { key: "PENDING", label: "Pending" },
-  { key: "CONFIRMED", label: "Confirmed" },
-  { key: "PICKED_UP", label: "Picked up" },
-  { key: "IN_TRANSIT", label: "In transit" },
-  { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
-  { key: "DELIVERED", label: "Delivered" },
-  { key: "CANCELLED", label: "Cancelled" },
-];
+    { key: "ALL", label: "All" },
+    { key: "PENDING", label: "Pending" },
+    { key: "ASSIGNED", label: "Assigned" },
+    { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
+    { key: "CONFIRMED", label: "Confirmed" },
+    { key: "PICKED_UP", label: "Picked up" },
+    { key: "IN_TRANSIT", label: "In transit" },
+    { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
+    { key: "DELIVERED", label: "Delivered" },
+    { key: "CANCELLED", label: "Cancelled" },
+  ];
 
 export const SORT_OPTIONS: {
   value: SortKey;
   label: string;
 }[] = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "amount_high", label: "Amount: high → low" },
-  { value: "amount_low", label: "Amount: low → high" },
-];
+    { value: "newest", label: "Newest first" },
+    { value: "oldest", label: "Oldest first" },
+    { value: "amount_high", label: "Amount: high → low" },
+    { value: "amount_low", label: "Amount: low → high" },
+  ];
 
 export const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -72,10 +78,19 @@ export const formatDate = (iso: string) => {
   });
 };
 
-export const formatTime = (iso: string | null) => {
-  if (!iso) return null;
+export const formatTime = (
+  time: string | null,
+) => {
+  if (!time) return null;
 
-  return new Date(iso).toLocaleTimeString("en-IN", {
+  const [hour, minute] = time.split(":");
+
+  const date = new Date();
+
+  date.setHours(Number(hour));
+  date.setMinutes(Number(minute));
+
+  return date.toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
@@ -85,13 +100,11 @@ export const formatTime = (iso: string | null) => {
 export const getAgentLabel = (
   shipment: ShipmentResponse,
 ): string => {
-  const s = shipment.shipmentStatus as ShipmentStatus;
+  if (shipment.assignedAgent?.agentName) {
+    return shipment.assignedAgent.agentName;
+  }
 
-  if (s === "PENDING") return "Awaiting assignment";
-  // When backend adds agent name field, replace here:
-  // return shipment.agentName ?? "Agent assigned";
-
-  return "Agent assigned";
+  return "Awaiting assignment";
 };
 
 export const matchesSearch = (

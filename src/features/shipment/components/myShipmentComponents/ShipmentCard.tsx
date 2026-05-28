@@ -28,8 +28,8 @@ const ShipmentCard = ({ item, onView }: Props) => {
 
   const agentLabel = getAgentLabel(item);
 
-  const deliveryFrom = formatTime(item.preferredDeliveryFrom ?? null);
-  const deliveryTo = formatTime(item.preferredDeliveryTo ?? null);
+  const deliveryFrom = formatTime(item.assignedSlotStart ?? null);
+  const deliveryTo = formatTime(item.assignedSlotEnd ?? null);
 
   const slotLabel =
     deliveryFrom && deliveryTo
@@ -44,7 +44,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
         <div className="flex-1 min-w-0 pr-4">
           <p className="flex flex-wrap gap-2 items-center text-[13px] font-semibold text-slate-800 mb-1">
             <span className="font-mono">
-              {item.trackingId ?? `#SHP-${item.id}`}
+              {item.trackingId ?? `#SHP-${item.shipmentId}`}
             </span>
             <span
               className={`px-3 h-[22px] rounded-full text-[11px] font-semibold flex items-center border ${PRIORITY_STYLES[priority]}`}
@@ -115,7 +115,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
 
         {/* {isPendingPayment && (
             <button
-              onClick={() => navigate(`/payment/${item.id}`)}
+              onClick={() => navigate(`/payment/${item.shipmentId}`)}
               className="py-[7px] px-4 border border-amber-300 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all text-[12px] font-medium"
             >
               <i className="fa-solid fa-credit-card mr-1" />
@@ -125,7 +125,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
 
         {!["CANCELLED", "PENDING"].includes(status) && (
           <button
-            onClick={() => navigate(`/trackShipments/${item.id}`)}
+            onClick={() => navigate(`/trackShipments/${item.shipmentId}`)}
             className="py-[7px] px-4 border border-blue-200 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all text-[12px]"
           >
             <i className="fa-solid fa-location-dot mr-1" />
@@ -135,7 +135,7 @@ const ShipmentCard = ({ item, onView }: Props) => {
 
         {!["CANCELLED", "PENDING", "CONFIRMED"].includes(status) && (
           <button
-            onClick={() => navigate(`/chat/${item.id}`)}
+            onClick={() => navigate(`/chat/${item.shipmentId}`)}
             className="py-[7px] px-4 border border-pink-200 bg-pink-50 text-pink-700 rounded-lg hover:bg-pink-100 transition-all text-[12px]"
           >
             <i className="fa-brands fa-rocketchat mr-1" />

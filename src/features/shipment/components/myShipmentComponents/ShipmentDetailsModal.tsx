@@ -18,8 +18,8 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
   if (!open || !shipment) return null;
   const priority = shipment.shipmentPriority;
   const status = shipment.shipmentStatus;
-  const deliveryFrom = formatTime(shipment.preferredDeliveryFrom ?? null);
-  const deliveryTo = formatTime(shipment.preferredDeliveryTo ?? null);
+  const deliveryFrom = formatTime(shipment.assignedSlotStart ?? null);
+  const deliveryTo = formatTime(shipment.assignedSlotEnd ?? null);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm p-4">
@@ -30,7 +30,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
               Shipment Details
             </h2>
             <p className="text-sm text-slate-500 mt-1">
-              {shipment.trackingId ?? `#SHP-${shipment.id}`}
+              {shipment.trackingId ?? `#SHP-${shipment.shipmentId}`}
             </p>
           </div>
 
@@ -111,49 +111,6 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
           </div>
 
           <div className="grid grid-cols-2 gap-5">
-            <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
-              <h3 className="text-lg font-semibold text-blue-700 mb-4">
-                Pickup Details
-              </h3>
-
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="text-slate-400">Sender Name</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.senderName}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-slate-400">Phone</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.senderPhone}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-slate-400">Address</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.pickupAddress}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-slate-400">City</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.pickupCity}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-slate-400">Pincode</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.pickupPincode}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div className="bg-violet-50 rounded-2xl p-5 border border-violet-100">
               <h3 className="text-lg font-semibold text-violet-700 mb-4">
                 Delivery Details
@@ -196,12 +153,55 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
                 </div>
               </div>
             </div>
+
+            <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
+              <h3 className="text-lg font-semibold text-blue-700 mb-4">
+                Delivery Agent Details
+              </h3>
+
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="text-slate-400">Agent Name</p>
+                  <p className="font-medium text-slate-700">
+                    {shipment?.assignedAgent?.agentName ?? "N/A"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-slate-400">Phone</p>
+                  <p className="font-medium text-slate-700">
+                    {shipment.assignedAgent?.agentPhone ?? "N/A"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-slate-400">ServiceZone</p>
+                  <p className="font-medium text-slate-700">
+                    {shipment.assignedAgent?.serviceZone ?? "N/A"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-slate-400">VehicleType</p>
+                  <p className="font-medium text-slate-700">
+                    {shipment.assignedAgent?.vehicleType ?? "N/A"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-slate-400">VehicleNumber</p>
+                  <p className="font-medium text-slate-700">
+                    {shipment.assignedAgent?.vehicleNumber ?? "N/A"}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {(deliveryFrom || deliveryTo) && (
             <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
               <h3 className="text-lg font-semibold text-amber-700 mb-3">
-                Preferred Delivery Time
+                Assigned Delivery Slot
               </h3>
 
               <p className="text-sm text-slate-700 font-medium">
@@ -211,7 +211,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
           )}
 
           <div className="flex items-center justify-between pt-2">
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Created on {formatDate(shipment.createdAt ?? "")}
             </p>
 
