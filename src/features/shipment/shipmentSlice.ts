@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Pagination, ShipmentResponse, ShipmentState } from "./shipmentTypes";
+import type {
+    Pagination,
+    ShipmentResponse,
+    ShipmentState,
+    InitiatePaymentResponse,
+    VerifyPaymentPayload,
+    VerifyPaymentResponse,
+} from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
 
@@ -17,6 +24,56 @@ export const createShipment = createAsyncThunk<
         } catch (err: unknown) {
             const error = err as import("axios").AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to create shipment");
+        }
+    }
+);
+
+export const initiatePayment = createAsyncThunk<
+    InitiatePaymentResponse,
+    number,
+    { rejectValue: string }
+>(
+    "payment/initiatePayment",
+    async (shipmentId, { rejectWithValue }) => {
+        try {
+            const res = await api.post(
+                `/payments/initiate/${shipmentId}`
+            );
+
+            return res.data.data;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to initiate payment"
+            );
+        }
+    }
+);
+
+export const verifyPayment = createAsyncThunk<
+    VerifyPaymentResponse,
+    {
+        shipmentId: number;
+        payload: VerifyPaymentPayload;
+    },
+    { rejectValue: string }
+>(
+    "payment/verifyPayment",
+    async ({ shipmentId, payload }, { rejectWithValue }) => {
+        try {
+            const res = await api.post(
+                `/payments/verify/${shipmentId}`,
+                payload
+            );
+
+            return res.data.data;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+
+            return rejectWithValue(
+                error.response?.data?.message || "Payment verification failed"
+            );
         }
     }
 );
@@ -83,7 +140,7 @@ const shipmentSlice = createSlice({
             .addCase(createShipment.fulfilled, (state, action) => {
                 state.loading = false;
                 state.currentShipment = action.payload;
-                state.shipments=[action.payload,...state.shipments];
+                state.shipments = [action.payload, ...state.shipments];
             })
             .addCase(createShipment.rejected, rejected)
 

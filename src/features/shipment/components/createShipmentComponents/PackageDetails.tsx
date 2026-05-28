@@ -1,12 +1,12 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { validatePackageDetails } from "./shipmentValidation";
-import type { PackageDetails } from "../../shipmentTypes";
+import type { PackageDetailsFormData } from "../../shipmentTypes";
 
 interface PackageDetailsProps {
   nextStep: () => void;
   prevStep: () => void;
-  packageDetails: PackageDetails;
-  setPackageDetails: Dispatch<SetStateAction<PackageDetails>>;
+  packageDetails: PackageDetailsFormData;
+  setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
 }
 
 const deliveryPriority = [

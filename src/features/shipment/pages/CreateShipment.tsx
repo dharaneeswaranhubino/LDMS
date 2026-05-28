@@ -1,36 +1,32 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// import PackageDetails from "../components/PackageDetails";
 import PackageDetails from "../components/createShipmentComponents/PackageDetails";
-import type { PackageDetails as PackageDetailsType } from "../shipmentTypes";
+import type { PackageDetailsFormData } from "../shipmentTypes";
 import PriceBreakdown from "../components/createShipmentComponents/PriceBreakdown";
 import ShipmentAddress from "../components/createShipmentComponents/ShipmentAddress";
-import { createShipment } from "../shipmentSlice";
-import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
 
 const CreateShipment = () => {
-  const dispatch = useAppDispatch();
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
 
   const [pickUpAddress, setPickUpAddress] = useState({
-    name:"",
-    phone:"",
+    name: "",
+    phone: "",
     fullAddress: "",
     city: "",
     pinCode: "",
   });
 
   const [deliveryAddress, setDeliveryAddress] = useState({
-    name:"",
-    phone:"",
+    name: "",
+    phone: "",
     fullAddress: "",
     city: "",
     pinCode: "",
   });
 
-  const [packageDetails, setPackageDetails] = useState<PackageDetailsType>({
-    itemName:"",
+  const [packageDetails, setPackageDetails] = useState<PackageDetailsFormData>({
+    itemName: "",
     quantity: "",
     weight: "",
     description: "",
@@ -67,41 +63,27 @@ const CreateShipment = () => {
     setStep((prev) => prev - 1);
   };
 
-  const handlePaymentSuccess = (amount: number) => {
-    dispatch(
-      createShipment({
-        pickUpAddress,
-        deliveryAddress,
-        packageDetails,
-        // paymentId,
-        amount,
-      })
-    );
-  };
-
   const onReset = () => {
     setStep(1);
-
     setDirection(1);
-
     setPickUpAddress({
-      name:"",
-      phone:"",
+      name: "",
+      phone: "",
       fullAddress: "",
       city: "",
       pinCode: "",
     });
 
     setDeliveryAddress({
-      name:"",
-      phone:"",
+      name: "",
+      phone: "",
       fullAddress: "",
       city: "",
       pinCode: "",
     });
 
     setPackageDetails({
-      itemName:"",
+      itemName: "",
       quantity: "",
       weight: "",
       description: "",
@@ -124,7 +106,6 @@ const CreateShipment = () => {
         </p>
       </div>
       <AnimatePresence mode="wait" custom={direction}>
-        
         {step === 1 && (
           <motion.div
             key="shipment"
@@ -176,8 +157,9 @@ const CreateShipment = () => {
           >
             <PriceBreakdown
               prevStep={prevStep}
-              onPaymentSuccess={handlePaymentSuccess}
               packageDetails={packageDetails}
+              pickUpAddress={pickUpAddress}
+              deliveryAddress={deliveryAddress}
               onReset={onReset}
             />
           </motion.div>

@@ -6,7 +6,7 @@ export interface Address {
   pinCode: string;
 }
 
-export interface PackageDetails {
+export interface PackageDetailsFormData {
   itemName: string;
   quantity: string;
   weight: string;
@@ -106,3 +106,63 @@ export type SortKey =
   | "oldest"
   | "amount_high"
   | "amount_low";
+
+
+// Payment interface and types
+export interface InitiatePaymentResponse {
+  orderId: string;
+  amount: number;
+  currency: string;
+  keyId: string;
+  shipmentId: number;
+  paymentId: number;
+}
+
+export interface VerifyPaymentPayload {
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  razorpaySignature: string;
+}
+
+export interface VerifyPaymentResponse {
+  id: number;
+  shipmentId: number;
+  customerId: number;
+  amount: number;
+  paymentStatus: "PAID" | "FAILED" | "PENDING";
+  transactionId: string;
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  paidAt: string;
+}
+
+export interface RazorpayResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+
+export interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+
+  handler: (response: RazorpayResponse) => void;
+
+  prefill?: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
+
+  theme?: {
+    color?: string;
+  };
+
+  modal?: {
+    ondismiss?: () => void;
+  };
+}
