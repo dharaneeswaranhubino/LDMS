@@ -1,11 +1,11 @@
-import type { Address, PackageDetails } from "../shipmentTypes";
+import type { Address, PackageDetailsFormData } from "../../shipmentTypes";
 
 export interface CreateShipmentPayload {
     pickUpAddress: Address;
     deliveryAddress: Address;
-    packageDetails: PackageDetails & { quantity: string };
+    packageDetails: PackageDetailsFormData & { quantity: string };
     // paymentId: string;
-    // amount: number;
+    amount: number;
 }
 
 export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
@@ -36,6 +36,6 @@ export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
     shipmentPriority: data.packageDetails.priority,
 
     // Payment
-    // amount: data.amount,
+    amount: data.amount,
     // paymentId: data.paymentId,
 });

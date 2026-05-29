@@ -19,10 +19,18 @@ const DeliveryDetail = () => {
     dispatch(getMyDeliveries());
   }, [dispatch]);
 
-  const data = deliveries.find(
-    (item) =>
-      item.shipmentStatus !== "PENDING" && item.shipmentStatus !== "CONFIRMED" && item.shipmentStatus !== "ASSIGNED",
-  );
+  // const data = deliveries.find(
+  //   (item) =>
+  //     item.shipmentStatus !== "PENDING" && item.shipmentStatus !== "CONFIRMED" && item.shipmentStatus !== "ASSIGNED",
+  // );
+  const data =
+    deliveries.find((item) => item.shipmentStatus === "OUT_FOR_PICKUP") ||
+    deliveries.find((item) => item.shipmentStatus === "ASSIGNED") ||
+    deliveries.find(
+      (item) =>
+        item.shipmentStatus !== "PENDING" &&
+        item.shipmentStatus !== "CONFIRMED",
+    );
   console.log(data);
 
   if (!data) {
@@ -40,7 +48,7 @@ const DeliveryDetail = () => {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br rounded-lg from-cyan-50 via-indigo-200 to-sky-50 text-white p-4 lg:p-6">
@@ -48,10 +56,10 @@ const DeliveryDetail = () => {
           <DeliveryDetailHeader data={data} />
           <div className="grid lg:grid-cols-2 gap-4">
             <ShipmentDetails data={data} />
-            <ReceiverDetails data={data}/>
+            <ReceiverDetails data={data} />
           </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            <DeliveryCheckpoints data={data}/>
+            <DeliveryCheckpoints data={data} />
             <ProofOfDelivery />
           </div>
         </div>

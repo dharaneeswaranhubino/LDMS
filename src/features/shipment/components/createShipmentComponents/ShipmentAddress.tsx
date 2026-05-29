@@ -1,26 +1,9 @@
 import {
   useState,
   type ChangeEvent,
-  type Dispatch,
-  type SetStateAction,
 } from "react";
 import { validateShipmentAddress } from "./shipmentValidation";
-
-interface Address {
-  name: string;
-  phone: string;
-  fullAddress: string;
-  city: string;
-  pinCode: string;
-}
-
-interface ShipmentAddressProps {
-  nextStep: () => void;
-  pickUpAddress: Address;
-  setPickUpAddress: Dispatch<SetStateAction<Address>>;
-  deliveryAddress: Address;
-  setDeliveryAddress: Dispatch<SetStateAction<Address>>;
-}
+import type { ShipmentAddressProps } from "../../shipmentTypes";
 
 const ShipmentAddress = ({
   nextStep,

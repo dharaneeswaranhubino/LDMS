@@ -1,4 +1,4 @@
-import type { Address, PackageDetails } from "../../shipmentTypes";
+import type { Address, PackageDetailsFormData } from "../../shipmentTypes";
 
 export const validateShipmentAddress = (
   pickUpAddress: Address,
@@ -66,7 +66,7 @@ export const validateShipmentAddress = (
   return errors;
 };
 
-export const validatePackageDetails = (packageDetails: PackageDetails) => {
+export const validatePackageDetails = (packageDetails: PackageDetailsFormData) => {
   const errors: Record<string, string> = {};
 
   if (!packageDetails.itemName.trim()) {

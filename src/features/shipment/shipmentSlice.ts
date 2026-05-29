@@ -11,14 +11,16 @@ import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
 
 export const createShipment = createAsyncThunk<
-    ShipmentResponse,       // ← return type
-    CreateShipmentPayload,  // ← arg type
-    { rejectValue: string } // ← error type
+    ShipmentResponse,       // return type
+    CreateShipmentPayload,  // arg type
+    { rejectValue: string } // error type
 >(
     "shipment/createShipment",
     async (data: CreateShipmentPayload, { rejectWithValue }) => {
         try {
             const payload = mapToBackendPayload(data);
+            console.log(payload);
+            
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
@@ -100,8 +102,8 @@ export const fetchMyShipments = createAsyncThunk<
 );
 
 export const fetchShipmentById = createAsyncThunk<
-    ShipmentResponse,  // return type
-    number,            // arg type (id)
+    ShipmentResponse,
+    number,           
     { rejectValue: string }
 >(
     "shipment/fetchShipmentById",

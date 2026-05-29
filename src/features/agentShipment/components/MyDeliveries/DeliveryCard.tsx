@@ -81,6 +81,14 @@ const DeliveryCard = ({ item }: Props) => {
 
   const Separator = () => <span className="w-px h-4 bg-slate-300 shrink-0" />;
 
+  const formatTime = (time: string) => {
+    return new Date(`1970-01-01T${time}`).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   return (
     <>
       <div className="rounded-2xl bg-white border border-slate-100 p-5 shadow-sm transition-all duration-300 hover:shadow">
@@ -158,12 +166,13 @@ const DeliveryCard = ({ item }: Props) => {
                     {item.receiverName}
                   </span>
 
-                  <TbMinusVertical size={20}/>
+                  <TbMinusVertical size={20} />
 
                   <div className="flex items-center gap-2">
                     <FaClock className="text-slate-400" />
                     <span>
-                      {item.assignedSlotStart} - {item.assignedSlotEnd}
+                      {formatTime(item.assignedSlotStart)} -{" "}
+                      {formatTime(item.assignedSlotEnd)}
                     </span>
                   </div>
                 </div>

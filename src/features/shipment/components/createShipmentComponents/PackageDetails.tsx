@@ -1,34 +1,7 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
 import { validatePackageDetails } from "./shipmentValidation";
-import type { PackageDetailsFormData } from "../../shipmentTypes";
-
-interface PackageDetailsProps {
-  nextStep: () => void;
-  prevStep: () => void;
-  packageDetails: PackageDetailsFormData;
-  setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
-}
-
-const deliveryPriority = [
-  {
-    label: "Standard",
-    multiplier: "1 × rate",
-    days:"Take's 3 to 5 days",
-    value: "STANDARD" as const,
-  },
-  {
-    label: "Express",
-    multiplier: "1.3 × rate",
-    days:"Take's maximum within 3 days",
-    value: "EXPRESS" as const,
-  },
-  {
-    label: "Same Day",
-    multiplier: "1.8 × rate",
-    days:"Take's 1 day",
-    value: "SAME_DAY" as const,
-  },
-];
+import type { PackageDetailsProps } from "../../shipmentTypes";
+import { deliveryPriority } from "../../utils/shipmentHelpers";
 
 const PackageDetails = ({
   nextStep,

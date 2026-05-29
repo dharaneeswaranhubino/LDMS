@@ -8,46 +8,18 @@ import {
   verifyPayment,
 } from "../../shipmentSlice";
 import type {
-  Address,
-  PackageDetailsFormData,
+  PriceBreakdownProps,
   RazorpayOptions,
   RazorpayResponse,
 } from "../../shipmentTypes";
-interface PriceBreakdownProps {
-  prevStep: () => void;
-  packageDetails: PackageDetailsFormData;
-  pickUpAddress: Address;
-  deliveryAddress: Address;
-  onReset: () => void;
-}
-
-const PRIORITY_MULTIPLIERS: Record<string, number> = {
-  STANDARD: 1,
-  EXPRESS: 1.3,
-  SAME_DAY: 1.8,
-};
-
-const BASE_RATE = 50;
-const RATE_PER_KG = 20;
-const FRAGILE_CHARGE = 50;
-const GST_RATE = 0.18;
-
-const loadRazorpayScript = (): Promise<boolean> => {
-  return new Promise((resolve) => {
-    if (document.getElementById("razorpay-script")) {
-      resolve(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-
-    script.id = "razorpay-script";
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-};
+import {
+  BASE_RATE,
+  FRAGILE_CHARGE,
+  GST_RATE,
+  loadRazorpayScript,
+  PRIORITY_MULTIPLIERS,
+  RATE_PER_KG,
+} from "../../utils/shipmentHelpers";
 
 const PriceBreakdown = ({
   prevStep,
@@ -64,7 +36,7 @@ const PriceBreakdown = ({
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [paymentStatus, setPaymentStatus] = useState<
-    "idle" | "success" | "failed"
+    "idle" | "verifying" | "success" | "failed"
   >("idle");
 
   const weight = parseFloat(packageDetails.weight) || 0;
@@ -102,6 +74,7 @@ const PriceBreakdown = ({
         }),
       ).unwrap();
       const createdShipmentId = shipment.id;
+      // const createdShipmentId = shipment.shipmentId;
       setShipmentId(createdShipmentId);
       const payment = await dispatch(
         initiatePayment(createdShipmentId),
@@ -115,6 +88,7 @@ const PriceBreakdown = ({
         order_id: payment.orderId,
         handler: async function (response: RazorpayResponse) {
           try {
+            setPaymentStatus("verifying");
             await dispatch(
               verifyPayment({
                 shipmentId: createdShipmentId,
@@ -159,6 +133,22 @@ const PriceBreakdown = ({
       setIsProcessing(false);
     }
   };
+  
+  if (paymentStatus === "verifying") {
+    return (
+      <div className="bg-white border border-slate-200 rounded-2xl p-8 mt-4 flex flex-col items-center gap-4 shadow-sm">
+        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+
+        <p className="text-xl font-semibold text-slate-700">
+          Verifying payment...
+        </p>
+
+        <p className="text-slate-500 text-sm text-center">
+          Please wait while we confirm your payment securely.
+        </p>
+      </div>
+    );
+  }
 
   if (paymentStatus === "success") {
     return (
