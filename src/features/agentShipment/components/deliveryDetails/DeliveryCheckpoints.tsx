@@ -1,38 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deliveryMock } from "../../utils/mockDelivery";
 import { getStatusState, statusOrder } from "../../utils/statusHelpers";
 import UpdateStatusModal from "./UpdateStatusModal";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../../shared/hooks/reduxHooks";
+import { useAppDispatch } from "../../../../shared/hooks/reduxHooks";
 import { updateTrackStatus } from "../../agentSlice";
+import { showToast } from "../../../../shared/components/Toast";
 
-const DeliveryCheckpoints = ({ data }) => {
+const DeliveryCheckpoints = ({ data, otpVerified }) => {
   const dispatch = useAppDispatch();
-  // const [currentStatus, setCurrentStatus] = useState(
-  //   deliveryMock.currentStatus,
-  // );
   const [currentStatus, setCurrentStatus] = useState(data.shipmentStatus);
+  useEffect(() => {
+    setCurrentStatus(data.shipmentStatus);
+  }, [data.shipmentStatus]);
   const [openModal, setOpenModal] = useState(false);
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
   const [truckProgress, setTruckProgress] = useState(0); // 0 → 1 over 3s
 
   const currentIndex = statusOrder.indexOf(currentStatus);
-
   const handleUpdate = async (nextStatus: string) => {
     try {
+      // prevent duplicate update
+      if (currentStatus === nextStatus) {
+        return;
+      }
+
+      // animation start
+      const currentIndex = statusOrder.indexOf(currentStatus);
+      setAnimatingIndex(currentIndex);
+      setTruckProgress(0);
+
+      const animationDuration = 3000; // 3 seconds
+      const intervalTime = 30;
+
+      const totalSteps = animationDuration / intervalTime;
+      const progressStep = 1 / totalSteps;
+
+      const animation = setInterval(() => {
+        setTruckProgress((prev) => {
+          if (prev >= 1) {
+            clearInterval(animation);
+            return 1;
+          }
+
+          return prev + progressStep;
+        });
+      }, intervalTime);
+
+      // API CALL
       await dispatch(
         updateTrackStatus({
-          shipmentId: data.id,
-          status: nextStatus,
+          id: String(data.shipmentId),
+          data: {
+            status: nextStatus,
+          },
         }),
       ).unwrap();
 
+      clearInterval(animation);
+
+      // IMPORTANT
       setCurrentStatus(nextStatus);
+      setAnimatingIndex(null);
+      setTruckProgress(0);
     } catch (error) {
       console.log(error);
+      setAnimatingIndex(null);
+      setTruckProgress(0);
     }
+  };
+
+  const handleUpdateClick = () => {
+    if (currentStatus === "OUT_FOR_DELIVERY" && !otpVerified) {
+      showToast({
+        type: "warning",
+        message: "OTP verification is required",
+      });
+      return;
+    }
+    setOpenModal(true);
   };
 
   return (
@@ -92,11 +137,13 @@ const DeliveryCheckpoints = ({ data }) => {
                         ) : (
                           <i
                             className={`fa-solid text-sm ${
-                              state.done
-                                ? "fa-check"
-                                : state.active
-                                  ? "fa-truck"
-                                  : "fa-circle"
+                              isAnimatingFromHere
+                                ? "fa-truck"
+                                : state.done
+                                  ? "fa-check"
+                                  : state.active
+                                    ? "fa-truck"
+                                    : "fa-circle"
                             }`}
                           />
                         )}
@@ -167,10 +214,10 @@ const DeliveryCheckpoints = ({ data }) => {
                     </div>
 
                     {state.active &&
-                      currentStatus !== "DELIVERED" &&
+                      item.key !== "DELIVERED" &&
                       animatingIndex === null && (
                         <button
-                          onClick={() => setOpenModal(true)}
+                          onClick={handleUpdateClick}
                           className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-xs text-blue-700 hover:bg-blue-100"
                         >
                           Update
@@ -189,7 +236,7 @@ const DeliveryCheckpoints = ({ data }) => {
           onClose={() => setOpenModal(false)}
           currentStatus={currentStatus}
           onUpdate={handleUpdate}
-          shipmentId={data.id}
+          shipmentId={data.shipmentId}
         />
       )}
     </>

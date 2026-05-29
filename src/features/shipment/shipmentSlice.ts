@@ -6,6 +6,7 @@ import type {
     InitiatePaymentResponse,
     VerifyPaymentPayload,
     VerifyPaymentResponse,
+    PaymentDetailsResponse,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -20,7 +21,7 @@ export const createShipment = createAsyncThunk<
         try {
             const payload = mapToBackendPayload(data);
             console.log(payload);
-            
+
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
@@ -103,7 +104,7 @@ export const fetchMyShipments = createAsyncThunk<
 
 export const fetchShipmentById = createAsyncThunk<
     ShipmentResponse,
-    number,           
+    number,
     { rejectValue: string }
 >(
     "shipment/fetchShipmentById",
@@ -118,9 +119,29 @@ export const fetchShipmentById = createAsyncThunk<
     }
 );
 
+export const fetchPaymentDetails = createAsyncThunk<
+    PaymentDetailsResponse,
+    number,
+    { rejectValue: string }
+>(
+    "payment/fetchPaymentDetails",
+    async (shipmentId, { rejectWithValue }) => {
+        try {
+            const res = await api.get(`/payments/${shipmentId}`);
+            return res.data.data;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch payment details"
+            );
+        }
+    }
+);
+
 const initialState: ShipmentState = {
     shipments: [],
     currentShipment: null,
+    paymentDetails: null,
     pagination: null,
     loading: false,
     error: null,
@@ -159,7 +180,16 @@ const shipmentSlice = createSlice({
                 state.loading = false;
                 state.currentShipment = action.payload;
             })
-            .addCase(fetchShipmentById.rejected, rejected);
+            .addCase(fetchShipmentById.rejected, rejected)
+
+            .addCase(fetchPaymentDetails.pending, pending)
+
+            .addCase(fetchPaymentDetails.fulfilled, (state, action) => {
+                state.loading = false;
+                state.paymentDetails = action.payload;
+            })
+
+            .addCase(fetchPaymentDetails.rejected, rejected)
     },
 });
 

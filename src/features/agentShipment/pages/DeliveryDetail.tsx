@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -14,24 +14,68 @@ import ShipmentDetails from "../components/deliveryDetails/ShipmentDetails";
 const DeliveryDetail = () => {
   const dispatch = useAppDispatch();
   const { deliveries } = useAppSelector((state) => state.agent);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [switchingShipment, setSwitchingShipment] = useState(false);
 
   useEffect(() => {
     dispatch(getMyDeliveries());
   }, [dispatch]);
 
-  // const data = deliveries.find(
-  //   (item) =>
-  //     item.shipmentStatus !== "PENDING" && item.shipmentStatus !== "CONFIRMED" && item.shipmentStatus !== "ASSIGNED",
-  // );
-  const data =
-    deliveries.find((item) => item.shipmentStatus === "OUT_FOR_PICKUP") ||
-    deliveries.find((item) => item.shipmentStatus === "ASSIGNED") ||
-    deliveries.find(
-      (item) =>
-        item.shipmentStatus !== "PENDING" &&
-        item.shipmentStatus !== "CONFIRMED",
+  const activeStatuses = [
+    "OUT_FOR_PICKUP",
+    "PICKED_UP",
+    "IN_TRANSIT",
+    "OUT_FOR_DELIVERY",
+  ];
+
+  const activeDelivery = deliveries.find((item) =>
+    activeStatuses.includes(item.shipmentStatus),
+  );
+
+  const assignedDeliveries = deliveries
+    .filter((item) => item.shipmentStatus === "ASSIGNED")
+    .sort(
+      (a, b) =>
+        new Date(a.assignedDate).getTime() - new Date(b.assignedDate).getTime(),
     );
-  console.log(data);
+
+  const data = activeDelivery || assignedDeliveries[0];
+  // const data =
+  //   deliveries.find((item) => item.shipmentStatus === "OUT_FOR_PICKUP") ||
+  //   deliveries.find((item) => item.shipmentStatus === "ASSIGNED") ||
+  //   deliveries.find(
+  //     (item) =>
+  //       item.shipmentStatus !== "PENDING" &&
+  //       item.shipmentStatus !== "CONFIRMED",
+  //   );
+  // console.log(data);
+
+  useEffect(() => {
+    if (data?.shipmentStatus === "DELIVERED") {
+      setSwitchingShipment(true);
+
+      const timer = setTimeout(() => {
+        setSwitchingShipment(false);
+        setOtpVerified(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [data?.shipmentStatus]);
+
+  if (switchingShipment) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-14 w-14 animate-spin rounded-full border-4 border-indigo-300 border-t-indigo-600"></div>
+
+          <p className="text-lg font-semibold text-slate-600">
+            Loading next assigned delivery...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!data) {
     return (
@@ -59,8 +103,15 @@ const DeliveryDetail = () => {
             <ReceiverDetails data={data} />
           </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            <DeliveryCheckpoints data={data} />
-            <ProofOfDelivery />
+            {/* <DeliveryCheckpoints data={data} />
+            <ProofOfDelivery data={data} /> */}
+            <DeliveryCheckpoints data={data} otpVerified={otpVerified} />
+
+            <ProofOfDelivery
+              currentStatus={data.shipmentStatus}
+              otpVerified={otpVerified}
+              setOtpVerified={setOtpVerified}
+            />
           </div>
         </div>
       </div>

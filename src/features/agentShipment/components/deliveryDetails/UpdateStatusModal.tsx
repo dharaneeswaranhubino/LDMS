@@ -6,7 +6,6 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../shared/hooks/reduxHooks";
-import { updateTrackStatus } from "../../agentSlice";
 import { showToast } from "../../../../shared/components/Toast";
 
 const UpdateStatusModal = ({
@@ -18,45 +17,85 @@ const UpdateStatusModal = ({
   const dispatch = useAppDispatch();
   const { statusState } = useAppSelector((state) => state.agent);
   const [remarks, setRemarks] = useState("");
-
   const currentIndex = statusOrder.indexOf(currentStatus);
-  const nextStatus = statusOrder[currentIndex + 1];
+  const calculatedNextStatus = statusOrder[currentIndex + 1];
+  const nextStatus = calculatedNextStatus;
   const prevStatus = deliveryMock.timeline.find(
     (item) => item.key === currentStatus,
   );
   const newStatus = deliveryMock.timeline.find(
     (item) => item.key === nextStatus,
   );
+  // const handleUpdate = async () => {
+  //   try {
+  //     await onUpdate(nextStatus);
+  //     showToast({
+  //       type: "success",
+  //       message:
+  //       nextStatus === "DELIVERED"
+  //       ? "Shipment delivered successfully"
+  //       : `Status updated to ${newStatus?.label}`,
+  //     });
+  //     onClose();
+  //   } catch (error) {
+  //     showToast({
+  //       type: "error",
+  //       message: "Failed to update shipment status",
+  //     });
+  //   }
+  // };
 
-  const handleUpdate = async () => {
-    const result = await dispatch(
-      updateTrackStatus({
-        id: shipmentId,
-        data: {
-          status: nextStatus,
-          ...(remarks.trim() && { remarks: remarks.trim() }),
-        },
-      }),
-    );
-    onUpdate(nextStatus);
-    onClose();
-    showToast({
-      type: "success",
-      message: `Status updated to ${newStatus?.label}`,
-    });
-    // if (updateTrackStatus.fulfilled.match(result)) {
-    //   onUpdate(nextStatus);
-    //   showToast({
-    //     type: "success",
-    //     message: `Status updated to ${newStatus?.label}`,
-    //   });
-    //   onClose();
-    // } else {
-    //   showToast({
-    //     type: "error",
-    //     message: `Failed to update status to ${newStatus?.label}`,
-    //   });
-    // }
+  const handleUpdate = async (nextStatus: string) => {
+    try {
+      if (currentStatus === nextStatus) {
+        return;
+      }
+
+      // animation starts AFTER modal closes
+      const currentIndex = statusOrder.indexOf(currentStatus);
+
+      setAnimatingIndex(currentIndex);
+      setTruckProgress(0);
+
+      const animationDuration = 3000;
+      const intervalTime = 30;
+
+      const totalSteps = animationDuration / intervalTime;
+      const progressStep = 1 / totalSteps;
+
+      const animation = setInterval(() => {
+        setTruckProgress((prev) => {
+          if (prev >= 1) {
+            clearInterval(animation);
+            return 1;
+          }
+
+          return prev + progressStep;
+        });
+      }, intervalTime);
+
+      // API call
+      await dispatch(
+        updateTrackStatus({
+          id: String(data.shipmentId),
+          data: {
+            status: nextStatus,
+          },
+        }),
+      ).unwrap();
+
+      // wait until animation finishes
+      setTimeout(() => {
+        setCurrentStatus(nextStatus);
+        setAnimatingIndex(null);
+        setTruckProgress(0);
+      }, animationDuration);
+    } catch (error) {
+      console.log(error);
+
+      setAnimatingIndex(null);
+      setTruckProgress(0);
+    }
   };
 
   return (
@@ -137,8 +176,8 @@ const UpdateStatusModal = ({
               </motion.button>
             </>
           ) : (
-            <div className="mt-6 rounded-2xl bg-green-100 p-4 text-center text-green-700">
-              Delivery already completed
+            <div className="mt-6 rounded-2xl bg-slate-100 p-4 text-center text-slate-600">
+              No further updates available
             </div>
           )}
         </motion.div>

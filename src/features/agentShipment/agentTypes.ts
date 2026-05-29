@@ -7,10 +7,17 @@ export interface UpdateTrackStatus {
   id: string;
   data: StatusUpdate;
 }
+
 export interface AgentState {
-  //   shipments: AgentResponse[];
+  deliveries: DeliveryItem[];
+  statusState: Partial<DeliveryItem> | null;
   loading: boolean;
   error: string | null;
+  search: string;
+  priorityFilter: string;
+  activeTab: string;
+  currentPage: number;
+  itemsPerPage: number;
 }
 
 export type ShipmentPriority =
@@ -63,15 +70,4 @@ export interface DeliveriesResponse {
   success: boolean;
   message: string;
   data: DeliveryItem[];
-}
-
-export interface AgentState {
-  deliveries: DeliveryItem[];
-  loading: boolean;
-  error: string | null;
-  search: string;
-  priorityFilter: string;
-  activeTab: string;
-  currentPage: number;
-  itemsPerPage: number;
 }

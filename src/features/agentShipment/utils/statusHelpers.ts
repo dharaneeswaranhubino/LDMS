@@ -1,10 +1,12 @@
 export const statusOrder = [
+    "ASSIGNED",
     "OUT_FOR_PICKUP",
     "PICKED_UP",
     "IN_TRANSIT",
     "OUT_FOR_DELIVERY",
     "DELIVERED",
 ];
+
 
 export const getStatusState = (
     currentStatus: string,
@@ -17,5 +19,6 @@ export const getStatusState = (
         done: itemIndex < currentIndex,
         active: itemIndex === currentIndex,
         pending: itemIndex > currentIndex,
+        nextPending:itemIndex === currentIndex+1,
     }
 }

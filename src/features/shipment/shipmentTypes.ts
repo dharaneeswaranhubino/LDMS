@@ -80,6 +80,7 @@ export interface Pagination {
 export interface ShipmentState {
   shipments: ShipmentResponse[];
   currentShipment: ShipmentResponse | null;
+  paymentDetails: PaymentDetailsResponse | null;
   pagination: Pagination | null;
   loading: boolean;
   error: string | null;
@@ -97,9 +98,7 @@ export type ShipmentStatus =
   | "CANCELLED";
 
 export type PriorityType = "STANDARD" | "EXPRESS" | "SAME_DAY";
-
 export type FilterTab = "ALL" | ShipmentStatus;
-
 export type SortKey = "newest" | "oldest" | "amount_high" | "amount_low";
 
 // Payment interface and types
@@ -143,22 +142,32 @@ export interface RazorpayOptions {
   name: string;
   description: string;
   order_id: string;
-
   handler: (response: RazorpayResponse) => void;
-
   prefill?: {
     name?: string;
     email?: string;
     contact?: string;
   };
-
   theme?: {
     color?: string;
   };
-
   modal?: {
     ondismiss?: () => void;
   };
+}
+
+export interface PaymentDetailsResponse {
+  id: number;
+  shipmentId: number;
+  customerId: number;
+  transactionId: string;
+  amount: number;
+  paymentStatus: "PAID" | "FAILED" | "PENDING";
+  paidAt: string;
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Components prop interfaces
@@ -187,3 +196,4 @@ export interface PriceBreakdownProps {
   deliveryAddress: Address;
   onReset: () => void;
 }
+

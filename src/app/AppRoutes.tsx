@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
+import PaymentDetails from "../features/shipment/pages/PaymentDetails";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -81,6 +82,8 @@ const AppRoutes = () => {
             <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/deliveryDetail" element={<DeliveryDetail />} />
             <Route path="/deliveryHistory" element={<DeliveryHistory />} />
+            <Route path="/payments/" element={<PaymentDetails />} />
+            {/* <Route path="/payments/:shipmentId" element={<PaymentDetails />} /> */}
           </Route>
         </Routes>
       </Suspense>

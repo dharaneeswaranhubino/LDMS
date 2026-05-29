@@ -14,6 +14,8 @@ import ShipmentCard from "../components/myShipmentComponents/ShipmentCard";
 import ShipmentEmpty from "../components/myShipmentComponents/ShipmentEmpty";
 import ShipmentTabs from "../components/myShipmentComponents/ShipmentTabs";
 import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar";
+import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
+// import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
 
 const MyShipments = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +35,17 @@ const MyShipments = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+
+  const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<
+    number | null
+  >(null);
+
+  const handlePaymentView = (shipmentId: number) => {
+    setSelectedPaymentShipmentId(shipmentId);
+    setOpenPaymentModal(true);
+  };
 
   const searchRef = useRef<HTMLInputElement | null>(null);
 
@@ -166,6 +179,7 @@ const MyShipments = () => {
                   key={item.shipmentId ?? item.trackingId}
                   item={item}
                   onView={handleView}
+                  onPaymentView={handlePaymentView}
                 />
               );
             })}
@@ -281,6 +295,12 @@ const MyShipments = () => {
         shipment={selectedShipment}
         open={openModal}
         onClose={() => setOpenModal(false)}
+      />
+
+      <PaymentDetailsModal
+        shipmentId={selectedPaymentShipmentId}
+        open={openPaymentModal}
+        onClose={() => setOpenPaymentModal(false)}
       />
     </>
   );

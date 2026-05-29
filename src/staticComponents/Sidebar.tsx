@@ -6,6 +6,7 @@ import { logoutUser } from "../features/auth/authSlice";
 import { TbListDetails, TbTruckDelivery } from "react-icons/tb";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaCubesStacked } from "react-icons/fa6";
+import { fetchMyShipments } from "../features/shipment/shipmentSlice";
 
 interface MenuItem {
   name: string;
@@ -24,7 +25,7 @@ const roleColors = {
   customer: "bg-blue-500 text-white",
 };
 
-const menu: MenuItem[] = [
+const getMenu = (shipmentCount: number): MenuItem[] => [
   // admin
   {
     name: "Admin Dashboard",
@@ -120,7 +121,7 @@ const menu: MenuItem[] = [
     section: "MAIN",
     allowedRole: "customer",
     icon: <FaCubesStacked size={18} />,
-    badge: 3,
+    badge: shipmentCount,
   },
   {
     name: "Track shipment",
@@ -176,12 +177,18 @@ const Sidebar = () => {
   const { hasRole } = useRole();
   const { user } = useAppSelector((state) => state.auth);
 
+  const shipmentCount = useAppSelector(
+    (state) => state.shipment.shipments.length,
+  );
+
   const [isOpen, setIsOpen] = useState(false);
 
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
 
+  const menu = getMenu(shipmentCount);
   const filteredMenu = menu.filter((item) => hasRole(item.allowedRole));
+
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
 
@@ -194,6 +201,12 @@ const Sidebar = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (user?.role === "customer") {
+      dispatch(fetchMyShipments({ page: 1, limit: 100 }));
+    }
+  }, [dispatch, user?.role]);
 
   const getFirstLetterCapital = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1);
@@ -269,7 +282,11 @@ const Sidebar = () => {
                 </p>
                 <nav className="space-y-1">
                   {sectionItems.map((item) => {
-                    const isActive = location.pathname === item.path;
+                    const isActive =
+                      item.path === "/payments"
+                        ? location.pathname.startsWith("/payments")
+                        : location.pathname === item.path;
+
                     return (
                       <NavLink
                         key={item.name}
@@ -290,8 +307,10 @@ const Sidebar = () => {
                           >
                             {item.icon}
                           </div>
+
                           <span>{item.name}</span>
                         </div>
+
                         {item.badge && (
                           <span
                             className={`min-w-[18px] h-[18px] rounded-full text-[10px] flex items-center justify-center font-semibold ${

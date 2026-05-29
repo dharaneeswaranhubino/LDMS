@@ -15,12 +15,18 @@ import {
   STATUS_STYLES,
 } from "../../utils/shipmentHelpers";
 
+// interface Props {
+//   item: ShipmentResponse;
+//   onView: (shipment: ShipmentResponse) => void;
+// }
+
 interface Props {
   item: ShipmentResponse;
   onView: (shipment: ShipmentResponse) => void;
+  onPaymentView: (shipmentId: number) => void;
 }
 
-const ShipmentCard = ({ item, onView }: Props) => {
+const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
   const navigate = useNavigate();
 
   const status = (item.shipmentStatus ?? "PENDING") as ShipmentStatus;
@@ -113,16 +119,6 @@ const ShipmentCard = ({ item, onView }: Props) => {
           View
         </button>
 
-        {/* {isPendingPayment && (
-            <button
-              onClick={() => navigate(`/payment/${item.shipmentId}`)}
-              className="py-[7px] px-4 border border-amber-300 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all text-[12px] font-medium"
-            >
-              <i className="fa-solid fa-credit-card mr-1" />
-              Pay now · ₹{item.amount}
-            </button>
-          )} */}
-
         {!["CANCELLED", "PENDING"].includes(status) && (
           <button
             onClick={() => navigate(`/trackShipments/${item.shipmentId}`)}
@@ -132,6 +128,15 @@ const ShipmentCard = ({ item, onView }: Props) => {
             Track
           </button>
         )}
+        
+        <button
+          // onClick={() => navigate(`/payments/${item.shipmentId}`)}
+          onClick={() => onPaymentView(item.shipmentId)}
+          className="py-[7px] px-4 border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100 transition-all text-[12px]"
+        >
+          <i className="fa-solid fa-credit-card mr-1" />
+          Payment
+        </button>
 
         {!["CANCELLED", "PENDING", "CONFIRMED"].includes(status) && (
           <button

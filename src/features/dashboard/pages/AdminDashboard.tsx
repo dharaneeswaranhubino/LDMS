@@ -6,7 +6,7 @@ import { FaRegCheckCircle } from "react-icons/fa";
 
 const stateCards = [
   {
-    count: 248,
+    count: 120,
     title: "Total Shipments",
     statusIcon: <i className="fa-solid fa-arrow-trend-up"></i>,
     status: "+12 today",
@@ -15,8 +15,17 @@ const stateCards = [
     iconBgColor:"bg-cyan-100"
   },
   {
-    count: 186,
+    count: 85,
     title: "Delivered",
+    statusIcon: <i className="fa-solid fa-arrow-trend-up"></i>,
+    status: "+12 today",
+    icon: <FaRegCheckCircle size={40} />,
+    iconColor:"text-lime-700",
+    iconBgColor:"bg-lime-100"
+  },
+  {
+    count: 20,
+    title: "Active Delivered",
     statusIcon: <i className="fa-solid fa-arrow-trend-up"></i>,
     status: "+12 today",
     icon: <FaRegCheckCircle size={40} />,
@@ -55,9 +64,9 @@ const AdminDashboard = () => {
                 <p className="text-[11px] text-slate-400 uppercase font-semibold">
                   {item.title}
                 </p>
-                <p className="text-[12px] mt-1 text-green-500">
+                {/* <p className="text-[12px] mt-1 text-green-500">
                   {item.statusIcon} {item.status}
-                </p>
+                </p> */}
               </div>
               <div className={`${item.iconBgColor} p-2 rounded-lg ${item.iconColor}`}>
                 {item.icon}

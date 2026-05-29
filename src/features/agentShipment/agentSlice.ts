@@ -4,12 +4,13 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import type { UpdateTrackStatus, DeliveriesResponse } from "./agentTypes";
+import type { UpdateTrackStatus, DeliveriesResponse, DeliveryItem } from "./agentTypes";
 import type { AxiosError } from "axios";
 
 
 export const getMyDeliveries = createAsyncThunk<
-  DeliveriesResponse,
+  // DeliveriesResponse,
+  DeliveryItem[],
   void,
   { rejectValue: string }
 >(
@@ -35,8 +36,9 @@ export const updateTrackStatus = createAsyncThunk(
   async ({ id, data }: UpdateTrackStatus, { rejectWithValue }) => {
     try {
       console.log("{ id, data } :", { id, data });
-
       const res = await api.patch(`shipments/status/${id}`, data);
+      console.log("Patch res :", res.data);
+
       return res.data?.data;
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;
@@ -51,6 +53,7 @@ export const updateTrackStatus = createAsyncThunk(
 const initialState = {
   deliveries: [],
   // deliveries: [],
+  // statusState: Partial<DeliveryItem> | null,
   statusState: {},
   search: "",
   priorityFilter: "ALL",
@@ -104,11 +107,27 @@ const agentSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      // .addCase(updateTrackStatus.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.statusState = action.payload;
+      //   state.error = null;
+      //   console.log(state.statusState);
+      // })
       .addCase(updateTrackStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.statusState = action.payload;
         state.error = null;
-        console.log(state.statusState);
+
+        const index = state.deliveries.findIndex(
+          (item) => item.shipmentId === action.payload.shipmentId,
+        );
+
+        if (index !== -1) {
+          state.deliveries[index] = {
+            ...state.deliveries[index],
+            ...action.payload,
+          };
+        }
       })
       .addCase(updateTrackStatus.rejected, (state) => {
         state.loading = false;
