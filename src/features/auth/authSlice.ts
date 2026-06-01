@@ -7,7 +7,7 @@ export const initializeAuth = createAsyncThunk(
   "auth/initializeAuth",
   async (_, { rejectWithValue }) => {
     try {
-      // RefreshToken cookie automatic send → new accessToken came
+      // RefreshToken cookie automatic send -> new accessToken came
       const res = await api.post("/auth/refreshToken");
       return res.data.data as { accessToken: string; user: User };
     } catch(err) {

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../shared/hooks/reduxHooks";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 interface MobileMenuProps {
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,16 +44,16 @@ const MobileMenu = ({ setMenuOpen }: MobileMenuProps) => {
         {!user?.name ? (
           <Link
             to="/login"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/30 hover:scale-105 transition duration-300"
+            className="flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/30 hover:scale-105 transition duration-300"
           >
-            Login →
+            Login <FaArrowRightLong />
           </Link>
         ) : (
           <Link
             to="/customerDashboard"
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/30 hover:scale-105 transition duration-300"
+            className="flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/30 hover:scale-105 transition duration-300"
           >
-            Dashboard →
+            Dashboard <FaArrowRightLong />
           </Link>
         )}
       </div>

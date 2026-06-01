@@ -8,7 +8,6 @@ export type ShipmentStatus =
     | "COMPLETED"
     | "CANCELLED";
 
-
 export interface AssignedShipment {
     id: number;
     trackingId: string;
@@ -28,7 +27,6 @@ export interface AssignedShipment {
     lastMessageTime?: string;
     unread?: boolean;
 }
-
 
 export interface AgentProfile {
   id: number;

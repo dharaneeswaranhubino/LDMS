@@ -9,9 +9,7 @@ import Footer from "../components/Footer";
 
 const LandingPage = () => {
   const [scrollY, setScrollY] = useState(0);
-
   const [menuOpen, setMenuOpen] = useState(false);
-
   // console.log("scrollY: ",scrollY);
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +24,6 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#080c14] text-slate-200 scroll-smooth">
       <Navbar scrollY={scrollY} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-
       {menuOpen && <MobileMenu setMenuOpen={setMenuOpen} />}
       <HeroSection />
       <StatsSection />

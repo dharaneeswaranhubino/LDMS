@@ -1,3 +1,4 @@
+import type { DeliveryDetailsModalProps } from "../../agentTypes";
 import { formatDate } from "../../utils/mockDelivery";
 
 const DeliveryDetailsModal = ({
@@ -5,7 +6,7 @@ const DeliveryDetailsModal = ({
   item,
   getPriorityColor,
   getStatusColor,
-}) => {
+}:DeliveryDetailsModalProps) => {
   const onClose = () => {
     setIsView(false);
   };
@@ -20,7 +21,7 @@ const DeliveryDetailsModal = ({
               </h2>
 
               <p className="text-sm text-slate-500 mt-1">
-                {item.trackingId ?? `#SHP-${item.id}`}
+                {item.trackingId ?? `#SHP-${item.shipmentId}`}
               </p>
             </div>
 

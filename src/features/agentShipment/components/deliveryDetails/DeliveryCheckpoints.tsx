@@ -5,8 +5,9 @@ import UpdateStatusModal from "./UpdateStatusModal";
 import { useAppDispatch } from "../../../../shared/hooks/reduxHooks";
 import { updateTrackStatus } from "../../agentSlice";
 import { showToast } from "../../../../shared/components/Toast";
+import type { DeliveryCheckpointsProps, ShipmentStatus } from "../../agentTypes";
 
-const DeliveryCheckpoints = ({ data, otpVerified }) => {
+const DeliveryCheckpoints = ({ data, otpVerified }:DeliveryCheckpointsProps) => {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(data.shipmentStatus);
   useEffect(() => {
@@ -17,7 +18,7 @@ const DeliveryCheckpoints = ({ data, otpVerified }) => {
   const [truckProgress, setTruckProgress] = useState(0); // 0 → 1 over 3s
 
   const currentIndex = statusOrder.indexOf(currentStatus);
-  const handleUpdate = async (nextStatus: string) => {
+  const handleUpdate = async (nextStatus: ShipmentStatus) => {
     try {
       // prevent duplicate update
       if (currentStatus === nextStatus) {

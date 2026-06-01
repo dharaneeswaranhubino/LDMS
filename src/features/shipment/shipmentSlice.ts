@@ -7,9 +7,11 @@ import type {
     VerifyPaymentPayload,
     VerifyPaymentResponse,
     PaymentDetailsResponse,
+    CustomerDashboardData,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
+import { getMockCustomerDashboard } from "../dashboard/utils/CustomerDashboardHelper";
 
 export const createShipment = createAsyncThunk<
     ShipmentResponse,       // return type
@@ -90,7 +92,6 @@ export const fetchMyShipments = createAsyncThunk<
     async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
         try {
             const res = await api.get(`/shipments/myShipments?page=${page}&limit=${limit}`);
-
             return {
                 shipments: res.data.data.shipments,
                 pagination: res.data.data.pagination,
@@ -138,11 +139,72 @@ export const fetchPaymentDetails = createAsyncThunk<
     }
 );
 
+// export const fetchCustomerDashboard = createAsyncThunk<
+//     CustomerDashboardData,
+//     { from: string; to: string },
+//     { rejectValue: string }
+// >(
+//     "customerDashboard/fetch",
+//     async (_args, { rejectWithValue }) => {
+//         try {
+//             // Simulate network delay so loading state is visible during dev
+//             await new Promise((res) => setTimeout(res, 600));
+//             return MOCK_CUSTOMER_DASHBOARD;
+//         } catch (err: unknown) {
+//             const error = err as import("axios").AxiosError<{ message: string }>;
+//             return rejectWithValue(
+//                 error.response?.data?.message || "Failed to fetch dashboard"
+//             );
+//         }
+//     }
+// );
+
+export const fetchCustomerDashboard = createAsyncThunk<
+    CustomerDashboardData,
+    { from: string; to: string },
+    { rejectValue: string }
+>(
+    "customerDashboard/fetch",
+    async ({ from, to }, { rejectWithValue }) => {
+        try {
+            await new Promise((res) => setTimeout(res, 500)); // simulate network delay
+            return getMockCustomerDashboard(from, to);        // ← filters by date range
+        } catch {
+            return rejectWithValue("Failed to load mock dashboard");
+        }
+    }
+);
+
+// API is ready
+// export const fetchCustomerDashboard = createAsyncThunk<
+//     CustomerDashboardData,
+//     { from: string; to: string },
+//     { rejectValue: string }
+// >(
+//     "customerDashboard/fetch",
+//     async ({ from, to }, { rejectWithValue }) => {
+//         try {
+//             const res = await api.get(`/dashboard/customer?from=${from}&to=${to}`);
+//             return res.data.data;
+//         } catch (err: unknown) {
+//             const error = err as import("axios").AxiosError<{ message: string }>;
+//             return rejectWithValue(error.response?.data?.message || "Failed to fetch dashboard");
+//         }
+//     }
+// );
+
+const today = new Date().toISOString().split("T")[0];
+const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+    .toISOString()
+    .split("T")[0];
+
 const initialState: ShipmentState = {
     shipments: [],
     currentShipment: null,
     paymentDetails: null,
     pagination: null,
+    dashboardData: null,
+    dateRange: { from: firstOfMonth, to: today },
     loading: false,
     error: null,
 };
@@ -153,6 +215,12 @@ const shipmentSlice = createSlice({
     reducers: {
         clearCurrentShipment: (state) => { state.currentShipment = null; },
         clearError: (state) => { state.error = null; },
+        setDateRange: (
+            state,
+            action: PayloadAction<{ from: string; to: string }>
+        ) => {
+            state.dateRange = action.payload;
+        },
     },
     extraReducers: (builder) => {
         const pending = (state: ShipmentState) => { state.loading = true; state.error = null; };
@@ -183,15 +251,20 @@ const shipmentSlice = createSlice({
             .addCase(fetchShipmentById.rejected, rejected)
 
             .addCase(fetchPaymentDetails.pending, pending)
-
             .addCase(fetchPaymentDetails.fulfilled, (state, action) => {
                 state.loading = false;
                 state.paymentDetails = action.payload;
             })
-
             .addCase(fetchPaymentDetails.rejected, rejected)
+
+            .addCase(fetchCustomerDashboard.pending, pending)
+            .addCase(fetchCustomerDashboard.fulfilled, (state, action) => {
+                state.loading = false;
+                state.dashboardData = action.payload;
+            })
+            .addCase(fetchCustomerDashboard.rejected, rejected);
     },
 });
 
-export const { clearCurrentShipment, clearError } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

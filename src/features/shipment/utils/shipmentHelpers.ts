@@ -80,14 +80,10 @@ export const formatDate = (iso: string) => {
 
 export const formatTime = (time: string | null) => {
   if (!time) return null;
-
   const [hour, minute] = time.split(":");
-
   const date = new Date();
-
   date.setHours(Number(hour));
   date.setMinutes(Number(minute));
-
   return date.toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
@@ -99,7 +95,6 @@ export const getAgentLabel = (shipment: ShipmentResponse): string => {
   if (shipment.assignedAgent?.agentName) {
     return shipment.assignedAgent.agentName;
   }
-
   return "Awaiting assignment";
 };
 
@@ -108,9 +103,7 @@ export const matchesSearch = (
   q: string,
 ): boolean => {
   if (!q.trim()) return true;
-
   const lower = q.toLowerCase();
-
   return (
     shipment.trackingId?.toLowerCase().includes(lower) ||
     shipment.itemName.toLowerCase().includes(lower) ||
@@ -142,7 +135,6 @@ export const deliveryPriority = [
   },
 ];
 
-
 //razorpay function and variables
 export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -150,9 +142,7 @@ export const loadRazorpayScript = (): Promise<boolean> => {
       resolve(true);
       return;
     }
-
     const script = document.createElement("script");
-
     script.id = "razorpay-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.onload = () => resolve(true);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks/reduxHooks";
+// import { useAppDispatch, useAppSelector } from "../../shared/hooks/reduxHooks";
 import ProfileView from "./ProfileView";
+import { useAppSelector } from "../../../shared/hooks/reduxHooks";
 // import { updateUser } from "../../features/user/userSlice";
 // import SuccessMessage from "../../components/profile/SuccessMessage";
 // import ErrorMessage from "../../components/profile/ErrorMessage";

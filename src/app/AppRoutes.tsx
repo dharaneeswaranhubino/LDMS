@@ -20,7 +20,7 @@ const CustomerDashboard = lazy(
 const CreateShipment = lazy(
   () => import("../features/shipment/pages/CreateShipment"),
 );
-const ProfilePage = lazy(() => import("../features/profile/ProfilePage"));
+const ProfilePage = lazy(() => import("../features/profile/pages/ProfilePage"));
 const MyShipments = lazy(() => import("../features/shipment/pages/MyShipment"));
 const TrackShipment = lazy(
   () => import("../features/shipment/pages/TrackShipment"),

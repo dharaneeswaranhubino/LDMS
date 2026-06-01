@@ -30,7 +30,7 @@ const PriceBreakdown = ({
 }: PriceBreakdownProps) => {
   const dispatch = useAppDispatch();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [shipmentId, setShipmentId] = useState<number | null>(null);
+  const [_shipmentId, setShipmentId] = useState<number | null>(null);
   const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
 
   const [scriptLoaded, setScriptLoaded] = useState(false);

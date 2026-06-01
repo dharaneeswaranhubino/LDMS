@@ -178,7 +178,7 @@ const Sidebar = () => {
   const { user } = useAppSelector((state) => state.auth);
 
   const shipmentCount = useAppSelector(
-    (state) => state.shipment.shipments.length,
+    (state) => state.shipment?.shipments?.length,
   );
 
   const [isOpen, setIsOpen] = useState(false);

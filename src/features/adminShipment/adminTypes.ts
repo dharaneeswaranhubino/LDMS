@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface AgentFormData {
   name: string;
   email: string;
@@ -8,12 +10,6 @@ export interface AgentFormData {
   vehicleNumber: string;
   licenseNumber: string;
   serviceZone: string;
-}
-
-export interface AgentDetailsState {
-  shipments: AgentFormData[];
-  loading: boolean;
-  error: string | null;
 }
 
 export type ShipmentStatus =
@@ -57,3 +53,148 @@ export interface Agent {
 export type FilterTab = "ALL" | ShipmentStatus;
 
 export type SortKey = "newest" | "oldest" | "amount_high" | "amount_low";
+
+export interface DeliveryAgent {
+  id: number;
+  phoneNumber: string;
+  vehicleType: string;
+  shipmentCount?: number;
+  totalDeliveries?: number;
+  availabilityStatus: "AVAILABLE" | "UNAVAILABLE";
+  isActive: boolean;
+  serviceZone: string;
+  createdAt: string;
+  agentId: number;
+  agentName: string;
+  agentEmail: string;
+}
+
+
+//Agent Details Modal props
+export interface AgentDetailsModalProps {
+  setSelectedAgent: (agent: DeliveryAgent | null) => void;
+  selectedAgent: DeliveryAgent;
+}
+
+
+// ─── Dashboard Types ───────────────────────────────────────────────
+ 
+export interface PaymentSummary {
+  paid: number;
+  pending: number;
+  failed: number;
+}
+ 
+export interface AgentPerformance {
+  agentId: number;
+  agentName: string;
+  totalDeliveries: number;
+  activeShipments: number;
+  completedShipments: number;
+}
+ 
+export interface RecentShipment {
+  shipmentId: number;
+  trackingId: string;
+  customerName: string;
+  shipmentStatus: ShipmentStatus;
+  paymentStatus: "PAID" | "PENDING" | "FAILED";
+  createdAt: string;
+}
+ 
+export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_PROGRESS";
+ 
+export interface CustomerComplaint {
+  id: number;
+  trackingId: string;
+  customerName: string;
+  message: string;
+  status: ComplaintStatus;
+  shipmentStatus: ShipmentStatus;
+  createdAt: string;
+}
+ 
+export type RevenueTab = "Daily" | "Weekly" | "Monthly";
+ 
+export interface RevenueDataPoint {
+  label: string;
+  value: number;
+}
+ 
+export interface AdminDashboardData {
+  totalShipments: number;
+  deliveredShipments: number;
+  activeDeliveries: number;
+  pendingShipments: number;
+  delayedShipments: number;
+  totalRevenue: number;
+  paymentSummary: PaymentSummary;
+  agentPerformance: AgentPerformance[];
+  recentShipments: RecentShipment[];
+  complaints: CustomerComplaint[];
+  revenueByTab: Record<RevenueTab, RevenueDataPoint[]>;
+}
+ 
+// ─── Date Range Params ─────────────────────────────────────────────
+ 
+export interface DashboardDateParams {
+  fromDate: string; // "YYYY-MM-DD"
+  toDate: string;   // "YYYY-MM-DD"
+}
+ 
+export interface AgentDetailsState {
+  shipments: AgentFormData[];
+  agents: DeliveryAgent[];
+  dashboard: AdminDashboardData | null;
+  dashboardLoading: boolean;
+  loading: boolean;
+  error: string | null;
+}
+
+// admin dashboard types/Interfaces
+export interface StatCardProps {
+  icon: ReactNode | string;
+  value: number;
+  label: string;
+  iconBg: string;
+  accent: string;
+}
+
+export interface DashboardHeaderProps {
+  fromDate: string;
+  toDate: string;
+  onApply: (from: string, to: string) => void;
+}
+
+export interface StatsProps {
+  totalShipments: number;
+  deliveredShipments: number;
+  activeDeliveries: number;
+  delayedShipments: number;
+  pendingShipments: number;
+}
+
+export interface RevenueChartProps {
+  totalRevenue: number;
+  revenueByTab: Record<RevenueTab, { label: string; value: number }[]>;
+  fromDate: string;
+  toDate: string;
+}
+
+export interface PaymentChartProps {
+  paid: number;
+  pending: number;
+  failed: number;
+}
+
+export interface AgentPerformanceTableProps {
+  agentPerformance: AgentPerformance[];
+}
+
+export interface RecentShipmentsTableProps {
+  recentShipments: RecentShipment[];
+}
+
+export interface CustomerComplaintsProps {
+  complaints: CustomerComplaint[];
+}

@@ -8,11 +8,7 @@ import {
 } from "../../../shared/hooks/reduxHooks";
 import { loginUser } from "../authSlice";
 import logistic_img from "../../../assets/bg4.avif";
-
-interface FormErrors {
-  email?: string;
-  password?: string;
-}
+import type { FormErrors } from "../authTypes";
 
 const Login = () => {
   const dispatch = useAppDispatch();

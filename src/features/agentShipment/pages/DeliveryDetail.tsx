@@ -38,17 +38,7 @@ const DeliveryDetail = () => {
       (a, b) =>
         new Date(a.assignedDate).getTime() - new Date(b.assignedDate).getTime(),
     );
-
   const data = activeDelivery || assignedDeliveries[0];
-  // const data =
-  //   deliveries.find((item) => item.shipmentStatus === "OUT_FOR_PICKUP") ||
-  //   deliveries.find((item) => item.shipmentStatus === "ASSIGNED") ||
-  //   deliveries.find(
-  //     (item) =>
-  //       item.shipmentStatus !== "PENDING" &&
-  //       item.shipmentStatus !== "CONFIRMED",
-  //   );
-  // console.log(data);
 
   useEffect(() => {
     if (data?.shipmentStatus === "DELIVERED") {
@@ -103,8 +93,6 @@ const DeliveryDetail = () => {
             <ReceiverDetails data={data} />
           </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            {/* <DeliveryCheckpoints data={data} />
-            <ProofOfDelivery data={data} /> */}
             <DeliveryCheckpoints data={data} otpVerified={otpVerified} />
 
             <ProofOfDelivery

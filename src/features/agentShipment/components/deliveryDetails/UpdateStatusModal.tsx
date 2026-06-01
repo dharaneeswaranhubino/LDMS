@@ -2,20 +2,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { statusOrder } from "../../utils/statusHelpers";
 import { deliveryMock } from "../../utils/mockDelivery";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../../shared/hooks/reduxHooks";
 import { showToast } from "../../../../shared/components/Toast";
+import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
+import type { UpdateStatusModalProps } from "../../agentTypes";
 
 const UpdateStatusModal = ({
   onClose,
   currentStatus,
   onUpdate,
   shipmentId,
-}) => {
-  const dispatch = useAppDispatch();
-  const { statusState } = useAppSelector((state) => state.agent);
+}:UpdateStatusModalProps) => {
+  // const dispatch = useAppDispatch();
+  // const { statusState } = useAppSelector((state) => state.agent);
+  const { availability } = useAppSelector((state) => state.agent);
   const [remarks, setRemarks] = useState("");
   const currentIndex = statusOrder.indexOf(currentStatus);
   const calculatedNextStatus = statusOrder[currentIndex + 1];
@@ -44,57 +43,51 @@ const UpdateStatusModal = ({
   //     });
   //   }
   // };
-
-  const handleUpdate = async (nextStatus: string) => {
+  // const handleUpdate = async () => {
+  //   try {
+  //     onClose();
+  //     await onUpdate(nextStatus); // delegates everything to DeliveryCheckpoints
+  //     showToast({
+  //       type: "success",
+  //       message:
+  //         nextStatus === "DELIVERED"
+  //           ? "Shipment delivered successfully"
+  //           : `Status updated to ${newStatus?.label}`,
+  //     });
+  //   } catch (error) {
+  //     showToast({
+  //       type: "error",
+  //       message: "Failed to update shipment status",
+  //     });
+  //   }
+  // };
+  const handleUpdate = async () => {
     try {
-      if (currentStatus === nextStatus) {
+      if (availability !== "AVAILABLE") {
+        showToast({
+          type: "error",
+          message: "Turn on your availability before updating shipment status",
+        });
+
         return;
       }
 
-      // animation starts AFTER modal closes
-      const currentIndex = statusOrder.indexOf(currentStatus);
+      onClose();
 
-      setAnimatingIndex(currentIndex);
-      setTruckProgress(0);
+      await onUpdate(nextStatus);
 
-      const animationDuration = 3000;
-      const intervalTime = 30;
-
-      const totalSteps = animationDuration / intervalTime;
-      const progressStep = 1 / totalSteps;
-
-      const animation = setInterval(() => {
-        setTruckProgress((prev) => {
-          if (prev >= 1) {
-            clearInterval(animation);
-            return 1;
-          }
-
-          return prev + progressStep;
-        });
-      }, intervalTime);
-
-      // API call
-      await dispatch(
-        updateTrackStatus({
-          id: String(data.shipmentId),
-          data: {
-            status: nextStatus,
-          },
-        }),
-      ).unwrap();
-
-      // wait until animation finishes
-      setTimeout(() => {
-        setCurrentStatus(nextStatus);
-        setAnimatingIndex(null);
-        setTruckProgress(0);
-      }, animationDuration);
+      showToast({
+        type: "success",
+        message:
+          nextStatus === "DELIVERED"
+            ? "Shipment delivered successfully"
+            : `Status updated to ${newStatus?.label}`,
+      });
     } catch (error) {
-      console.log(error);
-
-      setAnimatingIndex(null);
-      setTruckProgress(0);
+      showToast({
+        type: "error",
+        message: "Failed to update shipment status",
+      });
     }
   };
 
@@ -166,13 +159,28 @@ const UpdateStatusModal = ({
                 />
               </div>
 
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleUpdate}
                 className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 py-3 font-semibold text-white shadow-lg"
               >
                 Confirm Update
+              </motion.button> */}
+              <motion.button
+                whileHover={availability === "AVAILABLE" ? { scale: 1.01 } : {}}
+                whileTap={availability === "AVAILABLE" ? { scale: 0.98 } : {}}
+                onClick={handleUpdate}
+                disabled={availability !== "AVAILABLE"}
+                className={`mt-6 w-full rounded-2xl py-3 font-semibold text-white shadow-lg transition ${
+                  availability === "AVAILABLE"
+                    ? "bg-gradient-to-r from-indigo-500 to-blue-500"
+                    : "bg-slate-300 cursor-not-allowed"
+                }`}
+              >
+                {availability === "AVAILABLE"
+                  ? "Confirm Update"
+                  : "Your now in Unavailable status"}
               </motion.button>
             </>
           ) : (

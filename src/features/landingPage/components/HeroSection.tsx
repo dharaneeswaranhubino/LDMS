@@ -1,4 +1,5 @@
 import Banner from "../../../assets/main_banner_img.png";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const HeroSection = () => {
   return (
@@ -31,9 +32,9 @@ const HeroSection = () => {
           <div className="mt-10 flex flex-wrap gap-5">
             <a
               href="#services"
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-2xl shadow-indigo-500/30 hover:scale-105 transition duration-300"
+              className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold shadow-2xl shadow-indigo-500/30 hover:scale-105 transition duration-300"
             >
-              Explore Services →
+              Explore Services <FaArrowRightLong />
             </a>
 
             <a

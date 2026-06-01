@@ -1,25 +1,5 @@
+import type { ShipmentDetailsProps } from "../../agentTypes";
 import InfoBlock from "./InfoBlock";
-
-interface ShipmentDetails {
-  isFragile: boolean;
-  shipmentPriority: string;
-  trackingId: string;
-  pickupAddress: string;
-  pickupCity: string;
-  pickupPincode: string;
-  deliveryAddress: string;
-  deliveryCity: string;
-  deliveryPincode: string;
-  itemName: string;
-  packageWeight: string;
-  amount: number;
-  paymentStatus: string;
-  description: string;
-}
-
-interface ShipmentDetailsProps {
-  data?: ShipmentDetails;
-}
 
 const ShipmentDetails = ({ data }: ShipmentDetailsProps) => {
   return (

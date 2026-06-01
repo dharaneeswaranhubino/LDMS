@@ -99,7 +99,7 @@ const DeliveryHistory = () => {
               options={options}
               defaultValue={options[0]}
               onChange={(selected) =>
-                dispatch(setPriorityFilter(selected?.value))
+                dispatch(setPriorityFilter(selected?.value ?? "ALL"))
               }
               styles={{
                 control: (base) => ({

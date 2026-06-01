@@ -19,7 +19,7 @@ export const validateAgentDetails = (AgentDetails: AgentFormData) => {
         errors.password = "Password is required"
     }
 
-    if (!AgentDetails?.confirmPassword.trim()) {
+    if (!AgentDetails?.confirmPassword?.trim()) {
         errors.confirmPassword = "ConfirmPassword is required"
     } else if (AgentDetails?.confirmPassword.trim() !== AgentDetails.password.trim()) {
         errors.confirmPassword = "Passwords mismatched"

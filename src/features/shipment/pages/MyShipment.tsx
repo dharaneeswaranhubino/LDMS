@@ -15,7 +15,6 @@ import ShipmentEmpty from "../components/myShipmentComponents/ShipmentEmpty";
 import ShipmentTabs from "../components/myShipmentComponents/ShipmentTabs";
 import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar";
 import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
-// import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
 
 const MyShipments = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +23,7 @@ const MyShipments = () => {
   const { shipments, loading, error, pagination } = useAppSelector(
     (state) => state.shipment,
   );
-  console.log(shipments);
+  // console.log(shipments);
 
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
@@ -55,18 +54,20 @@ const MyShipments = () => {
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {
-      ALL: shipments.length,
+      ALL: shipments?.length ?? 0,
     };
+
     FILTER_TABS.slice(1).forEach(({ key }) => {
-      counts[key] = shipments.filter(
-        (s: ShipmentResponse) => s.shipmentStatus === key,
-      ).length;
+      counts[key] =
+        shipments?.filter((s: ShipmentResponse) => s?.shipmentStatus === key)
+          .length ?? 0;
     });
+
     return counts;
   }, [shipments]);
 
   const displayed = useMemo(() => {
-    let list = [...shipments];
+    let list = [...(shipments ?? [])];
     if (activeTab !== "ALL") {
       list = list.filter(
         (s: ShipmentResponse) => s.shipmentStatus === activeTab,
@@ -103,14 +104,14 @@ const MyShipments = () => {
     setSelectedShipment(shipment);
     setOpenModal(true);
   };
-  if (loading && shipments.length === 0) {
+  if (loading && (shipments ?? []).length === 0) {
     return <ShipmentLoading />;
   }
   if (error) {
     return (
       <ShipmentError
         error={error}
-        onRetry={() => dispatch(fetchMyShipments())}
+        onRetry={() => dispatch(fetchMyShipments({}))}
       />
     );
   }
@@ -188,7 +189,7 @@ const MyShipments = () => {
 
         <div
           className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${
-            shipments.length === 0 && "hidden"
+            (shipments ?? []).length === 0 && "hidden"
           }`}
         >
           <p className="text-center text-sm text-slate-600 lg:text-left">
@@ -204,7 +205,7 @@ const MyShipments = () => {
 
           <div
             className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${
-              shipments.length === 0 && "hidden"
+              (shipments ?? []).length === 0 && "hidden"
             }`}
           >
             <div className="flex min-w-max items-center justify-center gap-2 pb-1">

@@ -4,32 +4,27 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import type { UpdateTrackStatus, DeliveriesResponse, DeliveryItem } from "./agentTypes";
+import type { UpdateTrackStatus, DeliveryItem, AgentState } from "./agentTypes";
 import type { AxiosError } from "axios";
-
 
 export const getMyDeliveries = createAsyncThunk<
   // DeliveriesResponse,
   DeliveryItem[],
   void,
   { rejectValue: string }
->(
-  "agent/getMyDeliveries",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await api.get("shipments/myDeliveries");
-      // console.log(res.data.data);
-      return res.data.data;
-    } catch (err: unknown) {
-      const error = err as AxiosError<{ message: string }>;
+>("agent/getMyDeliveries", async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get("shipments/myDeliveries");
+    // console.log(res.data.data);
+    return res.data.data;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
 
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch deliveries",
-      );
-    }
-  },
-);
-
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch deliveries",
+    );
+  }
+});
 
 export const updateTrackStatus = createAsyncThunk(
   "agent/updateTrackStatus",
@@ -49,12 +44,29 @@ export const updateTrackStatus = createAsyncThunk(
   },
 );
 
+export const toggleAvailability = createAsyncThunk(
+  "agent/toggleAvailability",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.patch("deliveryAgents/myAvailability");
+      return res.data.data;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
 
-const initialState = {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to toggle availability",
+      );
+    }
+  },
+);
+
+const initialState: AgentState = {
   deliveries: [],
   // deliveries: [],
   // statusState: Partial<DeliveryItem> | null,
   statusState: {},
+  availability: "AVAILABLE",
+  availabilityLoading: false,
   search: "",
   priorityFilter: "ALL",
   activeTab: "ALL",
@@ -99,9 +111,10 @@ const agentSlice = createSlice({
         state.deliveries = action.payload;
       })
 
-      .addCase(getMyDeliveries.rejected, (state) => {
+      .addCase(getMyDeliveries.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Failed to fetch deliveries";
+        state.error =
+          (action.payload as string) || "Failed to fetch deliveries";
       })
       .addCase(updateTrackStatus.pending, (state) => {
         state.loading = true;
@@ -132,6 +145,21 @@ const agentSlice = createSlice({
       .addCase(updateTrackStatus.rejected, (state) => {
         state.loading = false;
         // state.error = action.payload || "Failed to fetch agent details"
+      })
+
+      .addCase(toggleAvailability.pending, (state) => {
+        state.availabilityLoading = true;
+      })
+
+      .addCase(toggleAvailability.fulfilled, (state, action) => {
+        state.availabilityLoading = false;
+        state.availability = action.payload.currentStatus;
+      })
+
+      .addCase(toggleAvailability.rejected, (state, action) => {
+        state.availabilityLoading = false;
+        state.error =
+          (action.payload as string) || "Failed to toggle availability";
       });
   },
 });

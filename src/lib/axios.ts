@@ -6,6 +6,7 @@ import { AxiosError, type InternalAxiosRequestConfig } from "axios";
 export const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     // baseURL: "http://localhost:5000/api/v1/",
+    // baseURL: "https://thus-spill-vitality.ngrok-free.dev/api/v1/",
     withCredentials: true, // Cookie auto-send
     headers: {
         'ngrok-skip-browser-warning': 'true',  // add this

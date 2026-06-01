@@ -51,15 +51,15 @@ export interface ShipmentResponse {
   receiverPhone: string;
   shipmentPriority: "STANDARD" | "EXPRESS" | "SAME_DAY";
   shipmentStatus:
-    | "PENDING"
-    | "CONFIRMED"
-    | "ASSIGNED"
-    | "OUT_FOR_PICKUP"
-    | "PICKED_UP"
-    | "IN_TRANSIT"
-    | "OUT_FOR_DELIVERY"
-    | "DELIVERED"
-    | "CANCELLED";
+  | "PENDING"
+  | "CONFIRMED"
+  | "ASSIGNED"
+  | "OUT_FOR_PICKUP"
+  | "PICKED_UP"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED";
   amount: number;
   paymentStatus: "PENDING" | "PAID" | "FAILED";
   assignedSlotStart: string | null;
@@ -82,6 +82,8 @@ export interface ShipmentState {
   currentShipment: ShipmentResponse | null;
   paymentDetails: PaymentDetailsResponse | null;
   pagination: Pagination | null;
+  dashboardData: CustomerDashboardData | null;
+  dateRange: { from: string; to: string };
   loading: boolean;
   error: string | null;
 }
@@ -197,3 +199,63 @@ export interface PriceBreakdownProps {
   onReset: () => void;
 }
 
+// Dashboard types
+export type SupportChatStatus = "OPEN" | "RESOLVED" | "CLOSED";
+export type LastMessageBy = "AGENT" | "BOT" | "CUSTOMER";
+
+export interface ShipmentStatusBreakdown {
+  IN_TRANSIT: number;
+  DELIVERED: number;
+  PENDING: number;
+  CANCELLED: number;
+}
+
+export interface DashboardRecentShipment {
+  shipmentId: number;
+  trackingId: string;
+  itemName: string;
+  shipmentStatus: ShipmentStatus;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  deliveryAddress: string;
+  deliveryCity: string;
+  estimatedDelivery: string | null;
+  createdAt: string;
+}
+
+export interface DashboardPaymentRecord {
+  paymentId: number;
+  shipmentId: number;
+  amount: number;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paidAt: string | null;
+}
+
+export interface DashboardSupportChat {
+  chatId: number;
+  subject: string;
+  lastMessage: string;
+  lastMessageBy: LastMessageBy;
+  agentName: string | null;
+  status: SupportChatStatus;
+  unreadCount: number;
+  updatedAt: string;
+}
+
+export interface MonthlyStatEntry {
+  month: string;
+  count: number;
+}
+
+export interface CustomerDashboardData {
+  activeShipments: number;
+  totalShipments: number;
+  deliveredShipments: number;
+  pendingShipments: number;
+  pendingPayments: number;
+  unreadNotifications: number;
+  recentShipments: DashboardRecentShipment[];
+  paymentHistory: DashboardPaymentRecord[];
+  recentSupportChats: DashboardSupportChat[];
+  shipmentStatusBreakdown: ShipmentStatusBreakdown;
+  monthlyStats: MonthlyStatEntry[];
+}

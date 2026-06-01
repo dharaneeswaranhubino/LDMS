@@ -1,11 +1,4 @@
-interface ProfileViewProps {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-  };
-}
+import type { ProfileViewProps } from "../profileTypes";
 
 const ProfileView = ({ user }: ProfileViewProps) => {
   return (
@@ -19,7 +12,6 @@ const ProfileView = ({ user }: ProfileViewProps) => {
             {user.name}
           </div>
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-1">
             Email Address
@@ -28,7 +20,6 @@ const ProfileView = ({ user }: ProfileViewProps) => {
             {user.email}
           </div>
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-1">
             User ID
@@ -37,7 +28,6 @@ const ProfileView = ({ user }: ProfileViewProps) => {
             #{user.id}
           </div>
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-1">
             Roles
@@ -47,10 +37,10 @@ const ProfileView = ({ user }: ProfileViewProps) => {
           </div>
         </div>
       </div>
-
       <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
         <p className="text-sm text-blue-800">
-          You can edit your name, email, and password. Contact admin if you need to change your roles.
+          You can edit your name, email, and password. Contact admin if you need
+          to change your roles.
         </p>
       </div>
     </>

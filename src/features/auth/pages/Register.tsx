@@ -9,13 +9,8 @@ import {
 import { registerUser } from "../authSlice";
 // import logistic_img from "../../../assets/auth_bg_side.jpg";
 import logistic_img from "../../../assets/register_banner.png";
+import type { FormErrors } from "../authTypes";
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-}
 
 const Register = () => {
   const dispatch = useAppDispatch();
