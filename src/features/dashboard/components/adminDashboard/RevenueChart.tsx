@@ -57,6 +57,9 @@ const RevenueChart = ({
       <LineChart
         key={`${activeTab}-${fromDate}-${toDate}`}
         data={revenueByTab[activeTab]}
+        datasetLabel="Revenue"
+        tooltipFormatter={(value) => `₹${value.toLocaleString("en-IN")}`}
+        yAxisFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
       />
 
       <div className="mt-3 flex items-center gap-1.5">

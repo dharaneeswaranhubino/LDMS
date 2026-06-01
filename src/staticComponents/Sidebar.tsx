@@ -14,7 +14,7 @@ interface MenuItem {
   section: string;
   icon: React.ReactNode;
   allowedRole: string;
-  badge?: number;
+  badge?: number | null;
 }
 
 const roleColors = {
@@ -25,7 +25,7 @@ const roleColors = {
   customer: "bg-blue-500 text-white",
 };
 
-const getMenu = (shipmentCount: number): MenuItem[] => [
+const getMenu = (pagination: number | null): MenuItem[] => [
   // admin
   {
     name: "Admin Dashboard",
@@ -121,7 +121,7 @@ const getMenu = (shipmentCount: number): MenuItem[] => [
     section: "MAIN",
     allowedRole: "customer",
     icon: <FaCubesStacked size={18} />,
-    badge: shipmentCount,
+    badge: pagination,
   },
   {
     name: "Track shipment",
@@ -177,16 +177,14 @@ const Sidebar = () => {
   const { hasRole } = useRole();
   const { user } = useAppSelector((state) => state.auth);
 
-  const shipmentCount = useAppSelector(
-    (state) => state.shipment?.shipments?.length,
-  );
+  const { pagination } = useAppSelector((state) => state.shipment);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
 
-  const menu = getMenu(shipmentCount);
+  const menu = getMenu(pagination?.total ?? 0);
   const filteredMenu = menu.filter((item) => hasRole(item.allowedRole));
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -208,8 +206,8 @@ const Sidebar = () => {
     }
   }, [dispatch, user?.role]);
 
-  const getFirstLetterCapital = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1);
+  const getFirstLetterCapital = (str: string | undefined) =>
+    str.charAt(0)?.toUpperCase() + str?.slice(1);
 
   const handleLogout = async () => {
     await dispatch(logoutUser());

@@ -19,7 +19,19 @@ Chart.register(
   LineController,
 );
 
-const LineChart = ({ data }: { data: { label: string; value: number }[] }) => {
+interface LineChartProps {
+  data: { label: string; value: number }[];
+  datasetLabel?: string;
+  tooltipFormatter?: (value: number | null) => string;
+  yAxisFormatter?: (value: number | null) => string;
+}
+
+const LineChart = ({
+  data,
+  datasetLabel = "Data",
+  tooltipFormatter = (value) => value.toString(),
+  yAxisFormatter = (value) => value.toString(),
+}: LineChartProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
 
@@ -33,7 +45,7 @@ const LineChart = ({ data }: { data: { label: string; value: number }[] }) => {
         labels: data.map((d) => d.label),
         datasets: [
           {
-            label: "Revenue (₹)",
+            label: datasetLabel,
             data: data.map((d) => d.value),
             borderColor: "#0891b2",
             backgroundColor: "rgba(8,145,178,0.08)",
@@ -57,7 +69,7 @@ const LineChart = ({ data }: { data: { label: string; value: number }[] }) => {
             titleColor: "#bae6fd",
             bodyColor: "#fff",
             callbacks: {
-              label: (ctx) => " ₹" + ctx?.parsed?.y?.toLocaleString("en-IN"),
+              label: (ctx) => tooltipFormatter(ctx.parsed.y),
             },
           },
         },
@@ -71,7 +83,8 @@ const LineChart = ({ data }: { data: { label: string; value: number }[] }) => {
             ticks: {
               color: "#64748b",
               font: { size: 11 },
-              callback: (v) => "₹" + Number(v) / 1000 + "k",
+              stepSize: 1,
+              callback: (v) => yAxisFormatter(Number(v)),
             },
           },
         },
@@ -81,7 +94,7 @@ const LineChart = ({ data }: { data: { label: string; value: number }[] }) => {
     return () => {
       chartRef.current?.destroy();
     };
-  }, [data]);
+  }, [data, datasetLabel, tooltipFormatter, yAxisFormatter]);
 
   return (
     <div className="relative h-[220px] w-full">
