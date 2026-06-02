@@ -89,7 +89,7 @@ const CreateAgent = () => {
 
   if (loading) {
     return (
-      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+      <div className="h-[calc(100vh-72px)] rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50">
         <LoadingSpinner />
       </div>
     );

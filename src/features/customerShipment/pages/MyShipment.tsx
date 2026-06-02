@@ -7,7 +7,7 @@ import {
 import { fetchMyShipments } from "../shipmentSlice";
 import type { FilterTab, ShipmentResponse, SortKey } from "../shipmentTypes";
 import { FILTER_TABS, matchesSearch } from "../utils/shipmentHelpers";
-import ShipmentLoading from "../components/myShipmentComponents/ShipmentLoading";
+// import ShipmentLoading from "../components/myShipmentComponents/ShipmentLoading";
 import ShipmentError from "../components/myShipmentComponents/ShipmentError";
 import ShipmentDetailsModal from "../components/myShipmentComponents/ShipmentDetailsModal";
 import ShipmentCard from "../components/myShipmentComponents/ShipmentCard";

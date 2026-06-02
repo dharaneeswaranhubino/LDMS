@@ -10,10 +10,8 @@ const UpdateStatusModal = ({
   onClose,
   currentStatus,
   onUpdate,
-  shipmentId,
-}:UpdateStatusModalProps) => {
-  // const dispatch = useAppDispatch();
-  // const { statusState } = useAppSelector((state) => state.agent);
+  // shipmentId,
+}: UpdateStatusModalProps) => {
   const { availability } = useAppSelector((state) => state.agent);
   const [remarks, setRemarks] = useState("");
   const currentIndex = statusOrder.indexOf(currentStatus);
@@ -25,7 +23,7 @@ const UpdateStatusModal = ({
   const newStatus = deliveryMock.timeline.find(
     (item) => item.key === nextStatus,
   );
-  
+
   const handleUpdate = async () => {
     try {
       if (availability !== "AVAILABLE") {
@@ -33,13 +31,10 @@ const UpdateStatusModal = ({
           type: "error",
           message: "Turn on your availability before updating shipment status",
         });
-
         return;
       }
 
       onClose();
-
-      await onUpdate(nextStatus);
 
       showToast({
         type: "success",
@@ -48,7 +43,10 @@ const UpdateStatusModal = ({
             ? "Shipment delivered successfully"
             : `Status updated to ${newStatus?.label}`,
       });
-    } catch (error) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      await onUpdate(nextStatus);
+    } catch {
       showToast({
         type: "error",
         message: "Failed to update shipment status",
@@ -89,6 +87,7 @@ const UpdateStatusModal = ({
               <i className="fa-solid fa-xmark text-lg"></i>
             </motion.button>
           </div>
+
           <div className="mt-6 rounded-2xl bg-indigo-50 p-4">
             <p className="text-sm text-slate-500">Current status</p>
             <h3 className="mt-1 font-semibold text-indigo-600">
@@ -98,6 +97,7 @@ const UpdateStatusModal = ({
               {prevStatus?.description}
             </p>
           </div>
+
           {nextStatus ? (
             <>
               <div className="mt-5 rounded-2xl border border-green-200 bg-green-50 p-4">
@@ -124,14 +124,6 @@ const UpdateStatusModal = ({
                 />
               </div>
 
-              {/* <motion.button
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleUpdate}
-                className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-500 py-3 font-semibold text-white shadow-lg"
-              >
-                Confirm Update
-              </motion.button> */}
               <motion.button
                 whileHover={availability === "AVAILABLE" ? { scale: 1.01 } : {}}
                 whileTap={availability === "AVAILABLE" ? { scale: 0.98 } : {}}

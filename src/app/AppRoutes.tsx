@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
-import PaymentDetails from "../features/customerShipment/pages/PaymentDetails";
-import CustomerNotifications from "../features/customerShipment/pages/CustomerNotifications";
+import LoadingSpinner from "../shared/components/LoadingSpinner";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -47,13 +46,22 @@ const DeliveryHistory = lazy(
   () => import("../features/agentShipment/pages/DeliveryHistory"),
 );
 
+const PaymentDetails = lazy(
+  () => import("../features/customerShipment/pages/PaymentDetails"),
+);
+
+const CustomerNotifications = lazy(
+  () => import("../features/customerShipment/pages/CustomerNotifications"),
+);
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Suspense
         fallback={
           <div className="min-h-screen flex items-center justify-center">
-            <p>Loading page...</p>
+            {/* <p>Loading page...</p> */}
+            <LoadingSpinner/>
           </div>
         }
       >

@@ -41,15 +41,27 @@ const DeliveryDetail = () => {
     );
   const data = activeDelivery || assignedDeliveries[0];
 
+  // useEffect(() => {
+  //   if (data?.shipmentStatus === "DELIVERED") {
+  //     setSwitchingShipment(true);
+
+  //     const timer = setTimeout(() => {
+  //       setSwitchingShipment(false);
+  //       setOtpVerified(false);
+  //     }, 2000);
+
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [data?.shipmentStatus]);
   useEffect(() => {
     if (data?.shipmentStatus === "DELIVERED") {
-      setSwitchingShipment(true);
-
       const timer = setTimeout(() => {
-        setSwitchingShipment(false);
-        setOtpVerified(false);
-      }, 2000);
-
+        setSwitchingShipment(true);
+        setTimeout(() => {
+          setSwitchingShipment(false);
+          setOtpVerified(false);
+        }, 2000);
+      }, 0);
       return () => clearTimeout(timer);
     }
   }, [data?.shipmentStatus]);
@@ -68,7 +80,7 @@ const DeliveryDetail = () => {
     );
   }
 
-  if (loading) {
+  if (loading && deliveries.length > 0) {
     return (
       <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
         <LoadingSpinner />

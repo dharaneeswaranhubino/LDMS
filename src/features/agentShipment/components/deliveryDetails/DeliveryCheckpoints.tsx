@@ -1,77 +1,79 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { deliveryMock } from "../../utils/mockDelivery";
 import { getStatusState, statusOrder } from "../../utils/statusHelpers";
 import UpdateStatusModal from "./UpdateStatusModal";
 import { useAppDispatch } from "../../../../shared/hooks/reduxHooks";
 import { updateTrackStatus } from "../../agentSlice";
 import { showToast } from "../../../../shared/components/Toast";
-import type { DeliveryCheckpointsProps, ShipmentStatus } from "../../agentTypes";
+import type {
+  DeliveryCheckpointsProps,
+  ShipmentStatus,
+} from "../../agentTypes";
 
-const DeliveryCheckpoints = ({ data, otpVerified }:DeliveryCheckpointsProps) => {
+const DeliveryCheckpoints = ({
+  data,
+  otpVerified,
+}: DeliveryCheckpointsProps) => {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(data.shipmentStatus);
-  useEffect(() => {
-    setCurrentStatus(data.shipmentStatus);
-  }, [data.shipmentStatus]);
   const [openModal, setOpenModal] = useState(false);
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
   const [truckProgress, setTruckProgress] = useState(0); // 0 → 1 over 3s
+  const displayStatus =
+    animatingIndex !== null ? currentStatus : data.shipmentStatus;
 
-  const currentIndex = statusOrder.indexOf(currentStatus);
+  // const currentIndex = statusOrder.indexOf(currentStatus);
+  const currentIndex = statusOrder.indexOf(displayStatus);
   const handleUpdate = async (nextStatus: ShipmentStatus) => {
+    let animationRef: ReturnType<typeof setInterval> | undefined;
     try {
-      // prevent duplicate update
-      if (currentStatus === nextStatus) {
-        return;
-      }
+      if (displayStatus === nextStatus) return;
 
-      // animation start
-      const currentIndex = statusOrder.indexOf(currentStatus);
+      const currentIndex = statusOrder.indexOf(displayStatus);
       setAnimatingIndex(currentIndex);
       setTruckProgress(0);
 
-      const animationDuration = 3000; // 3 seconds
+      const animationDuration = 3000;
       const intervalTime = 30;
-
       const totalSteps = animationDuration / intervalTime;
       const progressStep = 1 / totalSteps;
 
-      const animation = setInterval(() => {
-        setTruckProgress((prev) => {
-          if (prev >= 1) {
-            clearInterval(animation);
-            return 1;
-          }
+      const animationPromise = new Promise<void>((resolve) => {
+        animationRef = setInterval(() => {
+          setTruckProgress((prev) => {
+            const next = prev + progressStep;
+            if (next >= 1) {
+              clearInterval(animationRef);
+              resolve();
+              return 1;
+            }
+            return next;
+          });
+        }, intervalTime);
+      });
 
-          return prev + progressStep;
-        });
-      }, intervalTime);
-
-      // API CALL
-      await dispatch(
+      const apiPromise = dispatch(
         updateTrackStatus({
           id: String(data.shipmentId),
-          data: {
-            status: nextStatus,
-          },
+          data: { status: nextStatus },
         }),
       ).unwrap();
 
-      clearInterval(animation);
+      await Promise.all([animationPromise, apiPromise]);
 
-      // IMPORTANT
       setCurrentStatus(nextStatus);
       setAnimatingIndex(null);
       setTruckProgress(0);
     } catch (error) {
       console.log(error);
+      clearInterval(animationRef!);
       setAnimatingIndex(null);
       setTruckProgress(0);
     }
   };
 
   const handleUpdateClick = () => {
-    if (currentStatus === "OUT_FOR_DELIVERY" && !otpVerified) {
+    if (displayStatus === "OUT_FOR_DELIVERY" && !otpVerified) {
       showToast({
         type: "warning",
         message: "OTP verification is required",
@@ -93,7 +95,7 @@ const DeliveryCheckpoints = ({ data, otpVerified }:DeliveryCheckpointsProps) => 
 
         <div className="space-y-0 mt-4">
           {deliveryMock.timeline.map((item, i, arr) => {
-            const state = getStatusState(currentStatus, item.key);
+            const state = getStatusState(displayStatus, item.key);
             const isAnimatingFromHere = animatingIndex === i;
             const isAnimatingToHere = animatingIndex === i - 1;
             const destinationGreen = isAnimatingToHere
@@ -235,7 +237,7 @@ const DeliveryCheckpoints = ({ data, otpVerified }:DeliveryCheckpointsProps) => 
       {openModal && (
         <UpdateStatusModal
           onClose={() => setOpenModal(false)}
-          currentStatus={currentStatus}
+          currentStatus={displayStatus}
           onUpdate={handleUpdate}
           shipmentId={data.shipmentId}
         />

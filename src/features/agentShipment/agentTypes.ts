@@ -63,6 +63,7 @@ export interface AgentState {
   itemsPerPage: number;
   availability: AgentAvailability;
   availabilityLoading: boolean;
+  statusUpdateLoading: boolean;
 }
 
 export interface DeliveriesResponse {

@@ -74,6 +74,7 @@ const initialState: AgentState = {
   itemsPerPage: 6,
   loading: false,
   error: null,
+  statusUpdateLoading: false,
 };
 
 const agentSlice = createSlice({
@@ -117,7 +118,7 @@ const agentSlice = createSlice({
           (action.payload as string) || "Failed to fetch deliveries";
       })
       .addCase(updateTrackStatus.pending, (state) => {
-        state.loading = true;
+        state.statusUpdateLoading = true;
         state.error = null;
       })
       // .addCase(updateTrackStatus.fulfilled, (state, action) => {
@@ -127,7 +128,7 @@ const agentSlice = createSlice({
       //   console.log(state.statusState);
       // })
       .addCase(updateTrackStatus.fulfilled, (state, action) => {
-        state.loading = false;
+        state.statusUpdateLoading = false;
         state.statusState = action.payload;
         state.error = null;
 
@@ -143,7 +144,7 @@ const agentSlice = createSlice({
         }
       })
       .addCase(updateTrackStatus.rejected, (state) => {
-        state.loading = false;
+        state.statusUpdateLoading = false;
         // state.error = action.payload || "Failed to fetch agent details"
       })
 

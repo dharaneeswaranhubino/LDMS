@@ -42,7 +42,7 @@ const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
       ? `Preferred: ${deliveryFrom} – ${deliveryTo}`
       : null;
 
-  const isPendingPayment = item.paymentStatus === "PENDING";
+  // const isPendingPayment = item.paymentStatus === "PENDING";
 
   return (
     <div className="bg-white/90 border border-slate-200 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md transition-all">
@@ -119,7 +119,7 @@ const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
           View
         </button>
 
-        {!["CANCELLED", "PENDING"].includes(status) && (
+        {!["CANCELLED", "PENDING","DELIVERED"].includes(status) && (
           <button
             onClick={() => navigate(`/trackShipments/${item.shipmentId}`)}
             className="py-[7px] px-4 border border-blue-200 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all text-[12px]"
@@ -138,7 +138,7 @@ const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
           Payment
         </button>
 
-        {!["CANCELLED", "PENDING", "CONFIRMED"].includes(status) && (
+        {!["CANCELLED", "PENDING", "CONFIRMED","DELIVERED"].includes(status) && (
           <button
             onClick={() => navigate(`/chat/${item.shipmentId}`)}
             className="py-[7px] px-4 border border-pink-200 bg-pink-50 text-pink-700 rounded-lg hover:bg-pink-100 transition-all text-[12px]"
@@ -148,12 +148,12 @@ const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
           </button>
         )}
 
-        {item.amount && !isPendingPayment && (
+        {/* {item.amount && !isPendingPayment && (
           <span className="ml-auto py-[7px] px-3 rounded-lg text-[12px] font-medium text-green-700 bg-green-50 border border-green-200">
             ₹{item.amount}
             <span className="ml-1 text-[10px] text-green-500">paid</span>
           </span>
-        )}
+        )} */}
       </div>
     </div>
   );

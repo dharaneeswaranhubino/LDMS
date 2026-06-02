@@ -8,7 +8,7 @@ const DashboardLayout = () => {
       <Topbar />
       <Sidebar />
       <main className="lg:ml-64 pt-[72px] min-h-screen bg-slate-100">
-        <div className="h-[calc(100vh-72px)] overflow-y-auto scrollbar-none p-4">
+        <div className="min-h-[calc(100vh-72px)] overflow-y-auto scrollbar-none p-4">
           <Outlet />
         </div>
       </main>
