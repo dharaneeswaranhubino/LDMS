@@ -1,4 +1,4 @@
-import type { DashboardRecentShipment } from "../../../shipment/shipmentTypes";
+import type { DashboardRecentShipment } from "../../../customerShipment/shipmentTypes";
 import { fmtDate, PAYMENT_STATUS_CONFIG, SHIPMENT_STATUS_CONFIG } from "../../utils/CustomerDashboardHelper";
 import Badge from "./Badge";
 

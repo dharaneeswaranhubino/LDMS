@@ -110,7 +110,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid lg:grid-cols-2 gap-5">
             <div className="bg-violet-50 rounded-2xl p-5 border border-violet-100">
               <h3 className="text-lg font-semibold text-violet-700 mb-4">
                 Delivery Details
@@ -159,42 +159,48 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
                 Delivery Agent Details
               </h3>
 
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="text-slate-400">Agent Name</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment?.assignedAgent?.agentName ?? "N/A"}
-                  </p>
-                </div>
+              {shipment?.assignedAgent?.agentId ? (
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <p className="text-slate-400">Agent Name</p>
+                    <p className="font-medium text-slate-700">
+                      {shipment?.assignedAgent?.agentName ?? "N/A"}
+                    </p>
+                  </div>
 
-                <div>
-                  <p className="text-slate-400">Phone</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.assignedAgent?.agentPhone ?? "N/A"}
-                  </p>
-                </div>
+                  <div>
+                    <p className="text-slate-400">Phone</p>
+                    <p className="font-medium text-slate-700">
+                      {shipment.assignedAgent?.agentPhone ?? "N/A"}
+                    </p>
+                  </div>
 
-                <div>
-                  <p className="text-slate-400">ServiceZone</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.assignedAgent?.serviceZone ?? "N/A"}
-                  </p>
-                </div>
+                  <div>
+                    <p className="text-slate-400">ServiceZone</p>
+                    <p className="font-medium text-slate-700">
+                      {shipment.assignedAgent?.serviceZone ?? "N/A"}
+                    </p>
+                  </div>
 
-                <div>
-                  <p className="text-slate-400">VehicleType</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.assignedAgent?.vehicleType ?? "N/A"}
-                  </p>
-                </div>
+                  <div>
+                    <p className="text-slate-400">VehicleType</p>
+                    <p className="font-medium text-slate-700">
+                      {shipment.assignedAgent?.vehicleType ?? "N/A"}
+                    </p>
+                  </div>
 
-                <div>
-                  <p className="text-slate-400">VehicleNumber</p>
-                  <p className="font-medium text-slate-700">
-                    {shipment.assignedAgent?.vehicleNumber ?? "N/A"}
-                  </p>
+                  <div>
+                    <p className="text-slate-400">VehicleNumber</p>
+                    <p className="font-medium text-slate-700">
+                      {shipment.assignedAgent?.vehicleNumber ?? "N/A"}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ):(
+                "Agent yet to assigned"
+              )
+            
+              }
             </div>
           </div>
 

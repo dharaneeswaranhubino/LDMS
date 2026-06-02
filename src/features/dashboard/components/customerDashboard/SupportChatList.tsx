@@ -1,5 +1,5 @@
 import { Badge } from "lucide-react";
-import type { DashboardSupportChat } from "../../../shipment/shipmentTypes";
+import type { DashboardSupportChat } from "../../../customerShipment/shipmentTypes";
 import {
   fmtDate,
   getInitials,
@@ -51,7 +51,7 @@ const SupportChatList = ({ chats }: { chats: DashboardSupportChat[] }) => {
                     {chat.unreadCount}
                   </span>
                 )}
-                <Badge status={chat.status} config={SUPPORT_STATUS_CONFIG} />
+                {/* <Badge status={chat.status} config={SUPPORT_STATUS_CONFIG} /> */}
                 <span className="text-[11px] text-gray-400">
                   {chat.agentName ? `Agent: ${chat.agentName}` : "Automated"}
                 </span>

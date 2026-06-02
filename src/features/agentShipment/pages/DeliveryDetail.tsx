@@ -10,10 +10,11 @@ import DeliveryDetailHeader from "../components/deliveryDetails/DeliveryDetailHe
 import ProofOfDelivery from "../components/deliveryDetails/ProofOfDelivery";
 import ReceiverDetails from "../components/deliveryDetails/ReceiverDetails";
 import ShipmentDetails from "../components/deliveryDetails/ShipmentDetails";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 
 const DeliveryDetail = () => {
   const dispatch = useAppDispatch();
-  const { deliveries } = useAppSelector((state) => state.agent);
+  const { deliveries, loading } = useAppSelector((state) => state.agent);
   const [otpVerified, setOtpVerified] = useState(false);
   const [switchingShipment, setSwitchingShipment] = useState(false);
 
@@ -63,6 +64,14 @@ const DeliveryDetail = () => {
             Loading next assigned delivery...
           </p>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
       </div>
     );
   }

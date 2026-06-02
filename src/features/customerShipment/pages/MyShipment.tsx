@@ -15,6 +15,7 @@ import ShipmentEmpty from "../components/myShipmentComponents/ShipmentEmpty";
 import ShipmentTabs from "../components/myShipmentComponents/ShipmentTabs";
 import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar";
 import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 
 const MyShipments = () => {
   const dispatch = useAppDispatch();
@@ -104,8 +105,15 @@ const MyShipments = () => {
     setSelectedShipment(shipment);
     setOpenModal(true);
   };
+  // if (loading && (shipments ?? []).length === 0) {
+  //   return <ShipmentLoading />;
+  // }
   if (loading && (shipments ?? []).length === 0) {
-    return <ShipmentLoading />;
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
+      </div>
+    );
   }
   if (error) {
     return (

@@ -25,42 +25,7 @@ const UpdateStatusModal = ({
   const newStatus = deliveryMock.timeline.find(
     (item) => item.key === nextStatus,
   );
-  // const handleUpdate = async () => {
-  //   try {
-  //     await onUpdate(nextStatus);
-  //     showToast({
-  //       type: "success",
-  //       message:
-  //       nextStatus === "DELIVERED"
-  //       ? "Shipment delivered successfully"
-  //       : `Status updated to ${newStatus?.label}`,
-  //     });
-  //     onClose();
-  //   } catch (error) {
-  //     showToast({
-  //       type: "error",
-  //       message: "Failed to update shipment status",
-  //     });
-  //   }
-  // };
-  // const handleUpdate = async () => {
-  //   try {
-  //     onClose();
-  //     await onUpdate(nextStatus); // delegates everything to DeliveryCheckpoints
-  //     showToast({
-  //       type: "success",
-  //       message:
-  //         nextStatus === "DELIVERED"
-  //           ? "Shipment delivered successfully"
-  //           : `Status updated to ${newStatus?.label}`,
-  //     });
-  //   } catch (error) {
-  //     showToast({
-  //       type: "error",
-  //       message: "Failed to update shipment status",
-  //     });
-  //   }
-  // };
+  
   const handleUpdate = async () => {
     try {
       if (availability !== "AVAILABLE") {

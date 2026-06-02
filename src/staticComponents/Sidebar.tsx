@@ -6,7 +6,7 @@ import { logoutUser } from "../features/auth/authSlice";
 import { TbListDetails, TbTruckDelivery } from "react-icons/tb";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaCubesStacked } from "react-icons/fa6";
-import { fetchMyShipments } from "../features/shipment/shipmentSlice";
+import { fetchMyShipments } from "../features/customerShipment/shipmentSlice";
 
 interface MenuItem {
   name: string;
@@ -22,7 +22,14 @@ const roleColors = {
     "bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 text-cyan-800",
   deliveryAgent:
     "bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 text-indigo-600",
-  customer: "bg-blue-500 text-white",
+  customer: "bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 text-sky-600",
+};
+const roleBgColors = {
+  admin:
+    "bg-cyan-50 text-cyan-800",
+  deliveryAgent:
+    "bg-indigo-50 text-indigo-600",
+  customer: "bg-sky-50 text-sky-600",
 };
 
 const getMenu = (pagination: number | null): MenuItem[] => [
@@ -154,7 +161,7 @@ const getMenu = (pagination: number | null): MenuItem[] => [
   },
   {
     name: "Notifications",
-    path: "/notifications",
+    path: "/customerNotifications",
     section: "SUPPORT",
     allowedRole: "customer",
     icon: <i className="fa-regular fa-bell text-[13px]"></i>,
@@ -207,7 +214,7 @@ const Sidebar = () => {
   }, [dispatch, user?.role]);
 
   const getFirstLetterCapital = (str: string | undefined) =>
-    str.charAt(0)?.toUpperCase() + str?.slice(1);
+    str ? str.charAt(0)?.toUpperCase() + str?.slice(1) : "";
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
@@ -256,10 +263,11 @@ const Sidebar = () => {
         className={`
         fixed top-[72px] w-64
         h-[calc(100vh-72px)]
-        bg-white border-r border-slate-200
+        border-r border-slate-200
         flex flex-col justify-between
         overflow-y-auto scrollbar-none z-40
         lg:!left-0
+        ${roleBgColors[user?.role as keyof typeof roleBgColors]}
       `}
       >
         <div className="px-3 py-4">

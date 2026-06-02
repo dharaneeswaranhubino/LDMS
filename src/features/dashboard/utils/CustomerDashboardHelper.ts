@@ -1,4 +1,4 @@
-import type { CustomerDashboardData } from "../../shipment/shipmentTypes";
+import type { CustomerDashboardData } from "../../customerShipment/shipmentTypes";
 
 const ALL_RECENT_SHIPMENTS: CustomerDashboardData["recentShipments"] = [
     {

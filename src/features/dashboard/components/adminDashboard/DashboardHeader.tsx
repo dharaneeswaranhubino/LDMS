@@ -23,7 +23,7 @@ const DashboardHeader = ({
     <>
       <div className="mb-6 flex flex-wrap gap-3 items-start justify-between">
         <div>
-          <h1 className="m-0 text-3xl font-extrabold tracking-tight text-sky-900">
+          <h1 className="m-0 text-3xl font-extrabold tracking-tight text-cyan-800">
             Admin Dashboard
           </h1>
 

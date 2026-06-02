@@ -93,7 +93,7 @@ const DeliveryDetailsModal = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid lg:grid-cols-2 gap-5">
               <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
                 <h3 className="text-lg font-semibold text-blue-700 mb-4">
                   Pickup Details

@@ -1,10 +1,14 @@
 import { useState, type ChangeEvent } from "react";
 import { type AgentFormData } from "../adminTypes";
 import { validateAgentDetails } from "../components/agentDetailsValidation";
-import { useAppDispatch } from "../../../shared/hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../shared/hooks/reduxHooks";
 import { createAgentDetails } from "../adminSlice";
 import { toast } from "react-toastify";
-import notificationSound from "../../../assets/universfield-new-notification-051-494246.mp3"
+import notificationSound from "../../../assets/universfield-new-notification-051-494246.mp3";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 
 const vehicleTypes = ["Bike", "Scooter", "Van", "Mini Truck", "Truck"];
 
@@ -14,7 +18,7 @@ const CreateAgent = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useAppDispatch();
-  //   const {shipments} = useAppSelector((state)=>state.admin);
+  const { loading } = useAppSelector((state) => state.admin);
 
   const [agentForm, setAgentForm] = useState<AgentFormData>({
     name: "",
@@ -82,6 +86,14 @@ const CreateAgent = () => {
     audio.play();
     toast.success("new Agent added Successfully!");
   };
+
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg w-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen py-4 px-2 lg:p-6 overflow-hidden">

@@ -12,6 +12,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../shared/hooks/reduxHooks";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 
 const DeliveryHistory = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const DeliveryHistory = () => {
     activeTab,
     currentPage,
     itemsPerPage,
+    loading,
   } = useAppSelector((state) => state.agent);
 
   useEffect(() => {
@@ -73,6 +75,14 @@ const DeliveryHistory = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
+
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 p-5">
@@ -141,7 +151,9 @@ const DeliveryHistory = () => {
           )}
         </div>
 
-        <div className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${paginatedData.length === 0 && "hidden"}`}>
+        <div
+          className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${paginatedData.length === 0 && "hidden"}`}
+        >
           <p className="text-center text-sm text-slate-600 lg:text-left">
             Showing{" "}
             <span className="font-semibold">
@@ -156,7 +168,9 @@ const DeliveryHistory = () => {
             deliveries
           </p>
 
-          <div className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${paginatedData.length === 0 && "hidden"}`}>
+          <div
+            className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${paginatedData.length === 0 && "hidden"}`}
+          >
             <div className="flex min-w-max items-center justify-center gap-2 pb-1">
               <button
                 disabled={currentPage === 1}

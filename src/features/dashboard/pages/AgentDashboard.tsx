@@ -17,13 +17,17 @@ import ActiveShipments from "../components/agentDashboard/ActiveShipments";
 import CustomerMessages from "../components/agentDashboard/CustomerMessages";
 import TodaySchedule from "../components/agentDashboard/TodaySchedule";
 import CompletedToday from "../components/agentDashboard/CompletedToday";
-import { useAppDispatch, useAppSelector } from "../../../shared/hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../shared/hooks/reduxHooks";
 import { toggleAvailability } from "../../agentShipment/agentSlice";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 // import { fetchAgentSchedule } from "../../features/agent/agentSlice";
 
 const AgentDashboard = () => {
   const dispatch = useAppDispatch();
-  const { availability, availabilityLoading } = useAppSelector(
+  const { availability, availabilityLoading, loading } = useAppSelector(
     (state) => state.agent,
   );
 
@@ -67,6 +71,14 @@ const AgentDashboard = () => {
     });
     return map;
   }, [shipments]);
+
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className=" rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 px-2 py-4 lg:p-5">

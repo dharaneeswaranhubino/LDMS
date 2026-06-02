@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
-import shipmentReducer from "../features/shipment/shipmentSlice";
+import shipmentReducer from "../features/customerShipment/shipmentSlice";
 import adminReducer from "../features/adminShipment/adminSlice";
 import agentReducer from "../features/agentShipment/agentSlice";
 

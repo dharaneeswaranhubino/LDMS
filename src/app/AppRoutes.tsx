@@ -2,7 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
-import PaymentDetails from "../features/shipment/pages/PaymentDetails";
+import PaymentDetails from "../features/customerShipment/pages/PaymentDetails";
+import CustomerNotifications from "../features/customerShipment/pages/CustomerNotifications";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -18,12 +19,14 @@ const CustomerDashboard = lazy(
   () => import("../features/dashboard/pages/CustomerDashboard"),
 );
 const CreateShipment = lazy(
-  () => import("../features/shipment/pages/CreateShipment"),
+  () => import("../features/customerShipment/pages/CreateShipment"),
 );
 const ProfilePage = lazy(() => import("../features/profile/pages/ProfilePage"));
-const MyShipments = lazy(() => import("../features/shipment/pages/MyShipment"));
+const MyShipments = lazy(
+  () => import("../features/customerShipment/pages/MyShipment"),
+);
 const TrackShipment = lazy(
-  () => import("../features/shipment/pages/TrackShipment"),
+  () => import("../features/customerShipment/pages/TrackShipment"),
 );
 const CreateAgent = lazy(
   () => import("../features/adminShipment/pages/CreateAgent"),
@@ -73,6 +76,10 @@ const AppRoutes = () => {
             <Route path="/sendShipment" element={<CreateShipment />} />
             <Route path="/myShipments" element={<MyShipments />} />
             <Route path="/trackShipments" element={<TrackShipment />} />
+            <Route
+              path="/customerNotifications"
+              element={<CustomerNotifications />}
+            />
             {/* admin screens */}
             <Route path="/agentRegisteration" element={<CreateAgent />} />
             <Route path="/agentManagement" element={<AgentManagement />} />

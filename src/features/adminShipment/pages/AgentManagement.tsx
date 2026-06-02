@@ -8,6 +8,7 @@ import {
 import { getAllAgents } from "../adminSlice";
 import type { DeliveryAgent } from "../adminTypes";
 import AgentDetailsModal from "../components/agentManagement/AgentDetailsModal";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 
 const getStatusStyle = (status: string) => {
   switch (status) {
@@ -66,9 +67,17 @@ const AgentManagement = () => {
     (a) => a.availabilityStatus === "UNAVAILABLE",
   ).length;
 
+  if (loading) {
+    return (
+      <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5 scrollbar-none">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-slate-800">
             Agent Management
@@ -81,7 +90,7 @@ const AgentManagement = () => {
 
         <button
           onClick={sendShipment}
-          className="flex h-[44px] items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 text-[13px] font-medium text-white shadow-md"
+          className="flex h-[44px] w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 text-[13px] font-medium text-white shadow-md"
         >
           <i className="fa-solid fa-plus text-[11px]"></i>
           Add New Agent
@@ -137,8 +146,8 @@ const AgentManagement = () => {
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
-        <div className="flex items-center gap-2 border bg-white rounded-xl h-10 px-3 shadow-sm flex-1">
+      <div className="mt-5 flex flex-col sm:flex-row gap-2">
+        <div className="flex items-center gap-2 border bg-white rounded-xl h-10 px-3 shadow-sm flex-1 w-full">
           <i className="fa-solid fa-magnifying-glass text-slate-400 text-[14px]" />
 
           <input
@@ -146,14 +155,14 @@ const AgentManagement = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by agent name"
-            className="bg-transparent outline-none text-[13px] text-slate-700 placeholder-slate-400 w-full"
+            className="bg-transparent outline-none text-[13px] h-10 text-slate-700 placeholder-slate-400 w-full"
           />
         </div>
 
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="border border-slate-200 bg-white rounded-xl h-10 px-3 text-[13px] text-slate-600 outline-none shadow-sm w-44"
+          className="border border-slate-200 bg-white rounded-xl h-10 px-3 text-[13px] text-slate-600 outline-none shadow-sm w-full sm:w-44"
         >
           <option value="">All Status</option>
           <option value="AVAILABLE">Available</option>
@@ -162,24 +171,24 @@ const AgentManagement = () => {
       </div>
 
       <div className="mt-5 rounded-3xl border border-cyan-100 bg-white shadow-sm overflow-hidden">
-        <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none">
-          <table className="w-full border-collapse min-w-[800px] overflow-x-scrole">
+        <div className="overflow-x-auto max-h-[420px] overflow-y-auto scrollbar-none">
+          <table className="w-full border-collapse min-w-[1000px]">
             <thead className="bg-sky-50 sticky top-0 z-10">
               <tr className="text-[13px] uppercase tracking-wide text-slate-500">
-                <th className="px-6 py-5 text-left font-semibold">Agent</th>
-                <th className="px-6 py-5 text-left font-semibold">Phone</th>
-                <th className="px-6 py-5 text-left font-semibold">Status</th>
-                <th className="px-6 py-5 text-left font-semibold">
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Agent</th>
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Phone</th>
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Status</th>
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">
                   Today's Workload
                 </th>
 
-                <th className="px-6 py-5 text-left font-semibold">
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">
                   Total Deliveries
                 </th>
 
-                <th className="px-6 py-5 text-left font-semibold">Joined</th>
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Joined</th>
 
-                <th className="px-6 py-5 text-left font-semibold">Actions</th>
+                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Actions</th>
               </tr>
             </thead>
 
@@ -189,9 +198,9 @@ const AgentManagement = () => {
                   key={agent.id}
                   className="border-t border-sky-100 hover:bg-sky-50/70"
                 >
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-100 to-cyan-100 text-sm font-bold text-sky-700">
+                  <td className="px-3 md:px-6 py-4 md:py-5">
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-100 to-cyan-100 text-sm font-bold text-sky-700">
                         {agent.agentName
                           ?.split(" ")
                           .map((n) => n[0])
@@ -200,11 +209,11 @@ const AgentManagement = () => {
                       </div>
 
                       <div>
-                        <h3 className="font-semibold text-slate-800">
+                        <h3 className="font-semibold text-sm md:text-base text-slate-800">
                           {agent.agentName}
                         </h3>
 
-                        <p className="text-sm text-slate-400">
+                        <p className="text-xs md:text-sm text-slate-400">
                           #AGT-{agent.agentId}
                         </p>
                       </div>

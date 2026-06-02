@@ -2,7 +2,7 @@ import type { StatCardProps } from "../../../adminShipment/adminTypes";
 
 const StatCard = ({ icon, value, label, iconBg, accent }: StatCardProps) => {
   return (
-    <div className="flex flex-1 justify-between items-center gap-3 rounded-xl border-l-5 border-sky-300 bg-white px-5 py-[18px] shadow-md">
+    <div className="flex flex-1 justify-between items-center gap-3 rounded-xl border-l-5 border-cyan-300 bg-white px-5 py-[18px] shadow-md">
       <div>
         <div
           className="text-[34px] font-extrabold leading-none"

@@ -22,8 +22,7 @@ export const createShipment = createAsyncThunk<
     async (data: CreateShipmentPayload, { rejectWithValue }) => {
         try {
             const payload = mapToBackendPayload(data);
-            console.log(payload);
-
+            // console.log(payload);
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
@@ -44,7 +43,7 @@ export const initiatePayment = createAsyncThunk<
             const res = await api.post(
                 `/payments/initiate/${shipmentId}`
             );
-
+            // console.log("res.data.data :", res.data.data);
             return res.data.data;
         } catch (err: unknown) {
             const error = err as import("axios").AxiosError<{ message: string }>;
@@ -71,7 +70,7 @@ export const verifyPayment = createAsyncThunk<
                 `/payments/verify/${shipmentId}`,
                 payload
             );
-
+            // console.log("res.data.data :", res.data.data);
             return res.data.data;
         } catch (err: unknown) {
             const error = err as import("axios").AxiosError<{ message: string }>;

@@ -57,6 +57,18 @@ const AdminDashboard = () => {
     complaints,
     revenueByTab,
   } = dashboard;
+  console.log(totalShipments,
+    deliveredShipments,
+    activeDeliveries,
+    delayedShipments,
+    pendingShipments,
+    totalRevenue,
+    paymentSummary,
+    agentPerformance,
+    recentShipments,
+    complaints,
+    revenueByTab);
+  
 
   return (
     <div className="box-border h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5 font-sans scrollbar-none">

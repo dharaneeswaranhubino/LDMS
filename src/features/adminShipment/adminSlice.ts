@@ -12,7 +12,7 @@ import {
   type DeliveryAgent,
 } from "./adminTypes";
 import { AxiosError } from "axios";
-import type { ShipmentResponse } from "../shipment/shipmentTypes";
+import type { ShipmentResponse } from "../customerShipment/shipmentTypes";
 
 // ─── Mock Generator ────────────────────────────────────────────────
 // date range based-a deterministic mock data generate பண்றோம்.

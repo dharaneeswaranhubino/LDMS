@@ -57,7 +57,7 @@ export const validateShipmentAddress = (
 
   if (!deliveryAddress.pinCode.trim()) {
     errors.deliveryPinCode = "Delivery pincode is required";
-  } else if (!/^\d+$/.test(pickUpAddress.pinCode)) {
+  } else if (!/^\d+$/.test(deliveryAddress.pinCode)) {
     errors.deliveryPinCode = "Please enter numbers only";
   } else if (!/^[0-9]{6}$/.test(deliveryAddress.pinCode)) {
     errors.deliveryPinCode = "Delivery pinCode must be 6 digits";
@@ -85,7 +85,7 @@ export const validatePackageDetails = (packageDetails: PackageDetailsFormData) =
     errors.weight = "Weight is required";
   } else if (Number(packageDetails.weight) <= 0) {
     errors.weight = "Weight must be greater than 0";
-  } else if (!/^\d+$/.test(packageDetails.weight)) {
+  } else if (!/^\d+(\.\d+)?$/.test(packageDetails.weight)) {
     errors.weight = "Please enter numbers only";
   }
 
