@@ -9,7 +9,7 @@ import type { FilterType} from "../shipmentTypes";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import { filterOptions } from "../utils/shipmentHelpers";
 import NotificationCard from "../components/notificationComponents/NotificationCard";
-import { showToast } from "../../../shared/components/Toast";
+// import { showToast } from "../../../shared/components/Toast";
 
 const CustomerNotifications = () => {
   const dispatch = useAppDispatch();
