@@ -4,6 +4,8 @@ import type {
   PriorityType,
   FilterTab,
   SortKey,
+  NotificationType,
+  FilterType,
 } from "../shipmentTypes";
 
 export const STATUS_STYLES: Record<ShipmentStatus, string> = {
@@ -161,3 +163,86 @@ export const BASE_RATE = 50;
 export const RATE_PER_KG = 20;
 export const FRAGILE_CHARGE = 50;
 export const GST_RATE = 0.18;
+
+
+//Notifications helper functions and datas
+
+export const typeConfig: Record<
+  NotificationType,
+  { icon: string; bgColor: string; textColor: string; label: string }
+> = {
+  SHIPMENT_CREATED: {
+    icon: "fa-box",
+    bgColor: "bg-purple-100",
+    textColor: "text-purple-700",
+    label: "Created",
+  },
+  AGENT_ASSIGNED: {
+    icon: "fa-user-check",
+    bgColor: "bg-blue-100",
+    textColor: "text-blue-700",
+    label: "Agent Assigned",
+  },
+  SHIPMENT_IN_TRANSIT: {
+    icon: "fa-truck-fast",
+    bgColor: "bg-cyan-100",
+    textColor: "text-cyan-700",
+    label: "In Transit",
+  },
+  SHIPMENT_DELAYED: {
+    icon: "fa-triangle-exclamation",
+    bgColor: "bg-amber-100",
+    textColor: "text-amber-700",
+    label: "Delayed",
+  },
+  SHIPMENT_DELIVERED: {
+    icon: "fa-circle-check",
+    bgColor: "bg-green-100",
+    textColor: "text-green-700",
+    label: "Delivered",
+  },
+  SHIPMENT_COMPLETED: {
+    icon: "fa-flag-checkered",
+    bgColor: "bg-green-100",
+    textColor: "text-green-700",
+    label: "Completed",
+  },
+  PAYMENT_UPDATE: {
+    icon: "fa-credit-card",
+    bgColor: "bg-emerald-100",
+    textColor: "text-emerald-700",
+    label: "Payment",
+  },
+};
+
+export const formatNotificationTime = (dateStr: string): string => {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+
+export const filterOptions: { label: string; value: FilterType }[] = [
+  { label: "All", value: "ALL" },
+  { label: "Unread", value: "UNREAD" },
+  { label: "Created", value: "SHIPMENT_CREATED" },
+  { label: "Agent Assigned", value: "AGENT_ASSIGNED" },
+  { label: "In Transit", value: "SHIPMENT_IN_TRANSIT" },
+  { label: "Delayed", value: "SHIPMENT_DELAYED" },
+  { label: "Delivered", value: "SHIPMENT_DELIVERED" },
+  { label: "Payment", value: "PAYMENT_UPDATE" },
+];

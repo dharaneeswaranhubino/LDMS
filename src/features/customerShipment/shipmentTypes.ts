@@ -86,6 +86,14 @@ export interface ShipmentState {
   dateRange: { from: string; to: string };
   loading: boolean;
   error: string | null;
+  // notification state
+  notifications: Notification[];
+  unreadCount: number;
+  notificationPagination: NotificationPagination | null;
+  notificationLoading: boolean;
+  markAllLoading: boolean;
+  markSingleLoading: number | null;
+  notificationError: string | null;
 }
 
 export type ShipmentStatus =
@@ -258,4 +266,48 @@ export interface CustomerDashboardData {
   recentSupportChats: DashboardSupportChat[];
   shipmentStatusBreakdown: ShipmentStatusBreakdown;
   monthlyStats: MonthlyStatEntry[];
+}
+
+
+//Notification Types
+export type NotificationType =
+  | "SHIPMENT_CREATED"
+  | "AGENT_ASSIGNED"
+  | "SHIPMENT_IN_TRANSIT"
+  | "SHIPMENT_DELAYED"
+  | "SHIPMENT_DELIVERED"
+  | "SHIPMENT_COMPLETED"
+  | "PAYMENT_UPDATE";
+
+export interface Notification {
+  notificationId: number;
+  shipmentId: number;
+  trackingId: string;
+  title: string;
+  message: string;
+  type: NotificationType;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface NotificationPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface FetchNotificationsResponse {
+  unreadCount: number;
+  notifications: Notification[];
+  pagination: NotificationPagination;
+}
+
+
+export type FilterType = "ALL" | "UNREAD" | NotificationType;
+
+export interface NotificationCardProps {
+  notification: Notification;
+  onMarkRead: (id: number) => void;
+  isMarkingRead: boolean;
 }

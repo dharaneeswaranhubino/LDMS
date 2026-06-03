@@ -228,8 +228,8 @@ const MyShipments = () => {
                   )
                 }
                 className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
-        transition-all hover:border-violet-300 hover:text-violet-600
-        disabled:cursor-not-allowed disabled:opacity-40"
+                transition-all hover:border-violet-300 hover:text-violet-600
+                disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Prev
               </button>
@@ -284,8 +284,8 @@ const MyShipments = () => {
                   )
                 }
                 className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
-        transition-all hover:border-violet-300 hover:text-violet-600
-        disabled:cursor-not-allowed disabled:opacity-40"
+                transition-all hover:border-violet-300 hover:text-violet-600
+                disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Next
               </button>

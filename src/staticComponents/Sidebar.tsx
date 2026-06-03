@@ -32,7 +32,7 @@ const roleBgColors = {
   customer: "bg-sky-50 text-sky-600",
 };
 
-const getMenu = (pagination: number | null): MenuItem[] => [
+const getMenu = (pagination: number | null, unreadCount:number | null): MenuItem[] => [
   // admin
   {
     name: "Admin Dashboard",
@@ -165,7 +165,7 @@ const getMenu = (pagination: number | null): MenuItem[] => [
     section: "SUPPORT",
     allowedRole: "customer",
     icon: <i className="fa-regular fa-bell text-[13px]"></i>,
-    badge: 5,
+    badge: unreadCount,
   },
   {
     name: "My profile",
@@ -184,14 +184,14 @@ const Sidebar = () => {
   const { hasRole } = useRole();
   const { user } = useAppSelector((state) => state.auth);
 
-  const { pagination } = useAppSelector((state) => state.shipment);
+  const { pagination, unreadCount} = useAppSelector((state) => state.shipment);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
 
-  const menu = getMenu(pagination?.total ?? 0);
+  const menu = getMenu(pagination?.total ?? 0, unreadCount ?? 0);
   const filteredMenu = menu.filter((item) => hasRole(item.allowedRole));
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

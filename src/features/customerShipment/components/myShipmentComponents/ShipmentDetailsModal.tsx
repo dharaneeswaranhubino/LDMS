@@ -154,7 +154,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
               </div>
             </div>
 
-            <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100">
+            <div className="bg-blue-50 justify-center rounded-2xl p-5 border border-blue-100">
               <h3 className="text-lg font-semibold text-blue-700 mb-4">
                 Delivery Agent Details
               </h3>
@@ -196,11 +196,26 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
                     </p>
                   </div>
                 </div>
-              ):(
-                "Agent yet to assigned"
-              )
-            
-              }
+              ) : (
+                <div className="text-[10px] h-full flex flex-col justify-center items-center">
+                  <div>
+                    {"We're Connecting You with a Support Agent..."
+                      .split("")
+                      .map((char, index) => (
+                        <span
+                          key={index}
+                          className="inline-block animate-bounce"
+                          style={{ animationDelay: `${index * 15}ms` }}
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      ))}
+                  </div>
+                  <div>
+                    <i className="fa-solid fa-spinner fa-spin text-violet-600 text-4xl"></i>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
