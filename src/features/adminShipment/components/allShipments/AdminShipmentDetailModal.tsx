@@ -1,4 +1,4 @@
-import type { BackendShipment } from "../../adminTypes";
+import type { AllShipments } from "../../adminTypes";
 import {
   avatarColor,
   formatDate,
@@ -31,7 +31,7 @@ const formatSlot = (
 };
 
 interface Props {
-  shipment: BackendShipment | null;
+  shipment: AllShipments | null;
   onClose: () => void;
 }
 
@@ -48,7 +48,8 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white z-10">
+        {/* <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white z-10"> */}
+        <div className="flex items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-3 border-b border-slate-100 sticky top-0 bg-white z-10">
           <div>
             <h2 className="text-[15px] font-semibold text-slate-800">
               Shipment details
@@ -72,13 +73,13 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
           </div>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-4 sm:p-6 space-y-5">
           {/* Package Info */}
           <section>
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Package
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { label: "Item", val: shipment.itemName },
                 { label: "Quantity", val: shipment.quantity },
@@ -113,7 +114,7 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Route
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
                 <p className="text-[10px] text-blue-500 font-semibold mb-2 flex items-center gap-1">
                   <i className="fa-solid fa-circle-dot text-[9px]" /> Pickup
@@ -197,7 +198,7 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
                   <p className="text-[11px] text-slate-500">
                     {shipment.assignedAgent.email}
                   </p>
-                  <div className="flex gap-3 mt-1.5">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1.5">
                     {shipment.assignedAgent.vehicleType && (
                       <span className="text-[10px] text-slate-500 flex items-center gap-1">
                         <i className="fa-solid fa-truck text-[9px]" />{" "}
@@ -229,7 +230,7 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
               Payment
             </h3>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="bg-slate-50 rounded-xl p-3">
                 <p className="text-[10px] text-slate-400 mb-1">Amount</p>
                 <p className="text-[14px] font-semibold text-slate-800">

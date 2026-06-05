@@ -1,7 +1,7 @@
-import type { BackendShipment } from "../../adminTypes";
+import type { AllShipments } from "../../adminTypes";
 
 interface Props {
-  shipment: BackendShipment | null;
+  shipment: AllShipments | null;
   loading: boolean;
   onConfirm: () => void;
   onClose: () => void;
@@ -38,7 +38,7 @@ const AdminShipmentCompleteModal = ({
           action cannot be undone.
         </p>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={onClose}
             className="flex-1 py-2.5 rounded-xl border border-slate-200 text-[13px] text-slate-600 hover:bg-slate-50 transition-all"

@@ -1,9 +1,9 @@
 import Pagination from "../../../../shared/components/Pagination";
-import type { BackendShipment } from "../../adminTypes";
+import type { AllShipments } from "../../adminTypes";
 import AdminShipmentTableRow from "./AdminShipmentTableRow";
 
 interface Props {
-  shipments: BackendShipment[];
+  shipments: AllShipments[];
   shipmentsLoading: boolean;
   searchQuery: string;
   page: number;
@@ -12,8 +12,8 @@ interface Props {
   limit: number;
   onPageChange: (page: number) => void;
   onLimitChange: (limit: number) => void;
-  onView: (shipment: BackendShipment) => void;
-  onComplete: (shipment: BackendShipment) => void;
+  onView: (shipment: AllShipments) => void;
+  onComplete: (shipment: AllShipments) => void;
 }
 
 const TABLE_HEADERS = [
@@ -43,7 +43,8 @@ const AdminShipmentTable = ({
 }: Props) => {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-      <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none">
+      {/* <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none"> */}
+      <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none touch-pan-x">
         <table className="w-full text-[12px]" style={{ minWidth: "900px" }}>
           <thead className="bg-slate-50 border-b border-slate-200 sticky top-0">
             <tr>

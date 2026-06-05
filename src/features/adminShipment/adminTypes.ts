@@ -147,7 +147,7 @@ export interface AgentDetailsState {
   dashboard: AdminDashboardData | null;
   dashboardLoading: boolean;
 
-  allShipments: BackendShipment[];
+  allShipments: AllShipments[];
   shipmentPagination: ShipmentPagination | null;
   shipmentsLoading: boolean;
 
@@ -203,15 +203,16 @@ export interface CustomerComplaintsProps {
   complaints: CustomerComplaint[];
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-export interface BackendShipmentCustomer {
+
+// All Shipments
+export interface AllShipmentCustomer {
   customerId: number;
   name: string;
   email: string;
   phoneNumber: string | null;
 }
 
-export interface BackendShipmentAgent {
+export interface AllShipmentAgent {
   agentId: number;
   name: string;
   email: string;
@@ -221,7 +222,7 @@ export interface BackendShipmentAgent {
   serviceZone: string;
 }
 
-export interface BackendShipment {
+export interface AllShipments {
   shipmentId: number;
   trackingId: string;
   itemName: string;
@@ -243,8 +244,8 @@ export interface BackendShipment {
   shipmentStatus: ShipmentStatus;
   amount: number;
   paymentStatus: "PENDING" | "PAID" | "FAILED";
-  customer: BackendShipmentCustomer;
-  assignedAgent: BackendShipmentAgent | null;
+  customer: AllShipmentCustomer;
+  assignedAgent: AllShipmentAgent | null;
   assignedSlotStart: string | null;
   assignedSlotEnd: string | null;
   assignedDate: string | null;
@@ -260,6 +261,18 @@ export interface ShipmentPagination {
 }
 
 export interface AllShipmentsResponse {
-  shipments: BackendShipment[];
+  shipments: AllShipments[];
   pagination: ShipmentPagination;
+}
+
+export interface AdminShipmentTabsProps {
+  activeTab: FilterTab;
+  tabCounts: Record<string, number>;
+  onTabChange: (tab: FilterTab) => void;
+}
+
+export interface AdminShipmentTableRowProps {
+  shipment: AllShipments;
+  onView: (shipment: AllShipments) => void;
+  onComplete: (shipment: AllShipments) => void;
 }

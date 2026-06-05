@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../app/store";
 import { fetchAllShipments } from "../adminSlice";
-import type { BackendShipment, FilterTab, SortKey } from "../adminTypes";
+import type { AllShipments, FilterTab, SortKey } from "../adminTypes";
 import { TABS } from "../utils/adminShipmentHelper";
 
 import AllShipmentHeader from "../components/allShipments/AllShipmentHeader";
@@ -28,8 +28,8 @@ const AdminAllShipments = () => {
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [searchFocused, setSearchFocused] = useState(false);
 
-  const [viewModal, setViewModal] = useState<BackendShipment | null>(null);
-  const [completeModal, setCompleteModal] = useState<BackendShipment | null>(
+  const [viewModal, setViewModal] = useState<AllShipments | null>(null);
+  const [completeModal, setCompleteModal] = useState<AllShipments | null>(
     null,
   );
   const [completeLoading, setCompleteLoading] = useState(false);
@@ -101,7 +101,6 @@ const AdminAllShipments = () => {
     if (!completeModal) return;
     setCompleteLoading(true);
     try {
-      // TODO: dispatch(completeShipment(completeModal.shipmentId))
       await new Promise((r) => setTimeout(r, 800));
       setCompleteModal(null);
     } finally {
@@ -113,7 +112,8 @@ const AdminAllShipments = () => {
   const total = shipmentPagination?.total ?? 0;
 
   return (
-    <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
+    // <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
+    <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
       <AllShipmentHeader />
 
       <AdminShipmentSearchSort
@@ -131,7 +131,7 @@ const AdminAllShipments = () => {
         onTabChange={handleTabChange}
       />
 
-      <p className="text-[12px] text-slate-400 mb-3">
+      <p className="text-[11px] sm:text-[12px] text-slate-400 mb-3">
         {searchQuery
           ? `${displayed.length} result${displayed.length !== 1 ? "s" : ""} for "${searchQuery}" on this page`
           : `Showing ${displayed.length} of ${total} shipments (page ${page} of ${totalPages})`}

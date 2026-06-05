@@ -21,7 +21,7 @@ const AdminShipmentSearchSort = ({
   const searchRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex flex-col sm:flex-row gap-2 mb-4">
       {/* Search */}
       <div
         className={`flex items-center gap-2 border bg-white rounded-xl h-10 px-3 shadow-sm transition-all duration-300 overflow-hidden cursor-pointer flex-1
@@ -39,7 +39,7 @@ const AdminShipmentSearchSort = ({
             if (!searchQuery) setSearchFocused(false);
           }}
           placeholder="Search by tracking ID, customer, item, city, agent…"
-          className="bg-transparent outline-none text-[13px] text-slate-700 placeholder-slate-400 w-full"
+          className="bg-transparent outline-none text-[13px] h-10 text-slate-700 placeholder-slate-400 w-full"
         />
         {searchQuery && (
           <button
@@ -59,7 +59,7 @@ const AdminShipmentSearchSort = ({
       <select
         value={sortKey}
         onChange={(e) => setSortKey(e.target.value as SortKey)}
-        className="border border-slate-200 bg-white rounded-xl h-10 px-3 text-[13px] text-slate-600 outline-none focus:border-indigo-400 shadow-sm cursor-pointer w-44 flex-shrink-0"
+        className="border border-slate-200 bg-white rounded-xl h-10 px-3 text-[13px] text-slate-600 outline-none focus:border-indigo-400 shadow-sm cursor-pointer w-full sm:w-44 flex-shrink-0"
       >
         <option value="newest">Sort: Newest first</option>
         <option value="oldest">Sort: Oldest first</option>

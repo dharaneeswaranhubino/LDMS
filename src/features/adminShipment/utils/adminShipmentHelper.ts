@@ -134,6 +134,7 @@ export const TABS: { key: FilterTab; label: string }[] = [
   { key: "ALL", label: "All" },
   { key: "PENDING", label: "Pending" },
   { key: "CONFIRMED", label: "Confirmed" },
+  { key: "ASSIGNED", label: "Assigned" },
   { key: "PICKED_UP", label: "Picked up" },
   { key: "IN_TRANSIT", label: "In transit" },
   { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },

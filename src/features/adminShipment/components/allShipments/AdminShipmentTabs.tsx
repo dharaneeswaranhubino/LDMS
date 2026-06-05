@@ -1,14 +1,9 @@
-import type { FilterTab } from "../../adminTypes";
+import type { AdminShipmentTabsProps } from "../../adminTypes";
 import { TABS } from "../../utils/adminShipmentHelper";
 
-interface Props {
-  activeTab: FilterTab;
-  tabCounts: Record<string, number>;
-  onTabChange: (tab: FilterTab) => void;
-}
-const AdminShipmentTabs = ({ activeTab, tabCounts, onTabChange }: Props) => {
+const AdminShipmentTabs = ({ activeTab, tabCounts, onTabChange }: AdminShipmentTabsProps) => {
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1 mb-4">
+    <div className="flex gap-2 overflow-x-auto scrollbar-none pb-2 mb-4">
       {TABS.map(({ key, label }) => {
         const count = tabCounts[key] ?? 0;
         const isActive = activeTab === key;

@@ -1,4 +1,4 @@
-import type { BackendShipment } from "../../adminTypes";
+import type { AdminShipmentTableRowProps } from "../../adminTypes";
 import {
   avatarColor,
   formatDate,
@@ -30,13 +30,7 @@ const formatSlot = (
   return `${fmt(start)} – ${fmt(end)}${dateStr ? ` · ${dateStr}` : ""}`;
 };
 
-interface Props {
-  shipment: BackendShipment;
-  onView: (shipment: BackendShipment) => void;
-  onComplete: (shipment: BackendShipment) => void;
-}
-
-const AdminShipmentTableRow = ({ shipment: s, onView, onComplete }: Props) => {
+const AdminShipmentTableRow = ({ shipment: s, onView, onComplete }: AdminShipmentTableRowProps) => {
   const renderAction = () => {
     if (s.shipmentStatus === "CONFIRMED" || s.shipmentStatus === "DELAYED") {
       return (
