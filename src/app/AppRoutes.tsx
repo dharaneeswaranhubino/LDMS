@@ -53,6 +53,10 @@ const PaymentDetails = lazy(
 const CustomerNotifications = lazy(
   () => import("../features/customerShipment/pages/CustomerNotifications"),
 );
+const PaymentSuccessScreen = lazy(
+  () =>
+    import("../features/customerShipment/components/createShipmentComponents/PaymentSuccessScreen"),
+);
 
 const AppRoutes = () => {
   return (
@@ -61,7 +65,7 @@ const AppRoutes = () => {
         fallback={
           <div className="min-h-screen flex items-center justify-center">
             {/* <p>Loading page...</p> */}
-            <LoadingSpinner/>
+            <LoadingSpinner />
           </div>
         }
       >
@@ -88,6 +92,7 @@ const AppRoutes = () => {
               path="/customerNotifications"
               element={<CustomerNotifications />}
             />
+            <Route path="/paymentSuccess" element={<PaymentSuccessScreen />} />
             {/* admin screens */}
             <Route path="/agentRegisteration" element={<CreateAgent />} />
             <Route path="/agentManagement" element={<AgentManagement />} />

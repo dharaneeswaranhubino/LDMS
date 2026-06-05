@@ -9,6 +9,7 @@ import type {
     PaymentDetailsResponse,
     CustomerDashboardData,
     FetchNotificationsResponse,
+    ShipmentTimelineResponse,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -226,6 +227,24 @@ export const markSingleNotificationRead = createAsyncThunk<
     }
 );
 
+// ─── NEW: Fetch Shipment Timeline Thunk ────────────────────────────────────
+export const fetchShipmentTimeline = createAsyncThunk<
+    ShipmentTimelineResponse,
+    number,                     // shipmentId
+    { rejectValue: string }
+>(
+    "shipment/fetchShipmentTimeline",
+    async (shipmentId, { rejectWithValue }) => {
+        try {
+            const res = await api.get(`/shipments/${shipmentId}/timeline`);
+            return res.data.data as ShipmentTimelineResponse;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+            return rejectWithValue(error.response?.data?.message || "Failed to fetch timeline");
+        }
+    }
+);
+
 
 //initial States
 const today = new Date().toISOString().split("T")[0];
@@ -250,6 +269,10 @@ const initialState: ShipmentState = {
     markAllLoading: false,
     markSingleLoading: null,
     notificationError: null,
+
+    timelineData: null,
+    timelineLoading: false,
+    timelineError: null,
 };
 
 const shipmentSlice = createSlice({
@@ -266,6 +289,11 @@ const shipmentSlice = createSlice({
         },
 
         clearNotificationError: (state) => { state.notificationError = null; },
+
+        clearTimeline: (state) => {
+            state.timelineData = null;
+            state.timelineError = null;
+        },
     },
     extraReducers: (builder) => {
         const pending = (state: ShipmentState) => { state.loading = true; state.error = null; };
@@ -363,9 +391,22 @@ const shipmentSlice = createSlice({
             .addCase(markSingleNotificationRead.rejected, (state, action) => {
                 state.markSingleLoading = null;
                 state.notificationError = action.payload || "Failed to mark as read";
+            })
+
+            .addCase(fetchShipmentTimeline.pending, (state) => {
+                state.timelineLoading = true;
+                state.timelineError = null;
+            })
+            .addCase(fetchShipmentTimeline.fulfilled, (state, action) => {
+                state.timelineLoading = false;
+                state.timelineData = action.payload;
+            })
+            .addCase(fetchShipmentTimeline.rejected, (state, action) => {
+                state.timelineLoading = false;
+                state.timelineError = action.payload || "Failed to fetch timeline";
             });
     },
 });
 
-export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import notificationSound from "../../../../assets/universfield-new-notification-051-494246.mp3";
 import { useAppDispatch } from "../../../../shared/hooks/reduxHooks";
@@ -17,27 +17,30 @@ import {
   FRAGILE_CHARGE,
   GST_RATE,
   loadRazorpayScript,
+  unloadRazorpayScript,
   PRIORITY_MULTIPLIERS,
   RATE_PER_KG,
 } from "../../utils/shipmentHelpers";
+import { useNavigate } from "react-router-dom";
 
 const PriceBreakdown = ({
   prevStep,
   packageDetails,
   pickUpAddress,
   deliveryAddress,
-  onReset,
+  // onReset,
 }: PriceBreakdownProps) => {
   const dispatch = useAppDispatch();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [_shipmentId, setShipmentId] = useState<number | null>(null);
-  const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
+  const [shipmentId, setShipmentId] = useState<number | null>(null);
+  const [_razorpayPaymentId, setRazorpayPaymentId] = useState("");
 
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [paymentStatus, setPaymentStatus] = useState<
     "idle" | "verifying" | "success" | "failed"
   >("idle");
+
+  const navigate = useNavigate();
 
   const weight = parseFloat(packageDetails.weight) || 0;
   const weightCharge = weight * RATE_PER_KG;
@@ -50,35 +53,44 @@ const PriceBreakdown = ({
   const subtotal = BASE_RATE + weightCharge + priorityCharge + fragileCharge;
   const gst = Math.round(subtotal * GST_RATE);
   const totalAmount = subtotal + gst;
-  useEffect(() => {
-    loadRazorpayScript().then((loaded) => setScriptLoaded(loaded));
-  }, []);
 
   const handlePayment = async () => {
     try {
-      if (!scriptLoaded) {
-        toast.error("Payment gateway is loading");
-        return;
-      }
       if (retryCount >= 3) {
         toast.error("Maximum retries reached");
         return;
       }
+
       setIsProcessing(true);
-      const shipment = await dispatch(
-        createShipment({
-          pickUpAddress,
-          deliveryAddress,
-          packageDetails,
-          amount: totalAmount,
-        }),
-      ).unwrap();
-      // const createdShipmentId = shipment.id;
-      const createdShipmentId = shipment.shipmentId;
-      setShipmentId(createdShipmentId);
+
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        toast.error("Payment gateway failed to load. Try again.");
+        setIsProcessing(false);
+        return;
+      }
+
+      let currentShipmentId = shipmentId;
+      let trackingId: string | null = null;
+
+      if (!currentShipmentId) {
+        const shipment = await dispatch(
+          createShipment({
+            pickUpAddress,
+            deliveryAddress,
+            packageDetails,
+            amount: totalAmount,
+          }),
+        ).unwrap();
+        currentShipmentId = shipment.shipmentId;
+        trackingId = shipment.trackingId ?? null;
+        setShipmentId(currentShipmentId);
+      }
+
       const payment = await dispatch(
-        initiatePayment(createdShipmentId),
+        initiatePayment(currentShipmentId),
       ).unwrap();
+
       const options: RazorpayOptions = {
         key: payment.keyId,
         amount: payment.amount,
@@ -91,7 +103,7 @@ const PriceBreakdown = ({
             setPaymentStatus("verifying");
             await dispatch(
               verifyPayment({
-                shipmentId: createdShipmentId,
+                shipmentId: currentShipmentId!,
                 payload: {
                   razorpayOrderId: response.razorpay_order_id,
                   razorpayPaymentId: response.razorpay_payment_id,
@@ -99,11 +111,32 @@ const PriceBreakdown = ({
                 },
               }),
             ).unwrap();
+
+            unloadRazorpayScript();
+
             setRazorpayPaymentId(response.razorpay_payment_id);
             setPaymentStatus("success");
             const audio = new Audio(notificationSound);
             audio.play();
             toast.success("Payment successful! Shipment created.");
+            navigate("/paymentSuccess", {
+              state: {
+                razorpayPaymentId: response.razorpay_payment_id,
+                trackingId: trackingId,
+                breakdown: {
+                  base: BASE_RATE,
+                  weightKg: weight,
+                  weight: weightCharge,
+                  priorityType: packageDetails.priority,
+                  priority: priorityCharge,
+                  fragile: fragileCharge,
+                  subtotal,
+                  gst,
+                  total: totalAmount,
+                },
+              },
+              replace: true,
+            });
           } catch (error) {
             console.error(error);
             setRetryCount((prev) => prev + 1);
@@ -111,9 +144,7 @@ const PriceBreakdown = ({
             toast.error("Payment verification failed");
           }
         },
-        theme: {
-          color: "#3b82f6",
-        },
+        theme: { color: "#3b82f6" },
         modal: {
           ondismiss: () => {
             setRetryCount((prev) => prev + 1);
@@ -122,6 +153,7 @@ const PriceBreakdown = ({
           },
         },
       };
+
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
@@ -133,7 +165,7 @@ const PriceBreakdown = ({
       setIsProcessing(false);
     }
   };
-  
+
   if (paymentStatus === "verifying") {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-8 mt-4 flex flex-col items-center gap-4 shadow-sm">
@@ -150,35 +182,35 @@ const PriceBreakdown = ({
     );
   }
 
-  if (paymentStatus === "success") {
-    return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 mt-4 flex flex-col items-center gap-4 shadow-sm">
-        <div className="text-green-500 text-5xl">
-          <i className="fa-solid fa-circle-check"></i>
-        </div>
+  // if (paymentStatus === "success") {
+  //   return (
+  //     <div className="bg-white border border-slate-200 rounded-2xl p-8 mt-4 flex flex-col items-center gap-4 shadow-sm">
+  //       <div className="text-green-500 text-5xl">
+  //         <i className="fa-solid fa-circle-check"></i>
+  //       </div>
 
-        <p className="text-xl font-bold text-green-600">Payment Successful!</p>
+  //       <p className="text-xl font-bold text-green-600">Payment Successful!</p>
 
-        <p className="text-slate-500 text-sm">
-          Payment ID: {razorpayPaymentId}
-        </p>
+  //       <p className="text-slate-500 text-sm">
+  //         Payment ID: {razorpayPaymentId}
+  //       </p>
 
-        <p className="text-slate-600 text-center text-[14px]">
-          Your shipment has been created successfully. Admin will assign a
-          delivery slot shortly.
-        </p>
+  //       <p className="text-slate-600 text-center text-[14px]">
+  //         Your shipment has been created successfully. Admin will assign a
+  //         delivery slot shortly.
+  //       </p>
 
-        <button
-          type="button"
-          onClick={onReset}
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg transition-all"
-        >
-          <i className="fa-solid fa-plus mr-2"></i>
-          Create New Shipment
-        </button>
-      </div>
-    );
-  }
+  //       <button
+  //         type="button"
+  //         onClick={onReset}
+  //         className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg transition-all"
+  //       >
+  //         <i className="fa-solid fa-plus mr-2"></i>
+  //         Create New Shipment
+  //       </button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm">

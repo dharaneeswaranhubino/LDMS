@@ -48,27 +48,27 @@ export const FILTER_TABS: {
   key: FilterTab;
   label: string;
 }[] = [
-  { key: "ALL", label: "All" },
-  { key: "PENDING", label: "Pending" },
-  { key: "ASSIGNED", label: "Assigned" },
-  { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
-  { key: "CONFIRMED", label: "Confirmed" },
-  { key: "PICKED_UP", label: "Picked up" },
-  { key: "IN_TRANSIT", label: "In transit" },
-  { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
-  { key: "DELIVERED", label: "Delivered" },
-  { key: "CANCELLED", label: "Cancelled" },
-];
+    { key: "ALL", label: "All" },
+    { key: "PENDING", label: "Pending" },
+    { key: "ASSIGNED", label: "Assigned" },
+    { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
+    { key: "CONFIRMED", label: "Confirmed" },
+    { key: "PICKED_UP", label: "Picked up" },
+    { key: "IN_TRANSIT", label: "In transit" },
+    { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
+    { key: "DELIVERED", label: "Delivered" },
+    { key: "CANCELLED", label: "Cancelled" },
+  ];
 
 export const SORT_OPTIONS: {
   value: SortKey;
   label: string;
 }[] = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "amount_high", label: "Amount: high → low" },
-  { value: "amount_low", label: "Amount: low → high" },
-];
+    { value: "newest", label: "Newest first" },
+    { value: "oldest", label: "Oldest first" },
+    { value: "amount_high", label: "Amount: high → low" },
+    { value: "amount_low", label: "Amount: low → high" },
+  ];
 
 export const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -138,12 +138,16 @@ export const deliveryPriority = [
 ];
 
 //razorpay function and variables
+let razorpayFrame: HTMLIFrameElement | null = null;
+
 export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    if (document.getElementById("razorpay-script")) {
+    // Already loaded
+    if (window.Razorpay) {
       resolve(true);
       return;
     }
+
     const script = document.createElement("script");
     script.id = "razorpay-script";
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -151,6 +155,17 @@ export const loadRazorpayScript = (): Promise<boolean> => {
     script.onerror = () => resolve(false);
     document.body.appendChild(script);
   });
+};
+
+export const unloadRazorpayScript = (): void => {
+  const script = document.getElementById("razorpay-script");
+  if (script) script.remove();
+
+  document.querySelectorAll('[id^="razorpay"]').forEach((el) => el.remove());
+  document.querySelectorAll('iframe[src*="razorpay"]').forEach((el) => el.remove());
+  document.querySelectorAll('iframe[src*="checkout"]').forEach((el) => el.remove());
+
+  delete (window as Window & { Razorpay?: unknown }).Razorpay;
 };
 
 export const PRIORITY_MULTIPLIERS: Record<string, number> = {

@@ -16,6 +16,7 @@ export type ShipmentStatus =
   | "PENDING"
   | "CONFIRMED"
   | "ASSIGNED"
+  | "OUT_FOR_PICKUP"
   | "PICKED_UP"
   | "IN_TRANSIT"
   | "OUT_FOR_DELIVERY"

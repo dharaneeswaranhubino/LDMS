@@ -1,335 +1,266 @@
-import {
-  Check,
-  Truck,
-  MapPin,
-  CircleCheck,
-  CreditCard,
-  UserCheck,
-  PackageCheck,
-} from "lucide-react";
+// import { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import type { ShipmentResponse } from "../shipmentTypes";
+// import { useAppDispatch, useAppSelector } from "../../../shared/hooks/reduxHooks";
+// import { clearTimeline, fetchMyShipments } from "../shipmentSlice";
+// import ShipmentTimelinePanel from "../components/trackShipments/ShipmentTimelinePanel";
+// // import type { TimelineStatus } from "../../shipmentTypes";
+// // import ShipmentTimelinePanel from "./ShipmentTimelinePanel";
 
-type StepStatus = "done" | "active" | "pending";
+// // ─── Status badge config ─────────────────────────────────────────────────
 
-interface TimelineStep {
-  id: string;
-  label: string;
-  time: string;
-  status: StepStatus;
-  note?: string;
-  icon: React.ReactNode;
-}
+// const STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> = {
+//   PENDING:          { bg: "bg-amber-50",  text: "text-amber-800",  label: "Pending"          },
+//   CONFIRMED:        { bg: "bg-teal-50",   text: "text-teal-800",   label: "Confirmed"         },
+//   ASSIGNED:         { bg: "bg-purple-50", text: "text-purple-800", label: "Assigned"          },
+//   OUT_FOR_PICKUP:   { bg: "bg-purple-50", text: "text-purple-800", label: "Out for pickup"    },
+//   PICKED_UP:        { bg: "bg-teal-50",   text: "text-teal-800",   label: "Picked up"         },
+//   IN_TRANSIT:       { bg: "bg-blue-50",   text: "text-blue-800",   label: "In transit"        },
+//   OUT_FOR_DELIVERY: { bg: "bg-blue-50",   text: "text-blue-800",   label: "Out for delivery"  },
+//   DELIVERED:        { bg: "bg-green-50",  text: "text-green-800",  label: "Delivered"         },
+//   COMPLETED:        { bg: "bg-green-50",  text: "text-green-800",  label: "Completed"         },
+//   CANCELLED:        { bg: "bg-red-50",    text: "text-red-800",    label: "Cancelled"         },
+// };
 
-const timelineSteps: TimelineStep[] = [
-  {
-    id: "created",
-    label: "Shipment created",
-    time: "9:00 AM",
-    status: "done",
-    icon: <PackageCheck size={13} />,
-  },
-  {
-    id: "payment",
-    label: "Payment confirmed",
-    time: "9:15 AM",
-    status: "done",
-    note: "₹620 paid via UPI",
-    icon: <CreditCard size={13} />,
-  },
-  {
-    id: "assigned",
-    label: "Agent assigned",
-    time: "9:30 AM",
-    status: "done",
-    note: "Rajesh Kumar · Slot 10–11 AM",
-    icon: <UserCheck size={13} />,
-  },
-  {
-    id: "started",
-    label: "Delivery started",
-    time: "10:05 AM",
-    status: "done",
-    icon: <Check size={13} />,
-  },
-  {
-    id: "pickup",
-    label: "Pickup reached",
-    time: "10:18 AM",
-    status: "done",
-    icon: <Check size={13} />,
-  },
-  {
-    id: "enroute",
-    label: "En route",
-    time: "Now",
-    status: "active",
-    note: "Package picked up — heading to you",
-    icon: <Truck size={13} />,
-  },
-  {
-    id: "near",
-    label: "Near location",
-    time: "Pending",
-    status: "pending",
-    icon: <MapPin size={13} />,
-  },
-  {
-    id: "delivered",
-    label: "Delivered",
-    time: "Pending",
-    status: "pending",
-    icon: <CircleCheck size={13} />,
-  },
-];
+// const ACTIVE_STATUSES: string[] = [
+//   "CONFIRMED",
+//   "ASSIGNED",
+//   "OUT_FOR_PICKUP",
+//   "PICKED_UP",
+//   "IN_TRANSIT",
+//   "OUT_FOR_DELIVERY",
+// ];
 
-const TimelineStep: React.FC<{
-  step: TimelineStep;
-  isLast: boolean;
-}> = ({ step, isLast }) => {
-  const isDone    = step.status === "done";
-  const isActive  = step.status === "active";
-  const isPending = step.status === "pending";
+// // ─── Helpers ─────────────────────────────────────────────────────────────
 
-  return (
-    <div className="relative flex flex-1 flex-col items-center">
-      {/* Connector line */}
-      {!isLast && (
-        <div
-          className={`absolute top-[15px] left-1/2 h-0.5 w-full z-0 ${
-            isDone ? "bg-green-600" : "bg-gray-300"
-          }`}
-        />
-      )}
+// function isActive(status: string): boolean {
+//   return ACTIVE_STATUSES.includes(status);
+// }
 
-      {/* Icon circle */}
-      <div
-        className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 ${
-          isDone
-            ? "border-green-600 bg-green-950 text-green-400"
-            : isActive
-            ? "border-blue-400 bg-white text-blue-400"
-            : "border-gray-300 bg-white text-gray-400"
-        }`}
-      >
-        {step.icon}
-      </div>
+// // ─── Left panel card ─────────────────────────────────────────────────────
 
-      {/* Label */}
-      <div className="mt-2 px-1 text-center">
-        <p
-          className={`text-[11px] font-medium leading-tight ${
-            isPending
-              ? "text-gray-400"
-              : isActive
-              ? "text-blue-500"
-              : "text-slate-700"
-          }`}
-        >
-          {step.label}
-        </p>
-        <p
-          className={`mt-0.5 text-[11px] ${
-            isActive
-              ? "text-blue-400"
-              : isPending
-              ? "text-gray-400"
-              : "text-gray-500"
-          }`}
-        >
-          {step.time}
-        </p>
-      </div>
+// interface ShipmentCardProps {
+//   shipment: ShipmentResponse;
+//   isSelected: boolean;
+//   onClick: () => void;
+// }
 
-      {/* Active tooltip note */}
-      {isActive && step.note && (
-        <div className="absolute top-[52px] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-[11px] text-slate-600 shadow-sm">
-          {step.note}
-        </div>
-      )}
-    </div>
-  );
-};
+// function ShipmentCard({ shipment, isSelected, onClick }: ShipmentCardProps) {
+//   const style = STATUS_STYLE[shipment.shipmentStatus] ?? STATUS_STYLE["PENDING"];
+
+//   return (
+//     <div
+//       onClick={onClick}
+//       className={`border rounded-lg p-3 cursor-pointer mb-2 transition-all
+//         ${isSelected
+//           ? "border-blue-400 bg-blue-50 border-[1.5px]"
+//           : "border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50"
+//         }`}
+//     >
+//       {/* Top row */}
+//       <div className="flex items-center justify-between gap-2 mb-1.5">
+//         <p className={`text-xs font-medium truncate max-w-[160px] ${isSelected ? "text-blue-800" : "text-gray-700"}`}>
+//           {shipment.trackingId}
+//         </p>
+//         <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${style.bg} ${style.text}`}>
+//           {style.label}
+//         </span>
+//       </div>
+
+//       {/* Route */}
+//       <div className={`flex items-center gap-1 text-xs mb-1.5 ${isSelected ? "text-blue-600" : "text-gray-500"}`}>
+//         <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+//           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+//         </svg>
+//         <span className="truncate">{shipment.pickupCity}</span>
+//         <span className="text-gray-300">→</span>
+//         <span className="truncate">{shipment.deliveryCity}</span>
+//       </div>
+
+//       {/* Meta */}
+//       <div className="flex items-center gap-2 text-[10px] text-gray-400">
+//         <span className="flex items-center gap-1">
+//           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+//           </svg>
+//           {shipment.assignedAgent?.agentName ?? "Awaiting agent"}
+//         </span>
+//         <span className="w-1 h-1 rounded-full bg-gray-300" />
+//         <span>{shipment.itemName}</span>
+//       </div>
+//     </div>
+//   );
+// }
+
+// // ─── Empty right panel ────────────────────────────────────────────────────
+
+// function EmptyPanel() {
+//   return (
+//     <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8 text-center">
+//       <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl">
+//         🗺️
+//       </div>
+//       <p className="text-sm font-medium text-gray-500">No shipment selected</p>
+//       <p className="text-xs text-gray-400 max-w-[180px] leading-relaxed">
+//         Pick a shipment from the left to view its full tracking timeline
+//       </p>
+//     </div>
+//   );
+// }
+
+// // ─── Left panel skeleton ─────────────────────────────────────────────────
+
+// function CardSkeleton() {
+//   return (
+//     <div className="animate-pulse space-y-2">
+//       {[1, 2, 3].map((i) => (
+//         <div key={i} className="border border-gray-100 rounded-lg p-3">
+//           <div className="flex justify-between mb-2">
+//             <div className="h-3 w-32 bg-gray-100 rounded" />
+//             <div className="h-3 w-16 bg-gray-100 rounded-full" />
+//           </div>
+//           <div className="h-2.5 w-40 bg-gray-100 rounded mb-1.5" />
+//           <div className="h-2.5 w-28 bg-gray-100 rounded" />
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+// export default function TrackShipmentPage() {
+//   const dispatch = useAppDispatch();
+//   const navigate = useNavigate();
+//   const { id } = useParams<{ id?: string }>();
+
+//   const { shipments, loading } = useAppSelector((state) => state.shipment);
+
+//   const [selectedShipment, setSelectedShipment] = useState<ShipmentResponse | null>(null);
+//   const [searchInput, setSearchInput] = useState("");
+
+//   // ── Fetch active shipments on mount ──
+//   useEffect(() => {
+//     dispatch(fetchMyShipments({ page: 1, limit: 50 }));
+//   }, [dispatch]);
+
+//   // ── If :id present (from "Track" button in My Shipments), auto-select ──
+//   useEffect(() => {
+//     if (id && shipments.length > 0) {
+//       const found = shipments.find((s) => s.shipmentId === Number(id));
+//       if (found) setSelectedShipment(found);
+//     }
+//   }, [id, shipments]);
+
+//   // ── Clear timeline on unmount ──
+//   useEffect(() => {
+//     return () => { dispatch(clearTimeline()); };
+//   }, [dispatch]);
+
+//   // ── Filter only active shipments for left panel ──
+//   const activeShipments = shipments.filter((s) => isActive(s.shipmentStatus));
+
+//   // ── Search handler ──
+//   function handleSearch() {
+//     const val = searchInput.trim().toUpperCase();
+//     if (!val) return;
+//     const found = shipments.find(
+//       (s) =>
+//         s.trackingId.toUpperCase() === val ||
+//         s.trackingId.toUpperCase().includes(val)
+//     );
+//     if (found) {
+//       setSelectedShipment(found);
+//       navigate(`/trackShipments/${found.shipmentId}`, { replace: true });
+//     }
+//   }
+
+//   function handleCardClick(shipment: ShipmentResponse) {
+//     setSelectedShipment(shipment);
+//     navigate(`/trackShipments/${shipment.shipmentId}`, { replace: true });
+//   }
+
+//   return (
+//     <div className="flex flex-col h-full bg-gray-50">
+
+//       {/* ── Top bar ── */}
+//       <div className="bg-white border-b border-gray-100 px-5 py-4 flex-shrink-0">
+//         <h1 className="text-lg font-medium text-gray-800 mb-0.5">Track your shipment</h1>
+//         <p className="text-sm text-gray-400 mb-3">Search by tracking ID or select from your active shipments</p>
+
+//         <div className="flex gap-2">
+//           <div className="flex-1 flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 bg-white focus-within:border-blue-300 transition-colors">
+//             <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+//             </svg>
+//             <input
+//               type="text"
+//               value={searchInput}
+//               onChange={(e) => setSearchInput(e.target.value)}
+//               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+//               placeholder="Enter tracking ID (e.g. TRK-ABC123)"
+//               className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent"
+//             />
+//           </div>
+//           <button
+//             onClick={handleSearch}
+//             className="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 active:scale-95 transition-all"
+//           >
+//             Search
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* ── Split view ── */}
+//       <div className="flex flex-1 min-h-0">
+
+//         {/* Left panel */}
+//         <div className="w-[42%] flex flex-col border-r border-gray-100 bg-white">
+//           <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
+//             <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Active shipments</span>
+//             <span className="text-xs text-gray-400">{activeShipments.length} shipments</span>
+//           </div>
+//           <div className="flex-1 overflow-y-auto p-3">
+//             {loading ? (
+//               <CardSkeleton />
+//             ) : activeShipments.length === 0 ? (
+//               <div className="flex flex-col items-center justify-center gap-2 py-12 text-center">
+//                 <span className="text-2xl">📭</span>
+//                 <p className="text-sm text-gray-500">No active shipments</p>
+//               </div>
+//             ) : (
+//               activeShipments.map((s) => (
+//                 <ShipmentCard
+//                   key={s.shipmentId}
+//                   shipment={s}
+//                   isSelected={selectedShipment?.shipmentId === s.shipmentId}
+//                   onClick={() => handleCardClick(s)}
+//                 />
+//               ))
+//             )}
+//           </div>
+//         </div>
+
+//         {/* Right panel */}
+//         <div className="flex-1 flex flex-col bg-white min-h-0">
+//           {selectedShipment ? (
+//             <ShipmentTimelinePanel shipment={selectedShipment} />
+//           ) : (
+//             <EmptyPanel />
+//           )}
+//         </div>
+
+//       </div>
+//     </div>
+//   );
+// }
+
+
+import React from 'react'
 
 const TrackShipment = () => {
-//   const navigate = useNavigate();
-
-//   const sendShipment = async () => {
-//     navigate("/sendShipment");
-//   };
-
-//   const handleFilter = () => {};
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
   return (
-    <>
-      <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center border border-slate-200 bg-white rounded-lg h-10 px-3 text-[18px] outline-none hover:border-violet-400 shadow-sm">
-            <i className="fa-solid fa-arrow-left"></i>
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold text-slate-800">
-              Track shipment — #SHP-001
-            </h1>
+    <div>TrackShipment</div>
+  )
+}
 
-            <p className="text-[14px] text-slate-500">
-              MG Road, Bangalore → Indiranagar, Bangalore
-            </p>
-          </div>
-        </div>
-
-        <div className="w-full flex justify-between py-2 px-4 gap-2 mt-3 bg-[#e7f1fb] rounded-lg border border-[#b5d3f5] shadow-sm">
-          <div className="flex justify-center items-center gap-3">
-            <span className="flex items-center border border-[#b5d3f5] bg-[#b5d3f5] rounded-[50%] h-12 px-3 text-[#376a9c] outline-none hover:border-violet-400 shadow-sm">
-              <i className="fa-regular fa-truck"></i>
-            </span>
-            <div>
-              <p className="text-[#0f4378]">Your shipment is in transit</p>
-              <p className="text-[#4c78a1]">
-                Agent Rajesh Kumar is on the way to deliver your package
-              </p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="text-[#4c78a1]">Estimated arrival</p>
-            <p className="text-[#0f4378]">~25 min</p>
-            <p className="text-[#4c78a1]">Slot: 10:00 – 11:00 AM</p>
-          </div>
-        </div>
-
-        <div className="w-full flex items-center text-violet-900 py-3 px-4 gap-2 mt-3 bg-violet-100 rounded-lg border border-violet-200 shadow-sm">
-          <i className="fa-regular fa-calendar"></i>
-          <p className=" text-[14px]">
-            Assigned slot: Today, 10:00 AM – 11:00 AM · Booked: 12 Jan 2025 ·
-            Priority: SAME_DAY · Weight: 2.5 kg
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mt-5 pb-10 text-slate-600">
-          <div className="bg-gray-100 border border-slate-200 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fa-regular fa-map text-[12px] text-slate-500"></i>
-              <h4 className="text-[13px] font-semibold text-slate-800">
-                Route details
-              </h4>
-            </div>
-
-            <div className="flex justify-between items-center gap-3 mb-3 bg-gray-200 py-2 px-4 rounded-lg border border-gray-300 shadow-sm">
-              <div>
-                <p className="text-slate-500">Pickup</p>
-                <p>No. 12, MG Road Bangalore – 560001</p>
-              </div>
-              <i className="fa-solid fa-arrow-right text-slate-400"></i>
-              <div className="text-right">
-                <p className="text-slate-500">Delivery</p>
-                <p>No. 45, Indiranagar Bangalore – 560038</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 justify-center">
-              <div>
-                <p>Shipment ID</p>
-                <p>#SHP-001</p>
-              </div>
-              <div>
-                <p>Payment</p>
-                <p>Paid — ₹620</p>
-              </div>
-              <div>
-                <p>Package</p>
-                <p>2.5 kg · Fragile</p>
-              </div>
-              <div>
-                <p>Description</p>
-                <p>Electronics</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gray-100 flex flex-col justify-between border border-slate-200 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <i className="fa-regular fa-user text-[12px] text-slate-500"></i>
-              <h4 className="text-[13px] font-semibold text-slate-800">
-                Your delivery agen
-              </h4>
-            </div>
-
-            <div className="w-full flex gap-2 mt-3 ">
-              <div className="flex justify-center items-center gap-3">
-                <div className="flex items-center border border-gray-300 bg-gray-200 rounded-[50%] h-11 px-3 text-[#376a9c] outline-none hover:border-gray-400 shadow-sm">
-                  {getInitials("Rajesh Kumar")}
-                </div>
-                <div>
-                  <p>Rajesh Kumar</p>
-                  <p className="text-[14px] text-gray-600">
-                    Delivery agent · ID #AGT-012
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between my-3">
-              <div className="bg-gray-300 py-2 px-8 rounded-lg text-center">
-                <p>245</p>
-                <p className="text-gray-600">Deliveries</p>
-              </div>
-              <div className="bg-gray-300 py-2 px-8 rounded-lg text-center">
-                <p>95%</p>
-                <p className="text-gray-600">On time</p>
-              </div>
-              <div className="bg-gray-300 py-2 px-8 rounded-lg text-center">
-                <p>4.8</p>
-                <p className="text-gray-600">Rating</p>
-              </div>
-            </div>
-
-            <div className="bg-gray-200 py-2 px-8 rounded-lg text-center border-2 border-gray-300 hover:border-gray-500">
-              <button>
-                <i className="fa-regular fa-comment"></i>Send message
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gray-100 flex flex-col justify-between border border-slate-200 rounded-2xl p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <i className="fa-solid fa-list-check text-[12px] text-slate-500"></i>
-            <h4 className="text-[13px] font-semibold text-slate-800">
-              Delivery timeline
-            </h4>
-          </div>
-          <div>
-            <div className="bg-gray-100 flex flex-col justify-between border border-slate-200 rounded-2xl p-4 mb-10">
-              <div className="flex items-center gap-2 mb-6">
-                <i className="fa-solid fa-list-check text-[12px] text-slate-500"></i>
-                <h4 className="text-[13px] font-semibold text-slate-800">
-                  Delivery timeline
-                </h4>
-              </div>
-
-              <div className="overflow-x-auto pb-10">
-                <div className="flex items-start min-w-[680px]">
-                  {timelineSteps.map((step, i) => (
-                    <TimelineStep
-                      key={step.id}
-                      step={step}
-                      isLast={i === timelineSteps.length - 1}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default TrackShipment;
+export default TrackShipment
