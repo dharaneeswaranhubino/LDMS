@@ -15,6 +15,7 @@ export interface AgentFormData {
 export type ShipmentStatus =
   | "PENDING"
   | "CONFIRMED"
+  | "ASSIGNED"
   | "PICKED_UP"
   | "IN_TRANSIT"
   | "OUT_FOR_DELIVERY"
@@ -69,22 +70,20 @@ export interface DeliveryAgent {
   agentEmail: string;
 }
 
-
 //Agent Details Modal props
 export interface AgentDetailsModalProps {
   setSelectedAgent: (agent: DeliveryAgent | null) => void;
   selectedAgent: DeliveryAgent;
 }
 
-
 // ─── Dashboard Types ───────────────────────────────────────────────
- 
+
 export interface PaymentSummary {
   paid: number;
   pending: number;
   failed: number;
 }
- 
+
 export interface AgentPerformance {
   agentId: number;
   agentName: string;
@@ -92,7 +91,7 @@ export interface AgentPerformance {
   activeShipments: number;
   completedShipments: number;
 }
- 
+
 export interface RecentShipment {
   shipmentId: number;
   trackingId: string;
@@ -101,9 +100,9 @@ export interface RecentShipment {
   paymentStatus: "PAID" | "PENDING" | "FAILED";
   createdAt: string;
 }
- 
+
 export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_PROGRESS";
- 
+
 export interface CustomerComplaint {
   id: number;
   trackingId: string;
@@ -113,14 +112,14 @@ export interface CustomerComplaint {
   shipmentStatus: ShipmentStatus;
   createdAt: string;
 }
- 
+
 export type RevenueTab = "Daily" | "Weekly" | "Monthly";
- 
+
 export interface RevenueDataPoint {
   label: string;
   value: number;
 }
- 
+
 export interface AdminDashboardData {
   totalShipments: number;
   deliveredShipments: number;
@@ -134,19 +133,24 @@ export interface AdminDashboardData {
   complaints: CustomerComplaint[];
   revenueByTab: Record<RevenueTab, RevenueDataPoint[]>;
 }
- 
+
 // ─── Date Range Params ─────────────────────────────────────────────
- 
+
 export interface DashboardDateParams {
   fromDate: string; // "YYYY-MM-DD"
-  toDate: string;   // "YYYY-MM-DD"
+  toDate: string; // "YYYY-MM-DD"
 }
- 
+
 export interface AgentDetailsState {
   shipments: AgentFormData[];
   agents: DeliveryAgent[];
   dashboard: AdminDashboardData | null;
   dashboardLoading: boolean;
+
+  allShipments: BackendShipment[];
+  shipmentPagination: ShipmentPagination | null;
+  shipmentsLoading: boolean;
+
   loading: boolean;
   error: string | null;
 }
@@ -197,4 +201,65 @@ export interface RecentShipmentsTableProps {
 
 export interface CustomerComplaintsProps {
   complaints: CustomerComplaint[];
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+export interface BackendShipmentCustomer {
+  customerId: number;
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+}
+
+export interface BackendShipmentAgent {
+  agentId: number;
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+  vehicleType: string;
+  vehicleNumber: string;
+  serviceZone: string;
+}
+
+export interface BackendShipment {
+  shipmentId: number;
+  trackingId: string;
+  itemName: string;
+  quantity: number;
+  packageWeight: number;
+  isFragile: boolean;
+  description: string;
+  senderName: string;
+  senderPhone: string;
+  pickupAddress: string;
+  pickupCity: string;
+  pickupPincode: string;
+  deliveryAddress: string;
+  deliveryCity: string;
+  deliveryPincode: string;
+  receiverName: string;
+  receiverPhone: string;
+  shipmentPriority: Priority;
+  shipmentStatus: ShipmentStatus;
+  amount: number;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  customer: BackendShipmentCustomer;
+  assignedAgent: BackendShipmentAgent | null;
+  assignedSlotStart: string | null;
+  assignedSlotEnd: string | null;
+  assignedDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ShipmentPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface AllShipmentsResponse {
+  shipments: BackendShipment[];
+  pagination: ShipmentPagination;
 }

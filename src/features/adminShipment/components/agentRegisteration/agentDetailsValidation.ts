@@ -1,4 +1,4 @@
-import type { AgentFormData } from "../adminTypes";
+import type { AgentFormData } from "../../adminTypes";
 
 export const validateAgentDetails = (AgentDetails: AgentFormData) => {
     const errors: Record<string, string> = {};

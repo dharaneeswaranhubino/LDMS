@@ -8,6 +8,7 @@ import {
   type AdminDashboardData,
   type AgentDetailsState,
   type AgentFormData,
+  type AllShipmentsResponse,
   type DashboardDateParams,
   type DeliveryAgent,
 } from "./adminTypes";
@@ -17,35 +18,47 @@ import type { ShipmentResponse } from "../customerShipment/shipmentTypes";
 // ─── Mock Generator ────────────────────────────────────────────────
 // date range based-a deterministic mock data generate பண்றோம்.
 // Same date range → same data (seed = day diff count).
- 
+
 function getDayDiff(from: string, to: string): number {
   const a = new Date(from).getTime();
   const b = new Date(to).getTime();
   return Math.max(1, Math.round((b - a) / 86400000) + 1);
 }
- 
+
 // Simple seeded pseudo-random (so same dates → same numbers)
 function seededRand(seed: number, index: number): number {
   const x = Math.sin(seed * 9301 + index * 49297 + 233) * 100000;
   return x - Math.floor(x);
 }
- 
-function generateMockDashboard(fromDate: string, toDate: string): AdminDashboardData {
+
+function generateMockDashboard(
+  fromDate: string,
+  toDate: string,
+): AdminDashboardData {
   const days = getDayDiff(fromDate, toDate);
   // seed = numeric representation of fromDate
   const seed = new Date(fromDate).getTime() / 86400000;
- 
-  const totalShipments    = Math.round(50 + seededRand(seed, 1) * 150);   // 50–200
-  const deliveredShipments = Math.round(totalShipments * (0.5 + seededRand(seed, 2) * 0.4));
-  const activeDeliveries   = Math.round(totalShipments * (0.05 + seededRand(seed, 3) * 0.15));
-  const delayedShipments   = Math.round(totalShipments * seededRand(seed, 4) * 0.1);
-  const pendingShipments   = totalShipments - deliveredShipments - activeDeliveries - delayedShipments;
-  const totalRevenue       = Math.round((30000 + seededRand(seed, 5) * 200000) * (days / 7));
- 
-  const paid    = Math.round(totalShipments * (0.6 + seededRand(seed, 6) * 0.3));
-  const failed  = Math.round(totalShipments * seededRand(seed, 7) * 0.08);
+
+  const totalShipments = Math.round(50 + seededRand(seed, 1) * 150); // 50–200
+  const deliveredShipments = Math.round(
+    totalShipments * (0.5 + seededRand(seed, 2) * 0.4),
+  );
+  const activeDeliveries = Math.round(
+    totalShipments * (0.05 + seededRand(seed, 3) * 0.15),
+  );
+  const delayedShipments = Math.round(
+    totalShipments * seededRand(seed, 4) * 0.1,
+  );
+  const pendingShipments =
+    totalShipments - deliveredShipments - activeDeliveries - delayedShipments;
+  const totalRevenue = Math.round(
+    (30000 + seededRand(seed, 5) * 200000) * (days / 7),
+  );
+
+  const paid = Math.round(totalShipments * (0.6 + seededRand(seed, 6) * 0.3));
+  const failed = Math.round(totalShipments * seededRand(seed, 7) * 0.08);
   const pending = totalShipments - paid - failed;
- 
+
   // ── Agent Performance ──
   const agentNames = ["Ravi Kumar", "Meera S", "Suresh P", "Arjun K"];
   const agentPerformance = agentNames.map((name, i) => {
@@ -59,24 +72,37 @@ function generateMockDashboard(fromDate: string, toDate: string): AdminDashboard
       completedShipments: total - active,
     };
   });
- 
+
   // ── Recent Shipments ──
-  const statuses = ["IN_TRANSIT", "CONFIRMED", "PENDING", "DELAYED", "DELIVERED"] as const;
+  const statuses = [
+    "IN_TRANSIT",
+    "CONFIRMED",
+    "PENDING",
+    "DELAYED",
+    "DELIVERED",
+  ] as const;
   const payStatuses = ["PAID", "PAID", "PENDING", "PAID", "PAID"] as const;
   const customers = ["John Doe", "Meera S", "Ravi P", "Anita K", "Suresh K"];
-  const trackIds  = ["TRK-ABC123", "TRK-DEF456", "TRK-GHI789", "TRK-JKL012", "TRK-MNO345"];
- 
+  const trackIds = [
+    "TRK-ABC123",
+    "TRK-DEF456",
+    "TRK-GHI789",
+    "TRK-JKL012",
+    "TRK-MNO345",
+  ];
+
   const recentShipments = customers.map((name, i) => ({
     shipmentId: i + 1,
     trackingId: trackIds[i],
     customerName: name,
-    shipmentStatus: statuses[Math.floor(seededRand(seed, 30 + i) * statuses.length)],
+    shipmentStatus:
+      statuses[Math.floor(seededRand(seed, 30 + i) * statuses.length)],
     paymentStatus: payStatuses[i],
     createdAt: new Date(
-      new Date(toDate).getTime() - i * 3600000 * 3
+      new Date(toDate).getTime() - i * 3600000 * 3,
     ).toISOString(),
   }));
- 
+
   // ── Complaints ──
   const complaintStatuses = ["OPEN", "OPEN", "RESOLVED"] as const;
   const complaintMsgs = [
@@ -84,21 +110,26 @@ function generateMockDashboard(fromDate: string, toDate: string): AdminDashboard
     "Agent marked delivered but I never received the package.",
     "Fragile item was damaged. Please initiate a refund process.",
   ];
-  const complaintShipmentStatuses = ["DELAYED", "DELIVERED", "DELIVERED"] as const;
+  const complaintShipmentStatuses = [
+    "DELAYED",
+    "DELIVERED",
+    "DELIVERED",
+  ] as const;
   const complaintCustomers = ["John Doe", "Meera Singh", "Ravi P"];
- 
+
   const complaints = complaintCustomers.map((name, i) => ({
     id: i + 1,
     trackingId: trackIds[i],
     customerName: name,
     message: complaintMsgs[i],
-    status: complaintStatuses[Math.floor(seededRand(seed, 40 + i) * 3)] as "OPEN" | "RESOLVED" | "IN_PROGRESS",
+    status: complaintStatuses[Math.floor(seededRand(seed, 40 + i) * 3)] as
+      | "OPEN"
+      | "RESOLVED"
+      | "IN_PROGRESS",
     shipmentStatus: complaintShipmentStatuses[i],
-    createdAt: new Date(
-      new Date(toDate).getTime() - i * 7200000
-    ).toISOString(),
+    createdAt: new Date(new Date(toDate).getTime() - i * 7200000).toISOString(),
   }));
- 
+
   // ── Revenue by Tab ──
   // Daily — show days in range (max 7 labels)
   const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -107,18 +138,31 @@ function generateMockDashboard(fromDate: string, toDate: string): AdminDashboard
     label: dayLabels[i % 7],
     value: Math.round(8000 + seededRand(seed, 50 + i) * 30000),
   }));
- 
+
   // Weekly — show weeks in range (min 1)
   const weekCount = Math.max(1, Math.min(Math.ceil(days / 7), 8));
   const weeklyData = Array.from({ length: weekCount }, (_, i) => ({
     label: `Week ${i + 1}`,
     value: Math.round(25000 + seededRand(seed, 60 + i) * 60000),
   }));
- 
+
   // Monthly — show months covered
   const fromD = new Date(fromDate);
-  const toD   = new Date(toDate);
-  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const toD = new Date(toDate);
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const monthlyData: { label: string; value: number }[] = [];
   const cur = new Date(fromD.getFullYear(), fromD.getMonth(), 1);
   let mi = 0;
@@ -130,7 +174,7 @@ function generateMockDashboard(fromDate: string, toDate: string): AdminDashboard
     cur.setMonth(cur.getMonth() + 1);
     mi++;
   }
- 
+
   return {
     totalShipments,
     deliveredShipments,
@@ -145,7 +189,9 @@ function generateMockDashboard(fromDate: string, toDate: string): AdminDashboard
     revenueByTab: {
       Daily: dailyData,
       Weekly: weeklyData,
-      Monthly: monthlyData.length ? monthlyData : [{ label: monthNames[fromD.getMonth()], value: totalRevenue }],
+      Monthly: monthlyData.length
+        ? monthlyData
+        : [{ label: monthNames[fromD.getMonth()], value: totalRevenue }],
     },
   };
 }
@@ -224,11 +270,32 @@ export const fetchAdminDashboard = createAsyncThunk<
   }
 });
 
+export const fetchAllShipments = createAsyncThunk<
+  AllShipmentsResponse,
+  { page: number; limit: number },
+  { rejectValue: string }
+>("admin/fetchAllShipments", async ({ page, limit }, { rejectWithValue }) => {
+  try {
+    const res = await api.get("/shipments", { params: { page, limit } });
+    return res.data.data as AllShipmentsResponse;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch shipments",
+    );
+  }
+});
+
 const initialState: AgentDetailsState = {
   shipments: [],
   agents: [],
   dashboard: null,
   dashboardLoading: false,
+
+  allShipments: [],
+  shipmentPagination: null,
+  shipmentsLoading: false,
+
   loading: false,
   error: null,
 };
@@ -284,6 +351,20 @@ const adminSlice = createSlice({
       .addCase(fetchAdminDashboard.rejected, (state, action) => {
         state.dashboardLoading = false;
         state.error = action.payload || "Failed to load dashboard";
+      })
+
+      .addCase(fetchAllShipments.pending, (state) => {
+        state.shipmentsLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllShipments.fulfilled, (state, action) => {
+        state.shipmentsLoading = false;
+        state.allShipments = action.payload.shipments;
+        state.shipmentPagination = action.payload.pagination;
+      })
+      .addCase(fetchAllShipments.rejected, (state, action) => {
+        state.shipmentsLoading = false;
+        state.error = action.payload || "Failed to fetch shipments";
       });
   },
 });

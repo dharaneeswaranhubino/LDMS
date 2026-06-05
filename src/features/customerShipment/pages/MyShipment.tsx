@@ -16,6 +16,7 @@ import ShipmentTabs from "../components/myShipmentComponents/ShipmentTabs";
 import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar";
 import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import Pagination from "../../../shared/components/Pagination";
 
 const MyShipments = () => {
   const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ const MyShipments = () => {
   const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<
     number | null
   >(null);
+  const [limit, setLimit] = useState(6);
 
   const handlePaymentView = (shipmentId: number) => {
     setSelectedPaymentShipmentId(shipmentId);
@@ -50,8 +52,8 @@ const MyShipments = () => {
   const searchRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    dispatch(fetchMyShipments({ page: 1 }));
-  }, [dispatch]);
+    dispatch(fetchMyShipments({ page: 1, limit }));
+  }, [dispatch, limit]);
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {
@@ -195,103 +197,32 @@ const MyShipments = () => {
           </div>
         )}
 
-        <div
-          className={`flex flex-col gap-4 pt-5 lg:flex-row lg:items-center lg:justify-between ${
-            (shipments ?? []).length === 0 && "hidden"
-          }`}
-        >
-          <p className="text-center text-sm text-slate-600 lg:text-left">
-            Showing{" "}
-            <span className="font-semibold">{(currentPage - 1) * 10 + 1}</span>
-            {" - "}
-            <span className="font-semibold">
-              {Math.min(currentPage * 10, pagination?.total ?? 0)}
-            </span>{" "}
-            of <span className="font-semibold">{pagination?.total ?? 0}</span>{" "}
-            shipments
-          </p>
+        {(shipments ?? []).length > 0 && (
+          <Pagination
+            page={currentPage}
+            totalPages={totalPages}
+            total={pagination?.total ?? 0}
+            limit={limit}
+            onPageChange={(page) =>
+              dispatch(
+                fetchMyShipments({
+                  page,
+                  limit,
+                }),
+              )
+            }
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
 
-          <div
-            className={`w-full overflow-x-auto lg:w-auto scrollbar-none ${
-              (shipments ?? []).length === 0 && "hidden"
-            }`}
-          >
-            <div className="flex min-w-max items-center justify-center gap-2 pb-1">
-              <button
-                disabled={currentPage === 1}
-                onClick={() =>
-                  dispatch(
-                    fetchMyShipments({
-                      page: currentPage - 1,
-                      limit: 10,
-                    }),
-                  )
-                }
-                className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
-                transition-all hover:border-violet-300 hover:text-violet-600
-                disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Prev
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter((page) => {
-                  return (
-                    page === 1 ||
-                    page === totalPages ||
-                    Math.abs(page - currentPage) <= 1
-                  );
-                })
-                .map((page, index, arr) => {
-                  const prev = arr[index - 1];
-
-                  return (
-                    <div key={page} className="flex items-center gap-2">
-                      {prev && page - prev > 1 && (
-                        <span className="px-1 text-slate-400">...</span>
-                      )}
-
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            fetchMyShipments({
-                              page,
-                              limit: 10,
-                            }),
-                          )
-                        }
-                        className={`h-9 min-w-[36px] rounded-xl px-3 text-sm font-semibold transition-all
-                ${
-                  currentPage === page
-                    ? "bg-violet-600 text-white shadow-md"
-                    : "border border-slate-200 bg-white text-slate-700 hover:border-violet-300 hover:text-violet-600"
-                }`}
-                      >
-                        {page}
-                      </button>
-                    </div>
-                  );
-                })}
-
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() =>
-                  dispatch(
-                    fetchMyShipments({
-                      page: currentPage + 1,
-                      limit: 10,
-                    }),
-                  )
-                }
-                className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium
-                transition-all hover:border-violet-300 hover:text-violet-600
-                disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
+              dispatch(
+                fetchMyShipments({
+                  page: 1,
+                  limit: newLimit,
+                }),
+              );
+            }}
+          />
+        )}
 
         {loading && shipments.length > 0 && (
           <div className="flex justify-center py-6">

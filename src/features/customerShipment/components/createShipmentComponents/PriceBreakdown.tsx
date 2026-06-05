@@ -73,8 +73,8 @@ const PriceBreakdown = ({
           amount: totalAmount,
         }),
       ).unwrap();
-      const createdShipmentId = shipment.id;
-      // const createdShipmentId = shipment.shipmentId;
+      // const createdShipmentId = shipment.id;
+      const createdShipmentId = shipment.shipmentId;
       setShipmentId(createdShipmentId);
       const payment = await dispatch(
         initiatePayment(createdShipmentId),

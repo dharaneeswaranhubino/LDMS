@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { type AgentFormData } from "../adminTypes";
-import { validateAgentDetails } from "../components/agentDetailsValidation";
+import { validateAgentDetails } from "../components/agentRegisteration/agentDetailsValidation";
 import {
   useAppDispatch,
   useAppSelector,

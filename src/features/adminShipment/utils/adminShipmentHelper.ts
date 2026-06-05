@@ -95,6 +95,7 @@ export const MOCK_SHIPMENTS: Shipment[] = [
 export const STATUS_STYLE: Record<ShipmentStatus, string> = {
   PENDING: "bg-amber-100 text-amber-700 border-amber-200",
   CONFIRMED: "bg-blue-100 text-blue-700 border-blue-200",
+  ASSIGNED: "bg-blue-100 text-blue-700 border-blue-200",
   PICKED_UP: "bg-sky-100 text-sky-700 border-sky-200",
   IN_TRANSIT: "bg-indigo-100 text-indigo-700 border-indigo-200",
   OUT_FOR_DELIVERY: "bg-violet-100 text-violet-700 border-violet-200",
@@ -106,6 +107,7 @@ export const STATUS_STYLE: Record<ShipmentStatus, string> = {
 export const STATUS_LABEL: Record<ShipmentStatus, string> = {
   PENDING: "Pending",
   CONFIRMED: "Confirmed",
+  ASSIGNED: "Assigned",
   PICKED_UP: "Picked up",
   IN_TRANSIT: "In transit",
   OUT_FOR_DELIVERY: "Out for delivery",

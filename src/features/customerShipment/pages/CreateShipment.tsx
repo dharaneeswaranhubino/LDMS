@@ -112,7 +112,7 @@ const CreateShipment = () => {
           </div>
           <div
             onClick={() => setIsInstruc(true)}
-            className=" flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
+            className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
           >
             <PiReadCvLogoLight size={18} />
             Instructions

@@ -144,13 +144,13 @@ const getMenu = (pagination: number | null, unreadCount:number | null): MenuItem
     allowedRole: "customer",
     icon: <i className="fa-solid fa-credit-card text-[13px]"></i>,
   },
-  {
-    name: "Invoices",
-    path: "/invoices",
-    section: "FINANCE",
-    allowedRole: "customer",
-    icon: <i className="fa-regular fa-file-lines text-[13px]"></i>,
-  },
+  // {
+  //   name: "Invoices",
+  //   path: "/invoices",
+  //   section: "FINANCE",
+  //   allowedRole: "customer",
+  //   icon: <i className="fa-regular fa-file-lines text-[13px]"></i>,
+  // },
   {
     name: "Agent Chat",
     path: "/agentChat",
