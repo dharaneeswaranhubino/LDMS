@@ -88,6 +88,7 @@ const AppRoutes = () => {
             <Route path="/sendShipment" element={<CreateShipment />} />
             <Route path="/myShipments" element={<MyShipments />} />
             <Route path="/trackShipments" element={<TrackShipment />} />
+            <Route path="/trackShipments/:shipmentId" element={<TrackShipment />}/>
             <Route
               path="/customerNotifications"
               element={<CustomerNotifications />}
@@ -97,7 +98,8 @@ const AppRoutes = () => {
             <Route path="/agentRegisteration" element={<CreateAgent />} />
             <Route path="/agentManagement" element={<AgentManagement />} />
             <Route path="/allShipment" element={<AdminAllShipments />} />
-            <Route path="/liveTracking" element={<AdminLiveTracking />} />
+            {/* <Route path="/liveTracking" element={<AdminLiveTracking />} /> */}
+            <Route path="/liveTracking" element={<TrackShipment />} />
             {/* agent screens */}
             <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/deliveryDetail" element={<DeliveryDetail />} />

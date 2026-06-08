@@ -464,3 +464,17 @@ export function getProgressPercent(status: TimelineStatus): number {
   if (idx < 0) return 0;
   return Math.round((idx / (ORDERED_STATUSES.length - 1)) * 100);
 }
+
+
+export const getRelativeTime = (dateStr: string): string => {
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diffMs = now - then;
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return "just now";
+  if (diffMins < 60) return `${diffMins} min ago`;
+  const diffHrs = Math.floor(diffMins / 60);
+  if (diffHrs < 24) return `${diffHrs} hr${diffHrs > 1 ? "s" : ""} ago`;
+  const diffDays = Math.floor(diffHrs / 24);
+  return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+}

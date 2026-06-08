@@ -357,3 +357,7 @@ export interface ShipmentCardProps {
   isSelected: boolean;
   onClick: () => void;
 }
+
+export interface ShipmentTimelinePanelProps {
+  shipment: ShipmentResponse;
+}

@@ -122,6 +122,7 @@ const ShipmentCard = ({ item, onView, onPaymentView, }: Props) => {
         {!["CANCELLED", "PENDING","DELIVERED"].includes(status) && (
           <button
             onClick={() => navigate(`/trackShipments/${item.shipmentId}`)}
+            // onClick={() => navigate(`/trackShipments`)}
             className="py-[7px] px-4 border border-blue-200 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all text-[12px]"
           >
             <i className="fa-solid fa-location-dot mr-1" />

@@ -105,7 +105,7 @@ const Topbar = () => {
 
             {/* Dropdown */}
             {isOpen && (
-              <div className="absolute right-0 top-12 w-88 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+              <div className="absolute right-[-3rem] lg:right-0 top-12 w-88 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
                   <div className="flex items-center gap-2">
