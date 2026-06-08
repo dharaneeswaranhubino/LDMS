@@ -107,6 +107,7 @@ export interface ShipmentDetailsProps {
 export interface DeliveryCheckpointsProps {
   data: DeliveryItem;
   otpVerified: boolean;
+  onDelivered: () => void;
 }
 
 // agentTypes.ts

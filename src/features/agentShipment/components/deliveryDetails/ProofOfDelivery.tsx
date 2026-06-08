@@ -39,6 +39,8 @@ const ProofOfDelivery = ({
     }
   };
 
+  const isOutForDelivery = currentStatus === "OUT_FOR_DELIVERY";
+
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   const handleVerifyOtp = () => {
@@ -62,7 +64,18 @@ const ProofOfDelivery = ({
         </p>
       </div>
 
-      <button className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 py-2 font-semibold text-white shadow-md">
+      {/* <button className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 py-2 font-semibold text-white shadow-md">
+        Send OTP to Customer
+      </button> */}
+      <button
+        disabled={!isOutForDelivery}
+        className={`w-full rounded-xl py-2 font-semibold text-white shadow-md transition-all
+    ${
+      isOutForDelivery
+        ? "bg-gradient-to-r from-indigo-500 to-blue-500"
+        : "bg-slate-300 cursor-not-allowed"
+    }`}
+      >
         Send OTP to Customer
       </button>
 
@@ -75,7 +88,7 @@ const ProofOfDelivery = ({
             inputMode="numeric"
             maxLength={1}
             value={digit}
-            disabled={otpVerified}
+            disabled={otpVerified || !isOutForDelivery}
             onChange={(e) => handleChange(e.target.value, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
             className="w-9 lg:h-14 lg:w-14 rounded-2xl border-2 border-indigo-200 bg-white text-center text-2xl font-bold text-slate-800 shadow-sm outline-none"

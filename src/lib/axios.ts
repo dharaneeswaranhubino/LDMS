@@ -9,7 +9,7 @@ export const api = axios.create({
     // baseURL: "https://thus-spill-vitality.ngrok-free.dev/api/v1/",
     withCredentials: true, // Cookie auto-send
     headers: {
-        'ngrok-skip-browser-warning': 'true',  // add this
+        'ngrok-skip-browser-warning': 'true',
     },
 });
 //inject pattern (circular dependency)

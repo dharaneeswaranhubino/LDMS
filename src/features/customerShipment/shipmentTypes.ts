@@ -351,3 +351,9 @@ export interface ShipmentTimelineResponse {
   currentStatus: TimelineStatus;
   timeline: TimelineEntry[];
 }
+
+export interface ShipmentCardProps {
+  shipment: ShipmentResponse;
+  isSelected: boolean;
+  onClick: () => void;
+}

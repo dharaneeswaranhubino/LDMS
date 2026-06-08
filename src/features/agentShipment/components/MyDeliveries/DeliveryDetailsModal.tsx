@@ -1,12 +1,15 @@
 import type { DeliveryDetailsModalProps } from "../../agentTypes";
 import { formatDate } from "../../utils/mockDelivery";
+import { formatTime } from "../../utils/statusHelpers";
 
 const DeliveryDetailsModal = ({
   setIsView,
   item,
   getPriorityColor,
   getStatusColor,
-}:DeliveryDetailsModalProps) => {
+}: DeliveryDetailsModalProps) => {
+  const deliveryFrom = formatTime(item.assignedSlotStart ?? null);
+  const deliveryTo = formatTime(item.assignedSlotEnd ?? null);
   const onClose = () => {
     setIsView(false);
   };
@@ -181,14 +184,14 @@ const DeliveryDetailsModal = ({
               </div>
             </div>
 
-            {(item.assignedSlotStart || item.assignedSlotEnd) && (
+            {(deliveryFrom || deliveryTo) && (
               <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5">
                 <h3 className="text-lg font-semibold text-amber-700 mb-3">
                   Preferred Delivery Time
                 </h3>
 
                 <p className="text-sm text-slate-700 font-medium">
-                  {item.assignedSlotStart} - {item.assignedSlotEnd}
+                  {deliveryFrom} - {deliveryTo}
                 </p>
               </div>
             )}

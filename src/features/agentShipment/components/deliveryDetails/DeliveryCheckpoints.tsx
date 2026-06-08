@@ -13,6 +13,7 @@ import type {
 const DeliveryCheckpoints = ({
   data,
   otpVerified,
+  onDelivered,
 }: DeliveryCheckpointsProps) => {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(data.shipmentStatus);
@@ -64,6 +65,9 @@ const DeliveryCheckpoints = ({
       setCurrentStatus(nextStatus);
       setAnimatingIndex(null);
       setTruckProgress(0);
+      if (nextStatus === "DELIVERED") {
+        onDelivered();
+      }
     } catch (error) {
       console.log(error);
       clearInterval(animationRef!);

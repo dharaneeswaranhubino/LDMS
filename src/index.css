@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
-body{
+body {
   font-family: "Inter", sans-serif;
 }
+
+/* html,
+body {
+  overflow: hidden;
+  height: 100%;
+} */
 /* Hide scrollbar */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;

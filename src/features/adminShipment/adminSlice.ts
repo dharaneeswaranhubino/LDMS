@@ -215,21 +215,21 @@ export const createAgentDetails = createAsyncThunk<
   },
 );
 
-export const fetchMyShipments = createAsyncThunk<
-  ShipmentResponse[],
-  void,
-  { rejectValue: string }
->("shipment/fetchMyShipments", async (_, { rejectWithValue }) => {
-  try {
-    const res = await api.get("/shipments/myShipments");
-    return res.data.data as ShipmentResponse[];
-  } catch (err: unknown) {
-    const error = err as AxiosError<{ message: string }>;
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch shipments",
-    );
-  }
-});
+// export const fetchMyShipments = createAsyncThunk<
+//   ShipmentResponse[],
+//   void,
+//   { rejectValue: string }
+// >("shipment/fetchMyShipments", async (_, { rejectWithValue }) => {
+//   try {
+//     const res = await api.get("/shipments/myShipments");
+//     return res.data.data as ShipmentResponse[];
+//   } catch (err: unknown) {
+//     const error = err as AxiosError<{ message: string }>;
+//     return rejectWithValue(
+//       error.response?.data?.message || "Failed to fetch shipments",
+//     );
+//   }
+// });
 
 export const getAllAgents = createAsyncThunk<
   DeliveryAgent[],

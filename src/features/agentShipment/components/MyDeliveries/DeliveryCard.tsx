@@ -8,12 +8,16 @@ import { PiUsersFill } from "react-icons/pi";
 import { useState } from "react";
 import DeliveryDetailsModal from "./DeliveryDetailsModal";
 import { TbMinusVertical } from "react-icons/tb";
+import { formatTime } from "../../utils/statusHelpers";
 
 interface Props {
   item: DeliveryItem;
 }
 const DeliveryCard = ({ item }: Props) => {
   const [isView, setIsView] = useState<boolean>(false);
+  
+    const deliveryFrom = formatTime(item.assignedSlotStart ?? null);
+    const deliveryTo = formatTime(item.assignedSlotEnd ?? null);
 
   const getPriorityColor = () => {
     switch (item.shipmentPriority) {
@@ -78,16 +82,7 @@ const DeliveryCard = ({ item }: Props) => {
   const onView = () => {
     setIsView(true);
   };
-
   const Separator = () => <span className="w-px h-4 bg-slate-300 shrink-0" />;
-
-  const formatTime = (time: string) => {
-    return new Date(`1970-01-01T${time}`).toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
 
   return (
     <>
@@ -171,8 +166,8 @@ const DeliveryCard = ({ item }: Props) => {
                   <div className="flex items-center gap-2">
                     <FaClock className="text-slate-400" />
                     <span>
-                      {formatTime(item.assignedSlotStart)} -{" "}
-                      {formatTime(item.assignedSlotEnd)}
+                      {deliveryFrom} -{" "}
+                      {deliveryTo}
                     </span>
                   </div>
                 </div>

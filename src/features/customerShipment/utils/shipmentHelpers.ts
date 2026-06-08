@@ -1,3 +1,17 @@
+import {
+  FiClock,
+  FiCheckCircle,
+  FiUser,
+  FiMapPin,
+  FiPackage,
+  FiTruck,
+  FiNavigation,
+  FiHome,
+  FiCheckSquare,
+  FiXCircle,
+  FiAlertTriangle,
+} from "react-icons/fi";
+import type { IconType } from "react-icons/lib";
 import type {
   ShipmentResponse,
   ShipmentStatus,
@@ -6,6 +20,7 @@ import type {
   SortKey,
   NotificationType,
   FilterType,
+  TimelineStatus,
 } from "../shipmentTypes";
 
 export const STATUS_STYLES: Record<ShipmentStatus, string> = {
@@ -48,27 +63,27 @@ export const FILTER_TABS: {
   key: FilterTab;
   label: string;
 }[] = [
-    { key: "ALL", label: "All" },
-    { key: "PENDING", label: "Pending" },
-    { key: "ASSIGNED", label: "Assigned" },
-    { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
-    { key: "CONFIRMED", label: "Confirmed" },
-    { key: "PICKED_UP", label: "Picked up" },
-    { key: "IN_TRANSIT", label: "In transit" },
-    { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
-    { key: "DELIVERED", label: "Delivered" },
-    { key: "CANCELLED", label: "Cancelled" },
-  ];
+  { key: "ALL", label: "All" },
+  { key: "PENDING", label: "Pending" },
+  { key: "ASSIGNED", label: "Assigned" },
+  { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
+  { key: "CONFIRMED", label: "Confirmed" },
+  { key: "PICKED_UP", label: "Picked up" },
+  { key: "IN_TRANSIT", label: "In transit" },
+  { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
+  { key: "DELIVERED", label: "Delivered" },
+  { key: "CANCELLED", label: "Cancelled" },
+];
 
 export const SORT_OPTIONS: {
   value: SortKey;
   label: string;
 }[] = [
-    { value: "newest", label: "Newest first" },
-    { value: "oldest", label: "Oldest first" },
-    { value: "amount_high", label: "Amount: high → low" },
-    { value: "amount_low", label: "Amount: low → high" },
-  ];
+  { value: "newest", label: "Newest first" },
+  { value: "oldest", label: "Oldest first" },
+  { value: "amount_high", label: "Amount: high → low" },
+  { value: "amount_low", label: "Amount: low → high" },
+];
 
 export const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -162,8 +177,12 @@ export const unloadRazorpayScript = (): void => {
   if (script) script.remove();
 
   document.querySelectorAll('[id^="razorpay"]').forEach((el) => el.remove());
-  document.querySelectorAll('iframe[src*="razorpay"]').forEach((el) => el.remove());
-  document.querySelectorAll('iframe[src*="checkout"]').forEach((el) => el.remove());
+  document
+    .querySelectorAll('iframe[src*="razorpay"]')
+    .forEach((el) => el.remove());
+  document
+    .querySelectorAll('iframe[src*="checkout"]')
+    .forEach((el) => el.remove());
 
   delete (window as Window & { Razorpay?: unknown }).Razorpay;
 };
@@ -178,7 +197,6 @@ export const BASE_RATE = 50;
 export const RATE_PER_KG = 20;
 export const FRAGILE_CHARGE = 50;
 export const GST_RATE = 0.18;
-
 
 //Notifications helper functions and datas
 
@@ -250,7 +268,6 @@ export const formatNotificationTime = (dateStr: string): string => {
   });
 };
 
-
 export const filterOptions: { label: string; value: FilterType }[] = [
   { label: "All", value: "ALL" },
   { label: "Unread", value: "UNREAD" },
@@ -261,3 +278,189 @@ export const filterOptions: { label: string; value: FilterType }[] = [
   { label: "Delivered", value: "SHIPMENT_DELIVERED" },
   { label: "Payment", value: "PAYMENT_UPDATE" },
 ];
+
+//Timeline Tracking helpers
+export const STATUS_STYLE: Record<
+  string,
+  { bg: string; text: string; label: string }
+> = {
+  PENDING: { bg: "bg-amber-50", text: "text-amber-800", label: "Pending" },
+  CONFIRMED: { bg: "bg-teal-50", text: "text-teal-800", label: "Confirmed" },
+  ASSIGNED: { bg: "bg-purple-50", text: "text-purple-800", label: "Assigned" },
+  OUT_FOR_PICKUP: {
+    bg: "bg-purple-50",
+    text: "text-purple-800",
+    label: "Out for pickup",
+  },
+  PICKED_UP: { bg: "bg-teal-50", text: "text-teal-800", label: "Picked up" },
+  IN_TRANSIT: { bg: "bg-blue-50", text: "text-blue-800", label: "In transit" },
+  OUT_FOR_DELIVERY: {
+    bg: "bg-blue-50",
+    text: "text-blue-800",
+    label: "Out for delivery",
+  },
+  DELIVERED: { bg: "bg-green-50", text: "text-green-800", label: "Delivered" },
+  COMPLETED: { bg: "bg-green-50", text: "text-green-800", label: "Completed" },
+  CANCELLED: { bg: "bg-red-50", text: "text-red-800", label: "Cancelled" },
+};
+
+export const ACTIVE_STATUSES: string[] = [
+  "CONFIRMED",
+  "ASSIGNED",
+  "OUT_FOR_PICKUP",
+  "PICKED_UP",
+  "IN_TRANSIT",
+  "OUT_FOR_DELIVERY",
+];
+
+export const ORDERED_STATUSES: TimelineStatus[] = [
+  "PENDING",
+  "CONFIRMED",
+  "ASSIGNED",
+  "OUT_FOR_PICKUP",
+  "PICKED_UP",
+  "IN_TRANSIT",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED",
+  "COMPLETED",
+];
+
+export const STATUS_META: Record<
+  TimelineStatus,
+  {
+    label: string;
+    bgColor: string;
+    textColor: string;
+    iconBg: string;
+    iconColor: string;
+  }
+> = {
+  PENDING: {
+    label: "Pending",
+    bgColor: "bg-amber-50",
+    textColor: "text-amber-800",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-700",
+  },
+  CONFIRMED: {
+    label: "Confirmed",
+    bgColor: "bg-teal-50",
+    textColor: "text-teal-800",
+    iconBg: "bg-teal-50",
+    iconColor: "text-teal-700",
+  },
+  ASSIGNED: {
+    label: "Assigned",
+    bgColor: "bg-purple-50",
+    textColor: "text-purple-800",
+    iconBg: "bg-purple-50",
+    iconColor: "text-purple-700",
+  },
+  OUT_FOR_PICKUP: {
+    label: "Out for pickup",
+    bgColor: "bg-purple-50",
+    textColor: "text-purple-800",
+    iconBg: "bg-purple-50",
+    iconColor: "text-purple-700",
+  },
+  PICKED_UP: {
+    label: "Picked up",
+    bgColor: "bg-teal-50",
+    textColor: "text-teal-800",
+    iconBg: "bg-teal-50",
+    iconColor: "text-teal-700",
+  },
+  IN_TRANSIT: {
+    label: "In transit",
+    bgColor: "bg-blue-50",
+    textColor: "text-blue-800",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-700",
+  },
+  OUT_FOR_DELIVERY: {
+    label: "Out for delivery",
+    bgColor: "bg-blue-50",
+    textColor: "text-blue-800",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-700",
+  },
+  DELIVERED: {
+    label: "Delivered",
+    bgColor: "bg-green-50",
+    textColor: "text-green-800",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-700",
+  },
+  COMPLETED: {
+    label: "Completed",
+    bgColor: "bg-green-50",
+    textColor: "text-green-800",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-700",
+  },
+  CANCELLED: {
+    label: "Cancelled",
+    bgColor: "bg-red-50",
+    textColor: "text-red-800",
+    iconBg: "bg-red-50",
+    iconColor: "text-red-700",
+  },
+  DELAYED: {
+    label: "Delayed",
+    bgColor: "bg-amber-50",
+    textColor: "text-amber-800",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-700",
+  },
+};
+
+export const ROLE_BADGE: Record<string, string> = {
+  admin: "bg-purple-50 text-purple-700",
+  customer: "bg-teal-50 text-teal-700",
+  agent: "bg-blue-50 text-blue-700",
+};
+
+export const STATUS_ICONS: Record<string, IconType> = {
+  PENDING: FiClock,
+  CONFIRMED: FiCheckCircle,
+  ASSIGNED: FiUser,
+  OUT_FOR_PICKUP: FiMapPin,
+  PICKED_UP: FiPackage,
+  IN_TRANSIT: FiTruck,
+  OUT_FOR_DELIVERY: FiNavigation,
+  DELIVERED: FiHome,
+  COMPLETED: FiCheckSquare,
+  CANCELLED: FiXCircle,
+  DELAYED: FiAlertTriangle,
+};
+
+// TimeLine functions
+export const isActive = (status: string): boolean => {
+  return ACTIVE_STATUSES.includes(status);
+};
+
+export function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+export function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+export function getProgressPercent(status: TimelineStatus): number {
+  const idx = ORDERED_STATUSES.indexOf(status);
+  if (idx < 0) return 0;
+  return Math.round((idx / (ORDERED_STATUSES.length - 1)) * 100);
+}

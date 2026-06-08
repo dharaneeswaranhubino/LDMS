@@ -148,8 +148,8 @@ export const fetchCustomerDashboard = createAsyncThunk<
     "customerDashboard/fetch",
     async ({ from, to }, { rejectWithValue }) => {
         try {
-            await new Promise((res) => setTimeout(res, 500)); // simulate network delay
-            return getMockCustomerDashboard(from, to);        // ← filters by date range
+            await new Promise((res) => setTimeout(res, 500));
+            return getMockCustomerDashboard(from, to);
         } catch {
             return rejectWithValue("Failed to load mock dashboard");
         }
@@ -174,8 +174,6 @@ export const fetchCustomerDashboard = createAsyncThunk<
 //     }
 // );
 
-
-// ─── Notification Thunks ───────────────────────────────────────────
 
 export const fetchNotifications = createAsyncThunk<
     FetchNotificationsResponse,
@@ -227,7 +225,6 @@ export const markSingleNotificationRead = createAsyncThunk<
     }
 );
 
-// ─── NEW: Fetch Shipment Timeline Thunk ────────────────────────────────────
 export const fetchShipmentTimeline = createAsyncThunk<
     ShipmentTimelineResponse,
     number,                     // shipmentId
