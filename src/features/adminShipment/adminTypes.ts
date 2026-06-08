@@ -154,6 +154,10 @@ export interface AgentDetailsState {
 
   loading: boolean;
   error: string | null;
+
+  timelineData: ShipmentTimelineResponse | null;
+  timelineLoading: boolean;
+  timelineError: string | null;
 }
 
 // admin dashboard types/Interfaces
@@ -276,4 +280,41 @@ export interface AdminShipmentTableRowProps {
   shipment: AllShipments;
   onView: (shipment: AllShipments) => void;
   onComplete: (shipment: AllShipments) => void;
+}
+
+
+//Time Line 
+export type TimelineStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "ASSIGNED"
+  | "OUT_FOR_PICKUP"
+  | "PICKED_UP"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "COMPLETED"
+  | "DELAYED";
+
+export interface TimelineUpdatedBy {
+  id: number;
+  name: string;
+  role: "admin" | "customer" | "agent";
+}
+
+export interface TimelineEntry {
+  id: number;
+  fromStatus: TimelineStatus | null;
+  toStatus: TimelineStatus;
+  remarks: string | null;
+  updatedAt: string;
+  updatedBy: TimelineUpdatedBy;
+}
+
+export interface ShipmentTimelineResponse {
+  shipmentId: number;
+  trackingId: string;
+  currentStatus: TimelineStatus;
+  timeline: TimelineEntry[];
 }

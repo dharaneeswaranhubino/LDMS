@@ -13,7 +13,7 @@ import {
   type DeliveryAgent,
 } from "./adminTypes";
 import { AxiosError } from "axios";
-import type { ShipmentResponse } from "../customerShipment/shipmentTypes";
+// import type { ShipmentResponse } from "../customerShipment/shipmentTypes";
 
 // ─── Mock Generator ────────────────────────────────────────────────
 // date range based-a deterministic mock data generate பண்றோம்.
@@ -298,12 +298,22 @@ const initialState: AgentDetailsState = {
 
   loading: false,
   error: null,
+
+  timelineData: null,
+  timelineLoading: false,
+  timelineError: null,
 };
 
 const adminSlice = createSlice({
   name: "admin",
   initialState,
-  reducers: {},
+  reducers: {
+
+    clearTimeline: (state) => {
+      state.timelineData = null;
+      state.timelineError = null;
+    },
+  },
 
   extraReducers: (builder) => {
     const pending = (state: AgentDetailsState) => {
@@ -369,4 +379,5 @@ const adminSlice = createSlice({
   },
 });
 
+export const { clearTimeline } = adminSlice.actions;
 export default adminSlice.reducer;

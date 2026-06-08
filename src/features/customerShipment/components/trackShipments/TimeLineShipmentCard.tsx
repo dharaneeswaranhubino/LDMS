@@ -8,6 +8,12 @@ const TimeLineShipmentCard = ({
 }: ShipmentCardProps) => {
   const style =
     STATUS_STYLE[shipment.shipmentStatus] ?? STATUS_STYLE["PENDING"];
+
+  const agentName = shipment.assignedAgent
+    ? "agentName" in shipment.assignedAgent
+      ? shipment.assignedAgent.agentName
+      : shipment.assignedAgent.name
+    : "Awaiting agent";
   return (
     <>
       <div
@@ -74,7 +80,10 @@ const TimeLineShipmentCard = ({
                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
               />
             </svg>
-            {shipment.assignedAgent?.agentName ?? "Awaiting agent"}
+            {/* {shipment.assignedAgent?.agentName ??
+              shipment.assignedAgent?.name ??
+              "Awaiting agent"} */}
+              {agentName}
           </span>
           <span className="w-1 h-1 rounded-full bg-gray-300" />
           <span>{shipment.itemName}</span>

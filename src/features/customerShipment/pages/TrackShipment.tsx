@@ -11,7 +11,6 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import { GiMailbox } from "react-icons/gi";
 import TimeLineShipmentCard from "../components/trackShipments/TimeLineShipmentCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchAllShipments } from "../../adminShipment/adminSlice";
 
 const TrackShipmentPage = () => {
   const navigate = useNavigate();
@@ -27,7 +26,6 @@ const TrackShipmentPage = () => {
 
   useEffect(() => {
     dispatch(fetchMyShipments({ page: 1, limit: 50 }));
-    // dispatch(fetchAllShipments({ page: 1, limit: 50 }));
     
   }, [dispatch]);
 

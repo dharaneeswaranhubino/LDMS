@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { AllShipments } from "../adminShipment/adminTypes";
 
 export interface Address {
   name: string;
@@ -353,11 +354,11 @@ export interface ShipmentTimelineResponse {
 }
 
 export interface ShipmentCardProps {
-  shipment: ShipmentResponse;
+  shipment: ShipmentResponse | AllShipments;
   isSelected: boolean;
   onClick: () => void;
 }
 
 export interface ShipmentTimelinePanelProps {
-  shipment: ShipmentResponse;
+  shipment: ShipmentResponse | AllShipments;
 }

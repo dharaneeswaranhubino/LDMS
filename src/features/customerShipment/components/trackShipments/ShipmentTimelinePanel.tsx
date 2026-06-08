@@ -28,6 +28,12 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
     ? [...timelineData.timeline].reverse()
     : [];
 
+  const agentName = shipment.assignedAgent
+    ? "agentName" in shipment.assignedAgent
+      ? shipment.assignedAgent.agentName
+      : shipment.assignedAgent.name
+    : "Awaiting agent";
+
   return (
     <>
       <style>{`
@@ -48,8 +54,10 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
               <p className="text-xs text-gray-400 mt-0.5">
                 Shipment #{shipment.shipmentId} &nbsp;·&nbsp;
                 {shipment.pickupCity} → {shipment.deliveryCity}
-                {shipment.assignedAgent &&
-                  ` · ${shipment.assignedAgent.agentName}`}
+                {/* {shipment.assignedAgent &&
+                  ` · ${shipment.assignedAgent.agentName}`} */}
+                &nbsp;·&nbsp;
+                {agentName}
               </p>
             </div>
             <TimeLineStatusBadge status={currentStatus} />
