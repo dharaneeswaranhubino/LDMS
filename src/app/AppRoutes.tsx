@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
 import LoadingSpinner from "../shared/components/LoadingSpinner";
 import AgentTracking from "../features/agentShipment/pages/AgentTracking";
+import AdminComplaints from "../features/adminShipment/pages/AdminComplaints";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -101,6 +102,7 @@ const AppRoutes = () => {
             <Route path="/allShipment" element={<AdminAllShipments />} />
             <Route path="/liveTracking" element={<AdminLiveTracking />} />
             <Route path="/liveTracking/:shipmentId" element={<AdminLiveTracking />} />
+            <Route path="/adminComplaints" element={<AdminComplaints/>} />
             {/* <Route path="/liveTracking" element={<TrackShipment />} /> */}
             {/* agent screens */}
             <Route path="/agentDashboard" element={<AgentDashboard />} />

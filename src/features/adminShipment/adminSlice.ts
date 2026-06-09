@@ -5,12 +5,17 @@ import {
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
 import {
+  type AdminComplaint,
   type AdminDashboardData,
   type AgentDetailsState,
   type AgentFormData,
   type AllShipmentsResponse,
+  type ComplaintPagination,
+  type ComplaintStatus,
   type DashboardDateParams,
   type DeliveryAgent,
+  type FetchComplaintsParams,
+  type UpdateComplaintStatusResponse,
 } from "./adminTypes";
 import { AxiosError } from "axios";
 
@@ -278,6 +283,52 @@ export const fetchAllShipments = createAsyncThunk<
   }
 });
 
+
+export const fetchComplaints = createAsyncThunk(
+  "adminComplaints/fetchComplaints",
+  async (params: FetchComplaintsParams, { rejectWithValue }) => {
+    try {
+      const { page = 1, limit = 10, status } = params;
+      const query = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        ...(status ? { status } : {}),
+      });
+      const res = await api.get(`/complaints?${query}`);
+      return res.data.data as {
+        complaints: AdminComplaint[];
+        pagination: ComplaintPagination;
+      };
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch complaints",
+      );
+    }
+  }
+);
+
+export const updateComplaintStatus = createAsyncThunk(
+  "adminComplaints/updateComplaintStatus",
+  async (
+    { complaintId, status }: { complaintId: number; status: ComplaintStatus },
+    { rejectWithValue }
+  ) => {
+    try {
+      const res = await api.patch(
+        `/complaints/${complaintId}/status`,
+        { status }
+      );
+      return res.data as UpdateComplaintStatusResponse;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update status",
+      );
+    }
+  }
+);
+
 const initialState: AgentDetailsState = {
   shipments: [],
   agents: [],
@@ -294,6 +345,14 @@ const initialState: AgentDetailsState = {
   timelineData: null,
   timelineLoading: false,
   timelineError: null,
+
+  complaints: [],
+  complaintPagination: null,
+  complaintsLoading: false,
+  complaintUpdateLoading: false,
+  activeComplaintTab: "ALL",
+  selectedComplaint: null,
+  complaintError: null,
 };
 
 const adminSlice = createSlice({
@@ -304,6 +363,18 @@ const adminSlice = createSlice({
     clearTimeline: (state) => {
       state.timelineData = null;
       state.timelineError = null;
+    },
+
+    //Complaints
+    setActiveComplaintTab(state, action: PayloadAction<"ALL" | ComplaintStatus>) {
+      state.activeComplaintTab = action.payload;
+    },
+    setSelectedComplaint(state, action: PayloadAction<AdminComplaint | null>) {
+      state.selectedComplaint = action.payload;
+    },
+    clearComplaintError(state) {
+      state.complaintError = null;
+      state.complaintUpdateLoading = false;
     },
   },
 
@@ -341,6 +412,7 @@ const adminSlice = createSlice({
       })
       .addCase(getAllAgents.rejected, rejected)
 
+      //fetch dashboard datas
       .addCase(fetchAdminDashboard.pending, (state) => {
         state.dashboardLoading = true;
         state.error = null;
@@ -355,6 +427,7 @@ const adminSlice = createSlice({
         state.error = action.payload || "Failed to load dashboard";
       })
 
+      //get all shipments
       .addCase(fetchAllShipments.pending, (state) => {
         state.shipmentsLoading = true;
         state.error = null;
@@ -367,9 +440,43 @@ const adminSlice = createSlice({
       .addCase(fetchAllShipments.rejected, (state, action) => {
         state.shipmentsLoading = false;
         state.error = action.payload || "Failed to fetch shipments";
+      })
+
+      //Complaints
+      .addCase(fetchComplaints.pending, (state) => {
+        state.complaintsLoading = true;
+        state.complaintError = null;
+      })
+      .addCase(fetchComplaints.fulfilled, (state, action) => {
+        state.complaintsLoading = false;
+        state.complaints = action.payload.complaints;
+        state.complaintPagination = action.payload.pagination;
+      })
+      .addCase(fetchComplaints.rejected, (state, action) => {
+        state.complaintsLoading = false;
+        state.complaintError = action.payload as string;
+      })
+
+      .addCase(updateComplaintStatus.pending, (state) => {
+        state.complaintUpdateLoading = true;
+      })
+      .addCase(updateComplaintStatus.fulfilled, (state, action) => {
+        state.complaintUpdateLoading = false;
+        const { complaintId, currentStatus } = action.payload;
+        const target = state.complaints.find(
+          (c) => c.complaintId === complaintId
+        );
+        if (target) target.status = currentStatus;
+        if (state.selectedComplaint?.complaintId === complaintId) {
+          state.selectedComplaint.status = currentStatus;
+        }
+      })
+      .addCase(updateComplaintStatus.rejected, (state, action) => {
+        state.complaintUpdateLoading = false;
+        state.complaintError = action.payload as string;
       });
   },
 });
 
-export const { clearTimeline } = adminSlice.actions;
+export const { clearTimeline, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, } = adminSlice.actions;
 export default adminSlice.reducer;

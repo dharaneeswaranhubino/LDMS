@@ -101,7 +101,7 @@ export interface RecentShipment {
   createdAt: string;
 }
 
-export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_PROGRESS";
+// export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_PROGRESS";
 
 export interface CustomerComplaint {
   id: number;
@@ -156,6 +156,14 @@ export interface AgentDetailsState {
   timelineData: ShipmentTimelineResponse | null;
   timelineLoading: boolean;
   timelineError: string | null;
+
+  complaints: AdminComplaint[];
+  complaintPagination: ComplaintPagination | null;
+  complaintsLoading: boolean;
+  complaintUpdateLoading: boolean;
+  activeComplaintTab: "ALL" | ComplaintStatus;
+  selectedComplaint: AdminComplaint | null;
+  complaintError: string | null;
 }
 
 // admin dashboard types/Interfaces
@@ -315,4 +323,76 @@ export interface ShipmentTimelineResponse {
   trackingId: string;
   currentStatus: TimelineStatus;
   timeline: TimelineEntry[];
+}
+
+//Complaint Types
+export interface ComplaintCustomer {
+  customerId: number;
+  name: string;
+  email: string;
+}
+
+export interface ComplaintAgent {
+  agentId: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  vehicleType: string;
+  serviceZone: string;
+}
+
+export type ComplaintStatus = "OPEN" | "IN_REVIEW" | "RESOLVED";
+
+export type ComplaintSubject =
+  | "PACKAGE_NOT_DELIVERED"
+  | "DAMAGED_PACKAGE"
+  | "DELAYED_DELIVERY"
+  | "WRONG_ITEM"
+  | "OTHER";
+
+export interface AdminComplaint {
+  complaintId: number;
+  shipmentId: number;
+  trackingId: string;
+  subject: ComplaintSubject;
+  description: string;
+  status: ComplaintStatus;
+  customer: ComplaintCustomer;
+  assignedAgent: ComplaintAgent | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ComplaintPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface FetchComplaintsParams {
+  page?: number;
+  limit?: number;
+  status?: ComplaintStatus;
+}
+
+export interface UpdateComplaintStatusResponse {
+  complaintId: number;
+  shipmentId: number;
+  trackingId: string;
+  subject: string;
+  previousStatus: ComplaintStatus;
+  currentStatus: ComplaintStatus;
+  updatedAt: string;
+}
+
+export interface ComplaintFiltersProps {
+  activeTab: "ALL" | ComplaintStatus;
+  pagination: ComplaintPagination;
+  onTabChange: (tab: "ALL" | ComplaintStatus) => void;
+}
+
+export interface ComplaintTableProps {
+  complaints: AdminComplaint[];
+  complaintsLoading: boolean;
 }

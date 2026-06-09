@@ -1,4 +1,4 @@
-import type { Agent, FilterTab, Priority, Shipment, ShipmentStatus } from "../adminTypes";
+import type { Agent, ComplaintStatus, FilterTab, Priority, Shipment, ShipmentStatus } from "../adminTypes";
 
 export const MOCK_AGENTS: Agent[] = [
   { id: 1, name: "Rajesh Kumar", todayCount: 5, status: "busy" },
@@ -176,4 +176,48 @@ export const matchSearch = (s: Shipment, q: string) => {
     s.deliveryCity.toLowerCase().includes(l) ||
     (s.assignedAgentName?.toLowerCase().includes(l) ?? false)
   );
+};
+
+export const ComplaintFiltersTABS: { label: string; value: "ALL" | ComplaintStatus }[] = [
+  { label: "All", value: "ALL" },
+  { label: "Open", value: "OPEN" },
+  { label: "In Review", value: "IN_REVIEW" },
+  { label: "Resolved", value: "RESOLVED" },
+];
+
+
+export const ComplaintTable_HEADS = [
+  { label: "Complaint Id", width: "w-12" },
+  { label: "Tracking ID", width: "w-48" },
+  { label: "Subject", width: "w-44" },
+  { label: "Customer", width: "w-32" },
+  { label: "Agent", width: "w-32" },
+  { label: "Status", width: "w-28" },
+  { label: "Raised on", width: "w-28" },
+  { label: "Action", width: "w-20" },
+];
+
+
+export const SUBJECT_LABELS: Record<string, string> = {
+  PACKAGE_NOT_DELIVERED: "Package not delivered",
+  DAMAGED_PACKAGE: "Damaged package",
+  WRONG_ITEM_DELIVERED:"Wrong Item Delivered",
+  DELIVERY_DELAYED: "Delivery Delayed",
+  AGENT_BEHAVIOUR:"Agent Behaviour",
+  PARTIAL_DELIVERY:"Partial Delivery",
+  LOST_PACKAGE:"Lost Package",
+  PAYMENT_ISSUE:"Payment Issue",
+  OTHER: "Other",
+};
+
+export const STATUS_STYLES: Record<ComplaintStatus, string> = {
+  OPEN: "bg-red-50 text-red-600 border border-red-200",
+  IN_REVIEW: "bg-amber-50 text-amber-600 border border-amber-200",
+  RESOLVED: "bg-green-50 text-green-600 border border-green-200",
+};
+
+export const STATUS_LABELS: Record<ComplaintStatus, string> = {
+  OPEN: "Open",
+  IN_REVIEW: "In Review",
+  RESOLVED: "Resolved",
 };

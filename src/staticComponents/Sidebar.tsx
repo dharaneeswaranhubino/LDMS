@@ -7,6 +7,8 @@ import { TbListDetails, TbTruckDelivery } from "react-icons/tb";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaCubesStacked } from "react-icons/fa6";
 import { fetchMyShipments } from "../features/customerShipment/shipmentSlice";
+import { TbMessageExclamation } from "react-icons/tb";
+import { fetchAllShipments } from "../features/adminShipment/adminSlice";
 
 interface MenuItem {
   name: string;
@@ -72,6 +74,13 @@ const getMenu = (
     section: "MAIN",
     allowedRole: "admin",
     icon: <i className="fa-regular fa-map text-[13px]"></i>,
+  },
+  {
+    name: "Complaints",
+    path: "/adminComplaints",
+    section: "MAIN",
+    allowedRole: "admin",
+    icon: <TbMessageExclamation size={18}/>,
   },
   // delivery agent
   {
@@ -215,7 +224,8 @@ const Sidebar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    close();
+    // close();
+    setTimeout(() => setIsOpen(false), 0);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -227,6 +237,8 @@ const Sidebar = () => {
   useEffect(() => {
     if (user?.role === "customer") {
       dispatch(fetchMyShipments({ page: 1, limit: 100 }));
+    }else if(user?.role === "admin"){
+      dispatch(fetchAllShipments({ page: 1, limit: 100 }));
     }
   }, [dispatch, user?.role]);
 
