@@ -26,7 +26,6 @@ const TrackShipmentPage = () => {
 
   useEffect(() => {
     dispatch(fetchMyShipments({ page: 1, limit: 50 }));
-    
   }, [dispatch]);
 
   useEffect(() => {
@@ -39,13 +38,22 @@ const TrackShipmentPage = () => {
 
   function handleSearch() {
     setSearchNotFound(false);
-    const val = searchInput.trim().toUpperCase();
-    if (!val) return;
-    const found = shipments.find(
-      (s) =>
-        s.trackingId.toUpperCase() === val ||
-        s.trackingId.toUpperCase().includes(val),
-    );
+
+    const search = searchInput.trim().toLowerCase();
+    if (!search) return;
+
+    const found = shipments.find((s) => {
+      const trackingId = s.trackingId?.toLowerCase() ?? "";
+      const packageName = s.itemName?.toLowerCase() ?? "";
+      const agentName = s.assignedAgent?.agentName?.toLowerCase() ?? "";
+
+      return (
+        trackingId.includes(search) ||
+        packageName.includes(search) ||
+        agentName.includes(search)
+      );
+    });
+
     if (found) {
       navigate(`/trackShipments/${found.shipmentId}`);
     } else {
@@ -71,7 +79,8 @@ const TrackShipmentPage = () => {
               Track your shipment
             </h1>
             <p className="text-sm text-gray-400">
-              (Search by tracking ID or select from your active shipments)
+              (<i className="fa-solid fa-circle-exclamation"></i> Click a
+              shipment to view its status)
             </p>
           </div>
 
@@ -97,7 +106,8 @@ const TrackShipmentPage = () => {
                   setSearchInput(e.target.value);
                 }}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                placeholder="Enter tracking ID (e.g. TRK-ABC123)"
+                // placeholder="Enter tracking ID (e.g. TRK-ABC123)"
+                placeholder="Search by tracking ID, package name, or agent name"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent"
               />
             </div>

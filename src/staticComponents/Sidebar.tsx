@@ -22,17 +22,20 @@ const roleColors = {
     "bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 text-cyan-800",
   deliveryAgent:
     "bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 text-indigo-600",
-  customer: "bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 text-sky-600",
+  customer:
+    "bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 text-sky-600",
 };
 const roleBgColors = {
-  admin:
-    "bg-cyan-50 text-cyan-800",
-  deliveryAgent:
-    "bg-indigo-50 text-indigo-600",
+  admin: "bg-cyan-50 text-cyan-800",
+  deliveryAgent: "bg-indigo-50 text-indigo-600",
   customer: "bg-sky-50 text-sky-600",
 };
 
-const getMenu = (pagination: number | null, unreadCount:number | null, adminAllShipmentsCount:number | null): MenuItem[] => [
+const getMenu = (
+  pagination: number | null,
+  unreadCount: number | null,
+  adminAllShipmentsCount: number | null,
+): MenuItem[] => [
   // admin
   {
     name: "Admin Dashboard",
@@ -91,6 +94,13 @@ const getMenu = (pagination: number | null, unreadCount:number | null, adminAllS
     section: "MAIN",
     allowedRole: "deliveryAgent",
     icon: <TbListDetails size={18} />,
+  },
+  {
+    name: "Track My Deliveries",
+    path: "/agentTracking",
+    section: "MAIN",
+    allowedRole: "deliveryAgent",
+    icon: <i className="fa-solid fa-location-dot text-[13px]"></i>,
   },
   {
     name: "Chat to Customer",
@@ -184,18 +194,21 @@ const Sidebar = () => {
   const { hasRole } = useRole();
   const { user } = useAppSelector((state) => state.auth);
 
-  const { pagination, unreadCount} = useAppSelector((state) => state.shipment);
-  const {shipmentPagination} = useAppSelector((state)=>state.admin)
-  const adminAllShipmentsCount = shipmentPagination?.total
+  const { pagination, unreadCount } = useAppSelector((state) => state.shipment);
+  const { shipmentPagination } = useAppSelector((state) => state.admin);
+  const adminAllShipmentsCount = shipmentPagination?.total;
   // console.log("shipmentPagination :",shipmentPagination?.total);
-  
 
   const [isOpen, setIsOpen] = useState(false);
 
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((prev) => !prev);
 
-  const menu = getMenu(pagination?.total ?? 0, unreadCount ?? 0, adminAllShipmentsCount ?? 0);
+  const menu = getMenu(
+    pagination?.total ?? 0,
+    unreadCount ?? 0,
+    adminAllShipmentsCount ?? 0,
+  );
   const filteredMenu = menu.filter((item) => hasRole(item.allowedRole));
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

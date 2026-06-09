@@ -75,6 +75,10 @@ const initialState: AgentState = {
   loading: false,
   error: null,
   statusUpdateLoading: false,
+
+  timelineData: null,
+  timelineLoading: false,
+  timelineError: null,
 };
 
 const agentSlice = createSlice({
@@ -98,6 +102,11 @@ const agentSlice = createSlice({
 
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
+    },
+
+    clearTimeline: (state) => {
+      state.timelineData = null;
+      state.timelineError = null;
     },
   },
   extraReducers: (builder) => {
@@ -165,6 +174,6 @@ const agentSlice = createSlice({
   },
 });
 
-export const { setSearch, setPriorityFilter, setActiveTab, setCurrentPage } =
+export const { setSearch, setPriorityFilter, setActiveTab, setCurrentPage, clearTimeline } =
   agentSlice.actions;
 export default agentSlice.reducer;

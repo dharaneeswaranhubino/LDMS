@@ -64,6 +64,10 @@ export interface AgentState {
   availability: AgentAvailability;
   availabilityLoading: boolean;
   statusUpdateLoading: boolean;
+
+  timelineData: ShipmentTimelineResponse | null;
+  timelineLoading: boolean;
+  timelineError: string | null;
 }
 
 export interface DeliveriesResponse {
@@ -114,7 +118,7 @@ export interface DeliveryCheckpointsProps {
 export interface UpdateStatusModalProps {
   onClose: () => void;
   currentStatus: ShipmentStatus;
-  onUpdate: (nextStatus: ShipmentStatus) => void;  // string → ShipmentStatus
+  onUpdate: (nextStatus: ShipmentStatus) => void; // string → ShipmentStatus
   shipmentId: number;
 }
 
@@ -124,4 +128,40 @@ export interface DeliveryDetailsModalProps {
   item: DeliveryItem;
   getStatusColor: () => string;
   getPriorityColor: () => string;
+}
+
+//Time Line
+export type TimelineStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "ASSIGNED"
+  | "OUT_FOR_PICKUP"
+  | "PICKED_UP"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "COMPLETED"
+  | "DELAYED";
+
+export interface TimelineUpdatedBy {
+  id: number;
+  name: string;
+  role: "admin" | "customer" | "agent";
+}
+
+export interface TimelineEntry {
+  id: number;
+  fromStatus: TimelineStatus | null;
+  toStatus: TimelineStatus;
+  remarks: string | null;
+  updatedAt: string;
+  updatedBy: TimelineUpdatedBy;
+}
+
+export interface ShipmentTimelineResponse {
+  shipmentId: number;
+  trackingId: string;
+  currentStatus: TimelineStatus;
+  timeline: TimelineEntry[];
 }

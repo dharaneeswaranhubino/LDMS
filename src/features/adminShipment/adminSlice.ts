@@ -13,12 +13,6 @@ import {
   type DeliveryAgent,
 } from "./adminTypes";
 import { AxiosError } from "axios";
-// import type { ShipmentResponse } from "../customerShipment/shipmentTypes";
-
-// ─── Mock Generator ────────────────────────────────────────────────
-// date range based-a deterministic mock data generate பண்றோம்.
-// Same date range → same data (seed = day diff count).
-
 function getDayDiff(from: string, to: string): number {
   const a = new Date(from).getTime();
   const b = new Date(to).getTime();

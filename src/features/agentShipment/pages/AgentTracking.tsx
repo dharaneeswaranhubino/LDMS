@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-// import type { ShipmentResponse } from "../../shipmentTypes";
-import type { AllShipments } from "../adminTypes";
 import {
   useAppDispatch,
   useAppSelector,
@@ -10,25 +8,28 @@ import { isActive } from "../../customerShipment/utils/shipmentHelpers";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { GiMailbox } from "react-icons/gi";
 import TimeLineShipmentCard from "../../customerShipment/components/trackShipments/TimeLineShipmentCard";
+// import AgentTimeLineShipmentCard from "../components/agentTrackingComponents/AgentTimeLineShipmentCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchAllShipments, clearTimeline } from "../adminSlice";
+import { getMyDeliveries, clearTimeline } from "../agentSlice";
+import type { DeliveryItem } from "../agentTypes";
 
-const AdminLiveTracking = () => {
+const AgentTracking = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { allShipments, shipmentsLoading } = useAppSelector(
-    (state) => state.admin,
-  );
+  //   const { allShipments, shipmentsLoading } = useAppSelector(
+  //     (state) => state.admin,
+  //   );
+  const { deliveries, loading } = useAppSelector((state) => state.agent);
   const { shipmentId } = useParams<{ shipmentId: string }>();
 
   const selectedShipment = shipmentId
-    ? (allShipments.find((s) => s.shipmentId === Number(shipmentId)) ?? null)
+    ? (deliveries.find((s) => s.shipmentId === Number(shipmentId)) ?? null)
     : null;
   const [searchInput, setSearchInput] = useState("");
   const [searchNotFound, setSearchNotFound] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchAllShipments({ page: 1, limit: 50 }));
+    dispatch(getMyDeliveries());
   }, [dispatch]);
 
   useEffect(() => {
@@ -37,38 +38,33 @@ const AdminLiveTracking = () => {
     };
   }, [dispatch]);
 
-  const activeShipments = allShipments.filter((s) =>
-    isActive(s.shipmentStatus),
-  );
+  const activeShipments = deliveries.filter((s) => isActive(s.shipmentStatus));
 
   function handleSearch() {
     setSearchNotFound(false);
+
     const val = searchInput.trim().toUpperCase();
     if (!val) return;
-    const found = allShipments.find((s) => {
+    const found = deliveries.find((s) => {
       const trackingId = s.trackingId?.toLowerCase() ?? "";
       const packageName = s.itemName?.toLowerCase() ?? "";
-      const agentName = s.assignedAgent?.name.toLowerCase() ?? "";
 
-      return (
-        trackingId.includes(val) ||
-        packageName.includes(val) ||
-        agentName.includes(val)
-      );
+      return trackingId.includes(val) || packageName.includes(val);
     });
     if (found) {
-      navigate(`/trackShipments/${found.shipmentId}`);
+      navigate(`/agentTracking/${found.shipmentId}`);
     } else {
       setSearchNotFound(true);
-      navigate(`/trackShipments`);
+      navigate(`/agentTracking`);
     }
   }
 
-  function handleCardClick(shipment: AllShipments) {
+  function handleCardClick(shipment: DeliveryItem) {
     setSearchInput("");
-    navigate(`/liveTracking/${shipment.shipmentId}`);
+    navigate(`/agentTracking/${shipment.shipmentId}`);
     setSearchNotFound(false);
   }
+
   return (
     <>
       <div className="rounded-2xl flex flex-col h-full bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-3">
@@ -107,7 +103,7 @@ const AdminLiveTracking = () => {
                   setSearchInput(e.target.value);
                 }}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                placeholder="Search by tracking ID, package name, or agent name"
+                placeholder="Search by tracking ID, package name"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent"
               />
             </div>
@@ -123,9 +119,9 @@ const AdminLiveTracking = () => {
         <div className="rounded-2xl flex flex-1 min-h-0">
           <div
             className={`rounded-l-2xl flex flex-col bg-white
-              w-full md:w-[38%] lg:w-[40%]
-              ${shipmentId ? "hidden md:flex" : "flex"}
-            `}
+                  w-full md:w-[38%] lg:w-[40%]
+                  ${shipmentId ? "hidden md:flex" : "flex"}
+                `}
           >
             <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
@@ -136,7 +132,7 @@ const AdminLiveTracking = () => {
               </span>
             </div>
             <div className="flex-1 overflow-y-auto p-3">
-              {shipmentsLoading ? (
+              {loading ? (
                 <>
                   <div className="animate-pulse space-y-2">
                     {[1, 2, 3].map((i) => (
@@ -174,9 +170,9 @@ const AdminLiveTracking = () => {
 
           <div
             className={`flex flex-col bg-white min-h-0
-              md:rounded-r-2xl flex-1
-              ${shipmentId ? "flex w-full rounded-2xl md:w-auto md:rounded-l-none" : "hidden md:flex"}
-            `}
+                  md:rounded-r-2xl flex-1
+                  ${shipmentId ? "flex w-full rounded-2xl md:w-auto md:rounded-l-none" : "hidden md:flex"}
+                `}
           >
             {shipmentId && (
               <div className="flex items-center px-4 py-2.5 border-b border-gray-100 md:hidden">
@@ -241,4 +237,4 @@ const AdminLiveTracking = () => {
   );
 };
 
-export default AdminLiveTracking;
+export default AgentTracking;

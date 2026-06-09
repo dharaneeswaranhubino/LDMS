@@ -11,8 +11,11 @@ import TimeLineStatusBadge from "./TimeLineStatusBadge";
 import TimeLineHorizontalStepper from "./TimeLineHorizontalStepper";
 import TimelineCard from "./TimelineCard";
 import TimeLineVerticalStepper from "./TimeLineVerticalStepper";
+import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
 
 const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
+  const { user } = useAppSelector((state) => state.auth);
+
   const dispatch = useDispatch<AppDispatch>();
   const { timelineData, timelineLoading, timelineError } = useSelector(
     (state: RootState) => state.shipment,
@@ -28,12 +31,21 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
     ? [...timelineData.timeline].reverse()
     : [];
 
-  const agentName = shipment.assignedAgent
-    ? "agentName" in shipment.assignedAgent
-      ? shipment.assignedAgent.agentName
-      : shipment.assignedAgent.name
-    : "Awaiting agent";
+  // const agentName = shipment.assignedAgent
+  //   ? "agentName" in shipment.assignedAgent
+  //     ? shipment.assignedAgent.agentName
+  //     : shipment.assignedAgent.name
+  //   : "Awaiting agent";
 
+  const hasAssignedAgent = "assignedAgent" in shipment;
+
+  const agentName = hasAssignedAgent
+    ? shipment.assignedAgent
+      ? "agentName" in shipment.assignedAgent
+        ? shipment.assignedAgent.agentName
+        : shipment.assignedAgent.name
+      : "Awaiting agent"
+    : null;
   return (
     <>
       <style>{`
@@ -56,8 +68,7 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
                 {shipment.pickupCity} → {shipment.deliveryCity}
                 {/* {shipment.assignedAgent &&
                   ` · ${shipment.assignedAgent.agentName}`} */}
-                &nbsp;·&nbsp;
-                {agentName}
+                {user?.role !== "deliveryAgent" && ` · ${agentName}`}
               </p>
             </div>
             <TimeLineStatusBadge status={currentStatus} />

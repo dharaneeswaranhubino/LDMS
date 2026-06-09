@@ -311,6 +311,7 @@ export const ACTIVE_STATUSES: string[] = [
   "PICKED_UP",
   "IN_TRANSIT",
   "OUT_FOR_DELIVERY",
+  "DELIVERED",
 ];
 
 export const ORDERED_STATUSES: TimelineStatus[] = [
