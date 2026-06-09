@@ -79,7 +79,6 @@ const Register = () => {
         password: form.password,
       }),
     );
-    // alert("Login functionality is currently disabled for demonstration purposes.");
 
     if (registerUser.fulfilled.match(result)) {
       setSuccess(true);

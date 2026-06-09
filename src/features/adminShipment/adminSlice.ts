@@ -13,6 +13,7 @@ import {
   type DeliveryAgent,
 } from "./adminTypes";
 import { AxiosError } from "axios";
+
 function getDayDiff(from: string, to: string): number {
   const a = new Date(from).getTime();
   const b = new Date(to).getTime();
@@ -53,7 +54,7 @@ function generateMockDashboard(
   const failed = Math.round(totalShipments * seededRand(seed, 7) * 0.08);
   const pending = totalShipments - paid - failed;
 
-  // ── Agent Performance ──
+  //Agent Performance
   const agentNames = ["Ravi Kumar", "Meera S", "Suresh P", "Arjun K"];
   const agentPerformance = agentNames.map((name, i) => {
     const total = Math.round(5 + seededRand(seed, 10 + i) * 40);
@@ -67,7 +68,7 @@ function generateMockDashboard(
     };
   });
 
-  // ── Recent Shipments ──
+  //Recent Shipments
   const statuses = [
     "IN_TRANSIT",
     "CONFIRMED",
@@ -97,7 +98,7 @@ function generateMockDashboard(
     ).toISOString(),
   }));
 
-  // ── Complaints ──
+  //Complaints
   const complaintStatuses = ["OPEN", "OPEN", "RESOLVED"] as const;
   const complaintMsgs = [
     "Package delayed since yesterday. No update from agent at all.",
@@ -124,7 +125,7 @@ function generateMockDashboard(
     createdAt: new Date(new Date(toDate).getTime() - i * 7200000).toISOString(),
   }));
 
-  // ── Revenue by Tab ──
+  //Revenue by Tab
   // Daily — show days in range (max 7 labels)
   const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const dailyCount = Math.min(days, 7);
@@ -241,7 +242,6 @@ export const getAllAgents = createAsyncThunk<
   }
 });
 
-// Dashboard thunk — date params accept பண்றோம்
 export const fetchAdminDashboard = createAsyncThunk<
   AdminDashboardData,
   DashboardDateParams,
@@ -252,14 +252,12 @@ export const fetchAdminDashboard = createAsyncThunk<
       params: { fromDate, toDate },
     });
     const apiData = res.data.data;
-    // API ready — but revenueByTab & complaints missing, so generate mock for those
     return {
       ...apiData,
       complaints: generateMockDashboard(fromDate, toDate).complaints,
       revenueByTab: generateMockDashboard(fromDate, toDate).revenueByTab,
     } as AdminDashboardData;
   } catch (_err) {
-    // API not ready — full date-based mock
     return generateMockDashboard(fromDate, toDate);
   }
 });

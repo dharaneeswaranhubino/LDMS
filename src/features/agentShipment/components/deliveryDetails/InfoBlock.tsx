@@ -1,8 +1,4 @@
-interface InfoBlockProps {
-  label: string;
-  value: string | number | undefined;
-  success?: boolean;
-}
+import type { InfoBlockProps } from "../../agentTypes";
 
 const InfoBlock = ({ label, value, success }: InfoBlockProps) => {
   return (

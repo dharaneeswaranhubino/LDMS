@@ -50,7 +50,6 @@ const Input = ({
           `}
         />
 
-        {/* Font Awesome Eye Icon */}
         {type === "password" && (
           <button
             type="button"

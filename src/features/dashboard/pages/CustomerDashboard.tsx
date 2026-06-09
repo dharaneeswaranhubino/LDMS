@@ -32,7 +32,6 @@ import { BsGraphUpArrow } from "react-icons/bs";
 
 // Chart.register(...registerables);
 
-//  Main Dashboard
 export default function CustomerDashboard() {
   const dispatch = useAppDispatch();
   const { dashboardData, loading, error, dateRange } = useAppSelector(
@@ -47,7 +46,6 @@ export default function CustomerDashboard() {
   const handleDateApply = useCallback(
     (from: string, to: string) => {
       dispatch(setDateRange({ from, to }));
-      // setDateRange triggers dateRange change → useEffect above re-fires → new fetch
     },
     [dispatch],
   );

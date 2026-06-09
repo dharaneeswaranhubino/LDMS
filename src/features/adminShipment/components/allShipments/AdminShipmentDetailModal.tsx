@@ -47,8 +47,6 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
         className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-none"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        {/* <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white z-10"> */}
         <div className="flex items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-3 border-b border-slate-100 sticky top-0 bg-white z-10">
           <div>
             <h2 className="text-[15px] font-semibold text-slate-800">

@@ -82,7 +82,7 @@ const DeliveryCard = ({ item }: Props) => {
   const onView = () => {
     setIsView(true);
   };
-  const Separator = () => <span className="w-px h-4 bg-slate-300 shrink-0" />;
+  // const Separator = () => <span className="w-px h-4 bg-slate-300 shrink-0" />;
 
   return (
     <>

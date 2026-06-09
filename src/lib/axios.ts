@@ -84,7 +84,7 @@ api.interceptors.response.use(
                 const res = await api.post("/auth/refreshToken");
                 const newAccessToken = res.data.data.accessToken as string;
 
-                // Redux update — no localStorage!
+                // Redux update — no localStorage
                 storeRef?.dispatch({
                     type: "auth/setAccessToken",
                     payload: newAccessToken,

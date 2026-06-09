@@ -100,6 +100,11 @@ export interface ShipmentState {
   timelineData: ShipmentTimelineResponse | null;
   timelineLoading: boolean;
   timelineError: string | null;
+
+  //for complaints
+  raising: boolean;
+  raiseError: string | null;
+  lastRaisedComplaint: ComplaintResponse | null;
 }
 
 export type ShipmentStatus =
@@ -362,4 +367,54 @@ export interface ShipmentCardProps {
 
 export interface ShipmentTimelinePanelProps {
   shipment: ShipmentResponse | AllShipments | DeliveryItem;
+}
+
+
+// ComplaintTypes Types
+export type ComplaintSubject =
+  | "PACKAGE_NOT_DELIVERED"
+  | "DAMAGED_PACKAGE"
+  | "WRONG_ITEM_DELIVERED"
+  | "DELIVERY_DELAYED"
+  | "AGENT_BEHAVIOUR"
+  | "PARTIAL_DELIVERY"
+  | "LOST_PACKAGE"
+  | "PAYMENT_ISSUE"
+  | "OTHER";
+
+export type ComplaintStatus = "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+
+export interface RaiseComplaintPayload {
+  subject: ComplaintSubject;
+  description: string;
+}
+export interface ComplaintResponse {
+  complaintId: number;
+  shipmentId: number;
+  customerId: number;
+  trackingId: string;
+  subject: ComplaintSubject;
+  description: string;
+  status: ComplaintStatus;
+  createdAt: string;
+}
+
+export interface ComplaintState {
+  raising: boolean;
+  raiseError: string | null;
+  lastRaisedComplaint: ComplaintResponse | null;
+}
+
+export interface RaiseComplaintModalProps {
+  open: boolean;
+  onClose: () => void;
+  shipmentId: number;
+  trackingId: string;
+}
+
+// Subject chip metadata for UI
+export interface SubjectMeta {
+  value: ComplaintSubject;
+  label: string;
+  icon: string;
 }

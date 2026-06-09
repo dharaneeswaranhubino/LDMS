@@ -114,7 +114,6 @@ const ALL_PAYMENT_HISTORY: CustomerDashboardData["paymentHistory"] = [
     { paymentId: 9, shipmentId: 9, amount: 130, paymentStatus: "PAID", paidAt: "2026-01-14T12:00:00.000Z" },
 ];
 
-// Support chats don't filter by date — always show all (same as real API behavior)
 const ALL_SUPPORT_CHATS: CustomerDashboardData["recentSupportChats"] = [
     {
         chatId: 1,
@@ -148,9 +147,7 @@ const ALL_SUPPORT_CHATS: CustomerDashboardData["recentSupportChats"] = [
     },
 ];
 
-// ─────────────────────────────────────────
-// Helper — generate monthlyStats between from/to
-// ─────────────────────────────────────────
+//Helper generate monthlyStats between from/to
 function generateMonthlyStats(
     shipments: CustomerDashboardData["recentShipments"],
     from: Date,
@@ -177,21 +174,19 @@ function generateMonthlyStats(
     return stats;
 }
 
-// ─────────────────────────────────────────
-// Main export — call this with from/to strings
-// Returns filtered mock data, simulating real API behavior
-// ─────────────────────────────────────────
+//Main export call this with from/to strings
+//Returns filtered mock data, simulating real API behavior
 export function getMockCustomerDashboard(from: string, to: string): CustomerDashboardData {
     const fromDate = new Date(from + "T00:00:00.000Z");
     const toDate = new Date(to + "T23:59:59.999Z");
 
-    // Filter shipments within date range
+    //Filter shipments within date range
     const filteredShipments = ALL_RECENT_SHIPMENTS.filter((s) => {
         const d = new Date(s.createdAt);
         return d >= fromDate && d <= toDate;
     });
 
-    // Filter payments within date range (by paidAt if paid, else by shipment createdAt)
+    //Filter payments within date range (by paidAt if paid, else by shipment createdAt)
     const filteredPayments = ALL_PAYMENT_HISTORY.filter((p) => {
         const refDate = p.paidAt ? new Date(p.paidAt) : null;
         if (!refDate) {
@@ -204,7 +199,7 @@ export function getMockCustomerDashboard(from: string, to: string): CustomerDash
         return refDate >= fromDate && refDate <= toDate;
     });
 
-    // Derive stats from filtered shipments
+    //Derive stats from filtered shipments
     const activeShipments = filteredShipments.filter((s) => s.shipmentStatus === "IN_TRANSIT" || s.shipmentStatus === "OUT_FOR_DELIVERY" || s.shipmentStatus === "PICKED_UP" || s.shipmentStatus === "OUT_FOR_PICKUP" || s.shipmentStatus === "ASSIGNED").length;
     const deliveredShipments = filteredShipments.filter((s) => s.shipmentStatus === "DELIVERED").length;
     const pendingShipments = filteredShipments.filter((s) => s.shipmentStatus === "PENDING" || s.shipmentStatus === "CONFIRMED").length;

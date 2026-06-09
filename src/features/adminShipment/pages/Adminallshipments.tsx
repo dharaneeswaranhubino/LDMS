@@ -112,7 +112,6 @@ const AdminAllShipments = () => {
   const total = shipmentPagination?.total ?? 0;
 
   return (
-    // <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
     <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
       <AllShipmentHeader />
 

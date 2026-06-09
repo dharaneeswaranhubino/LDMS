@@ -43,7 +43,6 @@ const AdminShipmentTable = ({
 }: Props) => {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-      {/* <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none"> */}
       <div className="overflow-x-auto overflow-y-auto max-h-[420px] scrollbar-none touch-pan-x">
         <table className="w-full text-[12px]" style={{ minWidth: "900px" }}>
           <thead className="bg-slate-50 border-b border-slate-200 sticky top-0">

@@ -1,14 +1,5 @@
-interface Delivery {
-  trackingId: string;
-  receiverName: string;
-  deliveryAddress: string;
-  deliveryCity: string;
-  assignedSlotStart: string;
-  assignedSlotEnd: string;
-}
-interface DeliveryDetailHeaderProps {
-  data?: Delivery;
-}
+import type { DeliveryDetailHeaderProps } from "../../agentTypes";
+
 const DeliveryDetailHeader = ({ data }: DeliveryDetailHeaderProps) => {
   return (
     <>

@@ -10,6 +10,8 @@ import type {
     CustomerDashboardData,
     FetchNotificationsResponse,
     ShipmentTimelineResponse,
+    ComplaintResponse,
+    RaiseComplaintPayload,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -24,7 +26,6 @@ export const createShipment = createAsyncThunk<
     async (data: CreateShipmentPayload, { rejectWithValue }) => {
         try {
             const payload = mapToBackendPayload(data);
-            // console.log(payload);
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
@@ -242,6 +243,25 @@ export const fetchShipmentTimeline = createAsyncThunk<
     }
 );
 
+export const raiseComplaint = createAsyncThunk<
+    ComplaintResponse,
+    { shipmentId: number; payload: RaiseComplaintPayload },
+    { rejectValue: string }
+>(
+    "complaint/raiseComplaint",
+    async ({ shipmentId, payload }, { rejectWithValue }) => {
+        try {
+            const res = await api.post(`/complaints/${shipmentId}`, payload);
+            return res.data.data as ComplaintResponse;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to raise complaint"
+            );
+        }
+    }
+);
+
 
 //initial States
 const today = new Date().toISOString().split("T")[0];
@@ -270,6 +290,11 @@ const initialState: ShipmentState = {
     timelineData: null,
     timelineLoading: false,
     timelineError: null,
+
+    //for complaints
+    raising: false,
+    raiseError: null,
+    lastRaisedComplaint: null,
 };
 
 const shipmentSlice = createSlice({
@@ -290,6 +315,13 @@ const shipmentSlice = createSlice({
         clearTimeline: (state) => {
             state.timelineData = null;
             state.timelineError = null;
+        },
+
+        clearComplaintError: (state) => {
+            state.raiseError = null;
+        },
+        clearLastComplaint: (state) => {
+            state.lastRaisedComplaint = null;
         },
     },
     extraReducers: (builder) => {
@@ -390,6 +422,7 @@ const shipmentSlice = createSlice({
                 state.notificationError = action.payload || "Failed to mark as read";
             })
 
+            //Fetch shipments Timeline
             .addCase(fetchShipmentTimeline.pending, (state) => {
                 state.timelineLoading = true;
                 state.timelineError = null;
@@ -401,9 +434,23 @@ const shipmentSlice = createSlice({
             .addCase(fetchShipmentTimeline.rejected, (state, action) => {
                 state.timelineLoading = false;
                 state.timelineError = action.payload || "Failed to fetch timeline";
+            })
+
+            //Raise Complaint for Customer
+            .addCase(raiseComplaint.pending, (state) => {
+                state.raising = true;
+                state.raiseError = null;
+            })
+            .addCase(raiseComplaint.fulfilled, (state, action) => {
+                state.raising = false;
+                state.lastRaisedComplaint = action.payload;
+            })
+            .addCase(raiseComplaint.rejected, (state, action) => {
+                state.raising = false;
+                state.raiseError = action.payload || "Failed to raise complaint";
             });
     },
 });
 
-export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

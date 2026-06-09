@@ -106,7 +106,6 @@ const TrackShipmentPage = () => {
                   setSearchInput(e.target.value);
                 }}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                // placeholder="Enter tracking ID (e.g. TRK-ABC123)"
                 placeholder="Search by tracking ID, package name, or agent name"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent"
               />

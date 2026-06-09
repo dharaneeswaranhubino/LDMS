@@ -1,7 +1,4 @@
-interface DetailRowProps {
-  label: string;
-  value: string;
-}
+import type { DetailRowProps } from "../../agentTypes";
 
 const DetailRow = ({ label, value }: DetailRowProps) => {
   return (

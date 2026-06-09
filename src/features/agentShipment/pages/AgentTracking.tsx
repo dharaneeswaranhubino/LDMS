@@ -8,7 +8,6 @@ import { isActive } from "../../customerShipment/utils/shipmentHelpers";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { GiMailbox } from "react-icons/gi";
 import TimeLineShipmentCard from "../../customerShipment/components/trackShipments/TimeLineShipmentCard";
-// import AgentTimeLineShipmentCard from "../components/agentTrackingComponents/AgentTimeLineShipmentCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMyDeliveries, clearTimeline } from "../agentSlice";
 import type { DeliveryItem } from "../agentTypes";
@@ -16,9 +15,6 @@ import type { DeliveryItem } from "../agentTypes";
 const AgentTracking = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  //   const { allShipments, shipmentsLoading } = useAppSelector(
-  //     (state) => state.admin,
-  //   );
   const { deliveries, loading } = useAppSelector((state) => state.agent);
   const { shipmentId } = useParams<{ shipmentId: string }>();
 

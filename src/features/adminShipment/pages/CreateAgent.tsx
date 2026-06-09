@@ -56,7 +56,6 @@ const CreateAgent = () => {
     }
 
     setErrors({});
-    // console.log("agentForm :", agentForm);
     dispatch(
       createAgentDetails({
         name: agentForm.name,

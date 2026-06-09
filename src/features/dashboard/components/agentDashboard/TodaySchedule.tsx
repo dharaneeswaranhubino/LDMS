@@ -26,8 +26,6 @@ const TodaySchedule = ({
       <div className="divide-y divide-slate-100 max-h-[420px] overflow-y-auto scrollbar-none">
         {ALL_SLOTS.map((slot) => {
           const shipment = slotMap[slot.start];
-
-          // Free slot
           if (!shipment)
             return (
               <div key={slot.start} className="flex items-center gap-0">

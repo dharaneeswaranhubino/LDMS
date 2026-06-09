@@ -7,7 +7,6 @@ import {
 import { fetchMyShipments } from "../shipmentSlice";
 import type { FilterTab, ShipmentResponse, SortKey } from "../shipmentTypes";
 import { FILTER_TABS, matchesSearch } from "../utils/shipmentHelpers";
-// import ShipmentLoading from "../components/myShipmentComponents/ShipmentLoading";
 import ShipmentError from "../components/myShipmentComponents/ShipmentError";
 import ShipmentDetailsModal from "../components/myShipmentComponents/ShipmentDetailsModal";
 import ShipmentCard from "../components/myShipmentComponents/ShipmentCard";
@@ -25,7 +24,6 @@ const MyShipments = () => {
   const { shipments, loading, error, pagination } = useAppSelector(
     (state) => state.shipment,
   );
-  // console.log(shipments);
 
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
@@ -107,9 +105,6 @@ const MyShipments = () => {
     setSelectedShipment(shipment);
     setOpenModal(true);
   };
-  // if (loading && (shipments ?? []).length === 0) {
-  //   return <ShipmentLoading />;
-  // }
   if (loading && (shipments ?? []).length === 0) {
     return (
       <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">

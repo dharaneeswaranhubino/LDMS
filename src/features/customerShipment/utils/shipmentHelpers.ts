@@ -21,6 +21,7 @@ import type {
   NotificationType,
   FilterType,
   TimelineStatus,
+  SubjectMeta,
 } from "../shipmentTypes";
 
 export const STATUS_STYLES: Record<ShipmentStatus, string> = {
@@ -63,27 +64,27 @@ export const FILTER_TABS: {
   key: FilterTab;
   label: string;
 }[] = [
-  { key: "ALL", label: "All" },
-  { key: "PENDING", label: "Pending" },
-  { key: "ASSIGNED", label: "Assigned" },
-  { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
-  { key: "CONFIRMED", label: "Confirmed" },
-  { key: "PICKED_UP", label: "Picked up" },
-  { key: "IN_TRANSIT", label: "In transit" },
-  { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
-  { key: "DELIVERED", label: "Delivered" },
-  { key: "CANCELLED", label: "Cancelled" },
-];
+    { key: "ALL", label: "All" },
+    { key: "PENDING", label: "Pending" },
+    { key: "ASSIGNED", label: "Assigned" },
+    { key: "OUT_FOR_PICKUP", label: "Out for Pickup" },
+    { key: "CONFIRMED", label: "Confirmed" },
+    { key: "PICKED_UP", label: "Picked up" },
+    { key: "IN_TRANSIT", label: "In transit" },
+    { key: "OUT_FOR_DELIVERY", label: "Out for delivery" },
+    { key: "DELIVERED", label: "Delivered" },
+    { key: "CANCELLED", label: "Cancelled" },
+  ];
 
 export const SORT_OPTIONS: {
   value: SortKey;
   label: string;
 }[] = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "amount_high", label: "Amount: high → low" },
-  { value: "amount_low", label: "Amount: low → high" },
-];
+    { value: "newest", label: "Newest first" },
+    { value: "oldest", label: "Oldest first" },
+    { value: "amount_high", label: "Amount: high → low" },
+    { value: "amount_low", label: "Amount: low → high" },
+  ];
 
 export const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -157,7 +158,6 @@ let razorpayFrame: HTMLIFrameElement | null = null;
 
 export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    // Already loaded
     if (window.Razorpay) {
       resolve(true);
       return;
@@ -199,7 +199,6 @@ export const FRAGILE_CHARGE = 50;
 export const GST_RATE = 0.18;
 
 //Notifications helper functions and datas
-
 export const typeConfig: Record<
   NotificationType,
   { icon: string; bgColor: string; textColor: string; label: string }
@@ -479,3 +478,16 @@ export const getRelativeTime = (dateStr: string): string => {
   const diffDays = Math.floor(diffHrs / 24);
   return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
 }
+
+//Complaint Meta Data
+export const SUBJECT_META: SubjectMeta[] = [
+  { value: "PACKAGE_NOT_DELIVERED", label: "Not delivered", icon: "fa-box-open" },
+  { value: "DAMAGED_PACKAGE", label: "Damaged package", icon: "fa-box-archive" },
+  { value: "WRONG_ITEM_DELIVERED", label: "Wrong item", icon: "fa-right-left" },
+  { value: "DELIVERY_DELAYED", label: "Delivery delayed", icon: "fa-clock" },
+  { value: "AGENT_BEHAVIOUR", label: "Agent behaviour", icon: "fa-user-slash" },
+  { value: "PARTIAL_DELIVERY", label: "Partial delivery", icon: "fa-boxes-stacked" },
+  { value: "LOST_PACKAGE", label: "Lost package", icon: "fa-magnifying-glass" },
+  { value: "PAYMENT_ISSUE", label: "Payment issue", icon: "fa-credit-card" },
+  { value: "OTHER", label: "Other", icon: "fa-circle-question" },
+];

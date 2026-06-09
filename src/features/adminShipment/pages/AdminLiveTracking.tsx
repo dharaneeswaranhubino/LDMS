@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import type { ShipmentResponse } from "../../shipmentTypes";
 import type { AllShipments } from "../adminTypes";
 import {
   useAppDispatch,

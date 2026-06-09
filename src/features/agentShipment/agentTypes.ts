@@ -114,7 +114,7 @@ export interface DeliveryCheckpointsProps {
   onDelivered: () => void;
 }
 
-// agentTypes.ts
+//UpdateStatus Modal Props
 export interface UpdateStatusModalProps {
   onClose: () => void;
   currentStatus: ShipmentStatus;
@@ -128,6 +128,46 @@ export interface DeliveryDetailsModalProps {
   item: DeliveryItem;
   getStatusColor: () => string;
   getPriorityColor: () => string;
+}
+
+interface Delivery {
+  trackingId: string;
+  receiverName: string;
+  deliveryAddress: string;
+  deliveryCity: string;
+  assignedSlotStart: string;
+  assignedSlotEnd: string;
+}
+export interface DeliveryDetailHeaderProps {
+  data?: Delivery;
+}
+
+export interface DetailRowProps {
+  label: string;
+  value: string;
+}
+
+export interface InfoBlockProps {
+  label: string;
+  value: string | number | undefined;
+  success?: boolean;
+}
+
+export interface ProofOfDeliveryProps {
+  currentStatus: string;
+  otpVerified: boolean;
+  setOtpVerified: (value: boolean) => void;
+}
+
+interface receiverDetails {
+  receiverName: string;
+  receiverPhone: string;
+  deliveryAddress: string;
+  deliveryCity: string;
+  deliveryPincode: string;
+}
+export interface ReceiverDetailCard {
+  data: receiverDetails;
 }
 
 //Time Line

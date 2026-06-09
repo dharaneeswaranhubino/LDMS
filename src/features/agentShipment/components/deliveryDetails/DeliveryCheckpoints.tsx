@@ -23,7 +23,6 @@ const DeliveryCheckpoints = ({
   const displayStatus =
     animatingIndex !== null ? currentStatus : data.shipmentStatus;
 
-  // const currentIndex = statusOrder.indexOf(currentStatus);
   const currentIndex = statusOrder.indexOf(displayStatus);
   const handleUpdate = async (nextStatus: ShipmentStatus) => {
     let animationRef: ReturnType<typeof setInterval> | undefined;

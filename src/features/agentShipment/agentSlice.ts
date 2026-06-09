@@ -15,7 +15,6 @@ export const getMyDeliveries = createAsyncThunk<
 >("agent/getMyDeliveries", async (_, { rejectWithValue }) => {
   try {
     const res = await api.get("shipments/myDeliveries");
-    // console.log(res.data.data);
     return res.data.data;
   } catch (err: unknown) {
     const error = err as AxiosError<{ message: string }>;
@@ -130,12 +129,6 @@ const agentSlice = createSlice({
         state.statusUpdateLoading = true;
         state.error = null;
       })
-      // .addCase(updateTrackStatus.fulfilled, (state, action) => {
-      //   state.loading = false;
-      //   state.statusState = action.payload;
-      //   state.error = null;
-      //   console.log(state.statusState);
-      // })
       .addCase(updateTrackStatus.fulfilled, (state, action) => {
         state.statusUpdateLoading = false;
         state.statusState = action.payload;

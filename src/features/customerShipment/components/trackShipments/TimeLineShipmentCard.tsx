@@ -1,6 +1,7 @@
 import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
 import type { ShipmentCardProps } from "../../shipmentTypes";
 import { STATUS_STYLE } from "../../utils/shipmentHelpers";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const TimeLineShipmentCard = ({
   shipment,
@@ -74,7 +75,9 @@ const TimeLineShipmentCard = ({
             />
           </svg>
           <span className="truncate">{shipment.pickupCity}</span>
-          <span className="text-gray-300">→</span>
+          <span className="text-gray-300">
+            <FaArrowRightLong />
+          </span>
           <span className="truncate">{shipment.deliveryCity}</span>
         </div>
 

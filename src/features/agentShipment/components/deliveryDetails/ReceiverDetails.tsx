@@ -1,14 +1,5 @@
+import type { ReceiverDetailCard } from "../../agentTypes";
 import DetailRow from "./DetailRow";
-interface receiverDetails {
-  receiverName: string;
-  receiverPhone: string;
-  deliveryAddress: string;
-  deliveryCity: string;
-  deliveryPincode: string;
-}
-interface ReceiverDetailCard {
-  data: receiverDetails;
-}
 
 const ReceiverDetails = ({ data }: ReceiverDetailCard) => {
   const getInitials = (name: string) => {

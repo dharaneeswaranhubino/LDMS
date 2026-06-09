@@ -1,12 +1,7 @@
 import { useState } from "react";
 import delivery_proof from "../../../../assets/delivery_box.jfif";
 import { showToast } from "../../../../shared/components/Toast";
-
-interface ProofOfDeliveryProps {
-  currentStatus: string;
-  otpVerified: boolean;
-  setOtpVerified: (value: boolean) => void;
-}
+import type { ProofOfDeliveryProps } from "../../agentTypes";
 
 const ProofOfDelivery = ({
   currentStatus,

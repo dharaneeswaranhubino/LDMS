@@ -182,36 +182,6 @@ const PriceBreakdown = ({
     );
   }
 
-  // if (paymentStatus === "success") {
-  //   return (
-  //     <div className="bg-white border border-slate-200 rounded-2xl p-8 mt-4 flex flex-col items-center gap-4 shadow-sm">
-  //       <div className="text-green-500 text-5xl">
-  //         <i className="fa-solid fa-circle-check"></i>
-  //       </div>
-
-  //       <p className="text-xl font-bold text-green-600">Payment Successful!</p>
-
-  //       <p className="text-slate-500 text-sm">
-  //         Payment ID: {razorpayPaymentId}
-  //       </p>
-
-  //       <p className="text-slate-600 text-center text-[14px]">
-  //         Your shipment has been created successfully. Admin will assign a
-  //         delivery slot shortly.
-  //       </p>
-
-  //       <button
-  //         type="button"
-  //         onClick={onReset}
-  //         className="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg transition-all"
-  //       >
-  //         <i className="fa-solid fa-plus mr-2"></i>
-  //         Create New Shipment
-  //       </button>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm">
       <form>

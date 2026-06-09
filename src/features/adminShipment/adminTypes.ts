@@ -77,8 +77,7 @@ export interface AgentDetailsModalProps {
   selectedAgent: DeliveryAgent;
 }
 
-// ─── Dashboard Types ───────────────────────────────────────────────
-
+//Dashboard Types
 export interface PaymentSummary {
   paid: number;
   pending: number;
@@ -135,8 +134,7 @@ export interface AdminDashboardData {
   revenueByTab: Record<RevenueTab, RevenueDataPoint[]>;
 }
 
-// ─── Date Range Params ─────────────────────────────────────────────
-
+//Date Range Params
 export interface DashboardDateParams {
   fromDate: string; // "YYYY-MM-DD"
   toDate: string; // "YYYY-MM-DD"

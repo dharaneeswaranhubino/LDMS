@@ -19,47 +19,6 @@ export const DELIVERY_STATUS = {
   DELIVERED: "DELIVERED",
 };
 
-// export const deliveryMock: {
-//   shipmentId: number;
-//   trackingId: string;
-//   timeline: { key: ShipmentStatus; label: string; description: string }[];
-// } = {
-//   shipmentId: 1,
-//   trackingId: "TRK-001-XYZ",
-
-//   timeline: [
-//     {
-//       key: DELIVERY_STATUS.ASSIGNED,
-//       label: "Assigned",
-//       description: "Delivery assigned to agent",
-//     },
-//     {
-//       key: DELIVERY_STATUS.OUT_FOR_PICKUP,
-//       label: "Out for Pickup",
-//       description: "Agent is heading to pickup location",
-//     },
-//     {
-//       key: DELIVERY_STATUS.PICKED_UP,
-//       label: "Picked Up",
-//       description: "Package collected from sender",
-//     },
-//     {
-//       key: DELIVERY_STATUS.IN_TRANSIT,
-//       label: "In Transit",
-//       description: "Package is on the way",
-//     },
-//     {
-//       key: DELIVERY_STATUS.OUT_FOR_DELIVERY,
-//       label: "Out for Delivery",
-//       description: "Last mile delivery started",
-//     },
-//     {
-//       key: DELIVERY_STATUS.DELIVERED,
-//       label: "Delivered",
-//       description: "Package delivered successfully",
-//     },
-//   ],
-// };
 export const deliveryMock: {
   shipmentId: number;
   trackingId: string;

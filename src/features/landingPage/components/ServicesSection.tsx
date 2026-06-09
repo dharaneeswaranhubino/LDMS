@@ -207,7 +207,6 @@ const ServicesSection = () => {
                 ))}
               </div>
 
-              {/* CTA */}
               <div className="mt-10 flex justify-end">
                 <button
                   onClick={() => setSelectedService(null)}

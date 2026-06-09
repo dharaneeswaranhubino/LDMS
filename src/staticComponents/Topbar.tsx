@@ -30,7 +30,7 @@ const Topbar = () => {
   };
   const dashboardRoute = roleDashboardMap[user?.role as string] || "/";
 
-  // fetch on mount — customer only
+  // fetch on mount customer only
   useEffect(() => {
     if (isCustomer) {
       dispatch(fetchNotifications({ page: 1, limit: 5 }));
@@ -64,7 +64,7 @@ const Topbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-18 px-6 flex items-center justify-between border-b border-white/20 bg-gradient-to-r from-slate-50 via-blue-50 to-cyan-50 backdrop-blur-xl shadow-lg">
-      {/* ── Logo ── */}
+      {/*Logo*/}
       <div className="flex items-center gap-10">
         <Link to={dashboardRoute} className="flex items-center gap-4 group">
           <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-200 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
