@@ -41,9 +41,8 @@ const DeliveryDetail = () => {
     );
   const currentDate = new Date().toISOString().split("T")[0];
   const today = assignedDeliveries[0]?.assignedDate === currentDate
-  // console.log("assignedDeliveries :", assignedDeliveries[0]?.assignedDate === currentDate);
-
-  const data = (activeDelivery && today) || (assignedDeliveries[0] && today);
+  
+  const data = activeDelivery || (today ? assignedDeliveries[0] : undefined);
 
   const handleDelivered = () => {
     setSwitchingShipment(true);
