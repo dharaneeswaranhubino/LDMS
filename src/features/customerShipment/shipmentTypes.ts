@@ -71,6 +71,17 @@ export interface ShipmentResponse {
   assignedAgent: AssignedAgent | null;
   createdAt: string;
   updatedAt: string;
+  priceBreakdown: PriceBreakdown | null;
+}
+
+export interface PriceBreakdown {
+  platformFee: number;
+  weightCharge: number;
+  priorityCharge: number;
+  fragileCharge: number;
+  subtotal: number;
+  gst: number;
+  total: number;
 }
 
 export interface Pagination {
@@ -212,18 +223,30 @@ export interface ShipmentAddressProps {
 
 //PackageDetails.tsx
 export interface PackageDetailsProps {
-  nextStep: () => void;
+  // nextStep: () => void;
+  // prevStep: () => void;
+  // packageDetails: PackageDetailsFormData;
+  // setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
+  onNext: () => Promise<void>;   // ← was "nextStep: () => void"
   prevStep: () => void;
+  isCreating: boolean;           // ← new: for loading spinner on Next button
   packageDetails: PackageDetailsFormData;
   setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
 }
 
 //PriceBreakdownProps
 export interface PriceBreakdownProps {
+  // prevStep: () => void;
+  // packageDetails: PackageDetailsFormData;
+  // pickUpAddress: Address;
+  // deliveryAddress: Address;
+  // onReset: () => void;
   prevStep: () => void;
-  packageDetails: PackageDetailsFormData;
-  pickUpAddress: Address;
-  deliveryAddress: Address;
+  shipmentId: number;
+  trackingId: string;
+  priceBreakdown: PriceBreakdown;
+  packageWeight: number;         // for display "54kg × ₹20"
+  priority: PriorityType;        // for display "EXPRESS"
   onReset: () => void;
 }
 

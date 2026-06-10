@@ -28,19 +28,19 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
   const currentStatus = (timelineData?.currentStatus ??
     shipment.shipmentStatus) as TimelineStatus;
 
-  const getDisplayStatus = (): TimelineStatus => {
-    if (currentStatus !== "DELAYED") return currentStatus;
+  // const getDisplayStatus = (): TimelineStatus => {
+  //   if (currentStatus !== "DELAYED") return currentStatus;
 
-    const delayedEntry = timelineData?.timeline
-      .slice()
-      .reverse()
-      .find((e) => e.toStatus === "DELAYED");
+  //   const delayedEntry = timelineData?.timeline
+  //     .slice()
+  //     .reverse()
+  //     .find((e) => e.toStatus === "DELAYED");
 
-    if (delayedEntry?.fromStatus) {
-      return delayedEntry.fromStatus as TimelineStatus;
-    }
-    return "IN_TRANSIT";
-  };
+  //   if (delayedEntry?.fromStatus) {
+  //     return delayedEntry.fromStatus as TimelineStatus;
+  //   }
+  //   return "IN_TRANSIT";
+  // };
 
   // const displayStatus = getDisplayStatus();
 

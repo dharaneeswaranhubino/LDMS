@@ -230,4 +230,3 @@ const TimeLineHorizontalStepper = ({
 };
 
 export default TimeLineHorizontalStepper;
-0

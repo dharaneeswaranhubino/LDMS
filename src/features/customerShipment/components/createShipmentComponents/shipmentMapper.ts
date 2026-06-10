@@ -36,6 +36,6 @@ export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
     shipmentPriority: data.packageDetails.priority,
 
     // Payment
-    amount: data.amount,
+    // amount: data.amount,
     // paymentId: data.paymentId,
 });
