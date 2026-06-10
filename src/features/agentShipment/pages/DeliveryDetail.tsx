@@ -39,8 +39,11 @@ const DeliveryDetail = () => {
       (a, b) =>
         new Date(a.assignedDate).getTime() - new Date(b.assignedDate).getTime(),
     );
+  const currentDate = new Date().toISOString().split("T")[0];
+  const today = assignedDeliveries[0]?.assignedDate === currentDate
+  // console.log("assignedDeliveries :", assignedDeliveries[0]?.assignedDate === currentDate);
 
-  const data = activeDelivery || assignedDeliveries[0];
+  const data = (activeDelivery && today) || (assignedDeliveries[0] && today);
 
   const handleDelivered = () => {
     setSwitchingShipment(true);
@@ -64,8 +67,12 @@ const DeliveryDetail = () => {
               </div>
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold text-slate-700">Loading next delivery</p>
-              <p className="text-xs text-slate-400 mt-1">Fetching your next assignment...</p>
+              <p className="text-sm font-semibold text-slate-700">
+                Loading next delivery
+              </p>
+              <p className="text-xs text-slate-400 mt-1">
+                Fetching your next assignment...
+              </p>
             </div>
           </div>
         </div>
@@ -108,7 +115,7 @@ const DeliveryDetail = () => {
           <DeliveryCheckpoints
             data={data}
             otpVerified={otpVerified}
-            onDelivered={handleDelivered} 
+            onDelivered={handleDelivered}
           />
           <ProofOfDelivery
             currentStatus={data.shipmentStatus}
