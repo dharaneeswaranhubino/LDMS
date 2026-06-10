@@ -3,8 +3,6 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
 import LoadingSpinner from "../shared/components/LoadingSpinner";
-import AgentTracking from "../features/agentShipment/pages/AgentTracking";
-import AdminComplaints from "../features/adminShipment/pages/AdminComplaints";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -60,6 +58,18 @@ const PaymentSuccessScreen = lazy(
     import("../features/customerShipment/components/createShipmentComponents/PaymentSuccessScreen"),
 );
 
+const AgentTracking = lazy(
+  () => import("../features/agentShipment/pages/AgentTracking"),
+);
+
+const AdminComplaints = lazy(
+  () => import("../features/adminShipment/pages/AdminComplaints"),
+);
+
+const MyComplaints = lazy(
+  () => import("../features/customerShipment/pages/MyComplaints"),
+);
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -90,27 +100,37 @@ const AppRoutes = () => {
             <Route path="/sendShipment" element={<CreateShipment />} />
             <Route path="/myShipments" element={<MyShipments />} />
             <Route path="/trackShipments" element={<TrackShipment />} />
-            <Route path="/trackShipments/:shipmentId" element={<TrackShipment />}/>
+            <Route
+              path="/trackShipments/:shipmentId"
+              element={<TrackShipment />}
+            />
             <Route
               path="/customerNotifications"
               element={<CustomerNotifications />}
             />
             <Route path="/paymentSuccess" element={<PaymentSuccessScreen />} />
+            <Route path="/myComplaints" element={<MyComplaints />} />
             {/* admin screens */}
             <Route path="/agentRegisteration" element={<CreateAgent />} />
             <Route path="/agentManagement" element={<AgentManagement />} />
             <Route path="/allShipment" element={<AdminAllShipments />} />
             <Route path="/liveTracking" element={<AdminLiveTracking />} />
-            <Route path="/liveTracking/:shipmentId" element={<AdminLiveTracking />} />
-            <Route path="/adminComplaints" element={<AdminComplaints/>} />
+            <Route
+              path="/liveTracking/:shipmentId"
+              element={<AdminLiveTracking />}
+            />
+            <Route path="/adminComplaints" element={<AdminComplaints />} />
             {/* <Route path="/liveTracking" element={<TrackShipment />} /> */}
             {/* agent screens */}
             <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/deliveryDetail" element={<DeliveryDetail />} />
             <Route path="/deliveryHistory" element={<DeliveryHistory />} />
             <Route path="/payments/" element={<PaymentDetails />} />
-            <Route path="/agentTracking/" element={<AgentTracking/>} />
-            <Route path="/agentTracking/:shipmentId" element={<AgentTracking/>} />
+            <Route path="/agentTracking/" element={<AgentTracking />} />
+            <Route
+              path="/agentTracking/:shipmentId"
+              element={<AgentTracking />}
+            />
             {/* <Route path="/payments/:shipmentId" element={<PaymentDetails />} /> */}
           </Route>
         </Routes>

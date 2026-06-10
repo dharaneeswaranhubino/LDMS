@@ -14,6 +14,7 @@ import {
   raiseComplaint,
 } from "../../shipmentSlice";
 import { SUBJECT_META } from "../../utils/shipmentHelpers";
+import { showToast } from "../../../../shared/components/Toast";
 
 const MIN_DESC_LENGTH = 20;
 
@@ -81,6 +82,10 @@ const RaiseComplaintModal = ({
         },
       }),
     );
+    showToast({
+      type: "success",
+      message: "Complaint raised Successfully",
+    });
   };
 
   return (
@@ -92,7 +97,7 @@ const RaiseComplaintModal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm px-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose();
           }}
@@ -103,10 +108,10 @@ const RaiseComplaintModal = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="bg-white rounded-2xl shadow-xl w-full max-w-[520px] overflow-hidden"
+            className="bg-white rounded-2xl shadow-xl w-full max-w-[520px] max-h-[85vh] scrollbar-none overflow-auto"
           >
             {/* Header */}
-            <div className="flex items-start justify-between gap-3 px-6 py-4 border-b border-slate-100">
+            <div className="flex items-start justify-between gap-3 px-6 py-3 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
                   <i className="fa-solid fa-triangle-exclamation text-red-600 text-[15px]" />
@@ -146,10 +151,10 @@ const RaiseComplaintModal = ({
                 </p>
               </motion.div>
             ) : (
-              <div className="px-6 py-5 flex flex-col gap-5">
+              <div className="px-5 py-3 flex flex-col gap-3">
                 {/* Subject chips */}
                 <div>
-                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
                     Issue type <span className="text-red-400">*</span>
                   </p>
                   <div className="grid grid-cols-2 gap-2">
@@ -159,7 +164,7 @@ const RaiseComplaintModal = ({
                         <button
                           key={s.value}
                           onClick={() => setSelectedSubject(s.value)}
-                          className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-[12px] font-medium transition-all text-left ${
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-[12px] font-medium transition-all text-left ${
                             isSelected
                               ? "border-red-300 bg-red-50 text-red-700"
                               : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white"
@@ -179,11 +184,11 @@ const RaiseComplaintModal = ({
 
                 {/* Description */}
                 <div>
-                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
                     Description <span className="text-red-400">*</span>
                   </p>
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Describe your issue clearly — include dates, times, or what you expected to happen..."
@@ -217,7 +222,7 @@ const RaiseComplaintModal = ({
 
             {/* Footer */}
             {!showSuccess && (
-              <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-slate-100">
+              <div className="flex items-center justify-between gap-3 px-6 py-3 border-t border-slate-100">
                 <p className="text-[11px] text-slate-400 leading-relaxed">
                   Our team reviews complaints within 24 hours.
                 </p>

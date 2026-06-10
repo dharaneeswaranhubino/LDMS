@@ -34,6 +34,7 @@ export const STATUS_STYLES: Record<ShipmentStatus, string> = {
   OUT_FOR_DELIVERY: "bg-violet-100 text-violet-700 border-violet-200",
   DELIVERED: "bg-green-100 text-green-700 border-green-200",
   CANCELLED: "bg-red-100 text-red-700 border-red-200",
+  DELAYED: "bg-red-100 text-red-700 border-red-200",
 };
 
 export const STATUS_LABEL: Record<ShipmentStatus, string> = {
@@ -46,6 +47,7 @@ export const STATUS_LABEL: Record<ShipmentStatus, string> = {
   OUT_FOR_DELIVERY: "Out for delivery",
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
+  DELAYED: "Delayed",
 };
 
 export const PRIORITY_STYLES: Record<PriorityType, string> = {
@@ -301,6 +303,7 @@ export const STATUS_STYLE: Record<
   DELIVERED: { bg: "bg-green-50", text: "text-green-800", label: "Delivered" },
   COMPLETED: { bg: "bg-green-50", text: "text-green-800", label: "Completed" },
   CANCELLED: { bg: "bg-red-50", text: "text-red-800", label: "Cancelled" },
+  DELAYED: { bg: "bg-red-50", text: "text-red-800", label: "Delayed" },
 };
 
 export const ACTIVE_STATUSES: string[] = [
@@ -311,6 +314,8 @@ export const ACTIVE_STATUSES: string[] = [
   "IN_TRANSIT",
   "OUT_FOR_DELIVERY",
   "DELIVERED",
+  "DELAYED",
+  "CANCELLED",
 ];
 
 export const ORDERED_STATUSES: TimelineStatus[] = [
@@ -322,6 +327,7 @@ export const ORDERED_STATUSES: TimelineStatus[] = [
   "IN_TRANSIT",
   "OUT_FOR_DELIVERY",
   "DELIVERED",
+  // "DELAYED",
   "COMPLETED",
 ];
 

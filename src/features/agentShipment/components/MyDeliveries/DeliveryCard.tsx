@@ -8,16 +8,16 @@ import { PiUsersFill } from "react-icons/pi";
 import { useState } from "react";
 import DeliveryDetailsModal from "./DeliveryDetailsModal";
 import { TbMinusVertical } from "react-icons/tb";
-import { formatTime } from "../../utils/statusHelpers";
+import { formatTime, formatDate } from "../../utils/statusHelpers";
 
 interface Props {
   item: DeliveryItem;
 }
 const DeliveryCard = ({ item }: Props) => {
   const [isView, setIsView] = useState<boolean>(false);
-  
-    const deliveryFrom = formatTime(item.assignedSlotStart ?? null);
-    const deliveryTo = formatTime(item.assignedSlotEnd ?? null);
+
+  const deliveryFrom = formatTime(item.assignedSlotStart ?? null);
+  const deliveryTo = formatTime(item.assignedSlotEnd ?? null);
 
   const getPriorityColor = () => {
     switch (item.shipmentPriority) {
@@ -166,8 +166,13 @@ const DeliveryCard = ({ item }: Props) => {
                   <div className="flex items-center gap-2">
                     <FaClock className="text-slate-400" />
                     <span>
-                      {deliveryFrom} -{" "}
-                      {deliveryTo}
+                      {deliveryFrom} - {deliveryTo}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FaClock className="text-slate-400" />
+                    <span>
+                      PickUp date : {formatDate(item.assignedDate ?? "")}
                     </span>
                   </div>
                 </div>

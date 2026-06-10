@@ -1,11 +1,26 @@
 import type { TimelineStatus } from "../../shipmentTypes";
-import { getProgressPercent, ORDERED_STATUSES, STATUS_META } from "../../utils/shipmentHelpers";
+import {
+  getProgressPercent,
+  ORDERED_STATUSES,
+  STATUS_META,
+} from "../../utils/shipmentHelpers";
 import { FaExclamation } from "react-icons/fa6";
 
-const TimeLineHorizontalStepper = ({currentStatus}: {currentStatus: TimelineStatus;}) => {
+const TimeLineHorizontalStepper = ({
+  currentStatus,
+}: {
+  currentStatus: TimelineStatus;
+}) => {
   const isCancelled = currentStatus === "CANCELLED";
   const isDelayed = currentStatus === "DELAYED";
-  const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
+  const displayStatus: TimelineStatus = isDelayed
+    ? "IN_TRANSIT"
+    : isCancelled
+      ? "PENDING"
+      : currentStatus;
+
+  const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
+  // const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
   const pct = getProgressPercent(currentStatus);
 
   function getDotStyle(status: TimelineStatus, idx: number) {
@@ -18,6 +33,9 @@ const TimeLineHorizontalStepper = ({currentStatus}: {currentStatus: TimelineStat
     if (isCurrent) return "current";
     return "pending";
   }
+
+  const progressWidth =
+    curIdx === 0 ? 0 : (curIdx / (ORDERED_STATUSES.length - 1)) * 100;
   return (
     <>
       <div className="px-4 pt-3 pb-4 border-b border-gray-100 flex-shrink-0">
@@ -27,17 +45,19 @@ const TimeLineHorizontalStepper = ({currentStatus}: {currentStatus: TimelineStat
         </div>
 
         <div className="hidden md:block relative">
-          <div className="absolute top-[10px] left-[10px] right-[10px] h-[2px] bg-gray-200 rounded-full" />
+          <div className="absolute top-[10px] left-[22px] right-[22px] h-[2px] bg-gray-200 rounded-full" />
 
-          <div
-            className="absolute top-[10px] left-[10px] h-[2px] rounded-full transition-all duration-700"
-            style={{
-              width: `calc(${pct}% - ${pct === 100 ? 10 : 0}px)`,
-              background:
-                "linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #34d399 100%)",
-              boxShadow: "0 0 6px 1px rgba(56,189,248,0.5)",
-            }}
-          />
+          <div className="absolute top-[10px] left-[22px] right-[22px] h-[2px] overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-700"
+              style={{
+                width: `${progressWidth}%`,
+                background:
+                  "linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #34d399 100%)",
+                boxShadow: "0 0 6px 1px rgba(56,189,248,0.5)",
+              }}
+            />
+          </div>
 
           <div className="relative flex items-start justify-between">
             {ORDERED_STATUSES.map((status, idx) => {
@@ -210,3 +230,4 @@ const TimeLineHorizontalStepper = ({currentStatus}: {currentStatus: TimelineStat
 };
 
 export default TimeLineHorizontalStepper;
+0

@@ -95,7 +95,7 @@ const CreateAgent = () => {
   }
 
   return (
-    <div className="rounded-lg w-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen py-4 px-2 lg:p-6 overflow-hidden">
+    <div className="rounded-2xl w-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen py-4 px-2 lg:p-6 overflow-hidden">
       <div>
         <h1 className="text-2xl font-semibold text-slate-800">
           Create New Agent Details

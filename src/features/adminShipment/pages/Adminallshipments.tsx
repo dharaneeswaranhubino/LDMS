@@ -14,38 +14,37 @@ import AdminShipmentCompleteModal from "../components/allShipments/AdminShipment
 
 const AdminAllShipments = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    allShipments: shipments,
-    shipmentPagination,
-    shipmentsLoading,
-  } = useSelector((state: RootState) => state.admin);
+  const { allShipments: shipments, shipmentsLoading } = useSelector(
+    (state: RootState) => state.admin,
+  );
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState<number>(5);
-
+  const [clientPage, setClientPage] = useState(1);
+  const [limit, setLimit] = useState<number>(6);
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [searchFocused, setSearchFocused] = useState(false);
-
   const [viewModal, setViewModal] = useState<AllShipments | null>(null);
-  const [completeModal, setCompleteModal] = useState<AllShipments | null>(
-    null,
-  );
+  const [completeModal, setCompleteModal] = useState<AllShipments | null>(null);
   const [completeLoading, setCompleteLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchAllShipments({ page, limit }));
-  }, [dispatch, page, limit]);
+    dispatch(fetchAllShipments({ page: 1, limit: 500 }));
+  }, [dispatch]);
 
   const handleTabChange = useCallback((tab: FilterTab) => {
     setActiveTab(tab);
-    setPage(1);
+    setClientPage(1);
   }, []);
 
   const handleLimitChange = useCallback((newLimit: number) => {
     setLimit(newLimit);
-    setPage(1);
+    setClientPage(1);
+  }, []);
+
+  const handleSearchChange = useCallback((val: string) => {
+    setSearchQuery(val);
+    setClientPage(1); // event handler-ல — no warning
   }, []);
 
   const tabCounts = useMemo(() => {
@@ -56,7 +55,7 @@ const AdminAllShipments = () => {
     return c;
   }, [shipments]);
 
-  const displayed = useMemo(() => {
+  const filteredAndSorted = useMemo(() => {
     let list = [...shipments];
 
     if (activeTab !== "ALL")
@@ -97,6 +96,15 @@ const AdminAllShipments = () => {
     return list;
   }, [shipments, activeTab, searchQuery, sortKey]);
 
+  const totalFiltered = filteredAndSorted.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+  const safePage = Math.min(clientPage, totalPages);
+
+  const displayed = useMemo(() => {
+    const start = (safePage - 1) * limit;
+    return filteredAndSorted.slice(start, start + limit);
+  }, [filteredAndSorted, safePage, limit]);
+
   const handleComplete = async () => {
     if (!completeModal) return;
     setCompleteLoading(true);
@@ -108,16 +116,13 @@ const AdminAllShipments = () => {
     }
   };
 
-  const totalPages = shipmentPagination?.totalPages ?? 1;
-  const total = shipmentPagination?.total ?? 0;
-
   return (
-    <div className="rounded-lg h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
+    <div className="rounded-2xl h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
       <AllShipmentHeader />
 
       <AdminShipmentSearchSort
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        setSearchQuery={handleSearchChange}
         searchFocused={searchFocused}
         setSearchFocused={setSearchFocused}
         sortKey={sortKey}
@@ -130,21 +135,23 @@ const AdminAllShipments = () => {
         onTabChange={handleTabChange}
       />
 
-      <p className="text-[11px] sm:text-[12px] text-slate-400 mb-3">
-        {searchQuery
-          ? `${displayed.length} result${displayed.length !== 1 ? "s" : ""} for "${searchQuery}" on this page`
-          : `Showing ${displayed.length} of ${total} shipments (page ${page} of ${totalPages})`}
-      </p>
+      {!shipmentsLoading && (
+        <p className="text-[11px] sm:text-[12px] text-slate-400 mb-3">
+          {searchQuery
+            ? `${totalFiltered} result${totalFiltered !== 1 ? "s" : ""} for "${searchQuery}"`
+            : `Showing ${displayed.length} of ${totalFiltered} shipments (page ${safePage} of ${totalPages})`}
+        </p>
+      )}
 
       <AdminShipmentTable
         shipments={displayed}
         shipmentsLoading={shipmentsLoading}
         searchQuery={searchQuery}
-        page={page}
+        page={safePage}
         totalPages={totalPages}
-        total={total}
+        total={totalFiltered}
         limit={limit}
-        onPageChange={setPage}
+        onPageChange={setClientPage}
         onLimitChange={handleLimitChange}
         onView={setViewModal}
         onComplete={setCompleteModal}

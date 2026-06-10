@@ -125,7 +125,7 @@ function generateMockDashboard(
     status: complaintStatuses[Math.floor(seededRand(seed, 40 + i) * 3)] as
       | "OPEN"
       | "RESOLVED"
-      | "IN_PROGRESS",
+      | "IN_REVIEW",
     shipmentStatus: complaintShipmentStatuses[i],
     createdAt: new Date(new Date(toDate).getTime() - i * 7200000).toISOString(),
   }));
@@ -319,7 +319,7 @@ export const updateComplaintStatus = createAsyncThunk(
         `/complaints/${complaintId}/status`,
         { status }
       );
-      return res.data as UpdateComplaintStatusResponse;
+      return res.data.data as UpdateComplaintStatusResponse;
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;
       return rejectWithValue(

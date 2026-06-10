@@ -19,7 +19,8 @@ export type ShipmentStatus =
   | "IN_TRANSIT"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "DELAYED";
 
 export interface DeliveryItem {
   shipmentId: number;

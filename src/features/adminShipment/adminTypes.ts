@@ -22,7 +22,8 @@ export type ShipmentStatus =
   | "OUT_FOR_DELIVERY"
   | "DELAYED"
   | "DELIVERED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "DELAYED";
 
 export type Priority = "STANDARD" | "EXPRESS" | "SAME_DAY";
 
@@ -101,7 +102,7 @@ export interface RecentShipment {
   createdAt: string;
 }
 
-// export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_PROGRESS";
+// export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_REVIEW";
 
 export interface CustomerComplaint {
   id: number;

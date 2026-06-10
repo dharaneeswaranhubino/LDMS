@@ -221,3 +221,28 @@ export const STATUS_LABELS: Record<ComplaintStatus, string> = {
   IN_REVIEW: "In Review",
   RESOLVED: "Resolved",
 };
+
+// Complaint Modal
+export const COMPLAINT_STATUS_OPTIONS: { label: string; value: ComplaintStatus }[] = [
+  { label: "Open", value: "OPEN" },
+  { label: "In Review", value: "IN_REVIEW" },
+  { label: "Resolved", value: "RESOLVED" },
+];
+
+export const COMPLAINT_STATUS_STYLES: Record<ComplaintStatus, string> = {
+  OPEN: "bg-red-50 text-red-600 border border-red-200",
+  IN_REVIEW: "bg-amber-50 text-amber-600 border border-amber-200",
+  RESOLVED: "bg-green-50 text-green-600 border border-green-200",
+};
+
+export const COMPLAINT_SUBJECT_LABELS: Record<string, string> = {
+  PACKAGE_NOT_DELIVERED: "Package not delivered",
+  DAMAGED_PACKAGE: "Damaged package",
+  WRONG_ITEM_DELIVERED: "Wrong Item Delivered",
+  DELIVERY_DELAYED: "Delivery Delayed",
+  AGENT_BEHAVIOUR: "Agent Behaviour",
+  PARTIAL_DELIVERY: "Partial Delivery",
+  LOST_PACKAGE: "Lost Package",
+  PAYMENT_ISSUE: "Payment Issue",
+  OTHER: "Other",
+};

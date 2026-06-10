@@ -92,7 +92,8 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
               )}
               <p className="text-[11px] text-slate-400">
                 <i className="fa-regular fa-calendar-check mr-1" />
-                {formatDate(item.createdAt ?? "")}
+                {/* Created At : {formatDate(item.createdAt ?? "")} */}
+                PickUp date : {formatDate(item.assignedDate ?? "")}
               </p>
             </div>
           </div>
@@ -137,7 +138,9 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
           </button>
 
           {/* Chat not for CANCELLED, PENDING, CONFIRMED, DELIVERED */}
-          {!["CANCELLED", "PENDING", "CONFIRMED", "DELIVERED"].includes(status) && (
+          {!["CANCELLED", "PENDING", "CONFIRMED", "DELIVERED"].includes(
+            status,
+          ) && (
             <button
               onClick={() => navigate(`/chat/${item.shipmentId}`)}
               className="py-[7px] px-4 border border-pink-200 bg-pink-50 text-pink-700 rounded-lg hover:bg-pink-100 transition-all text-[12px]"
@@ -158,15 +161,15 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
             </button>
           )}
         </div>
+        <div>
+          <RaiseComplaintModal
+            open={openComplaintModal}
+            onClose={() => setOpenComplaintModal(false)}
+            shipmentId={item.shipmentId}
+            trackingId={item.trackingId ?? `#SHP-${item.shipmentId}`}
+          />
+        </div>
       </div>
-
-      {/* Modal outside card div to avoid stacking context issues */}
-      <RaiseComplaintModal
-        open={openComplaintModal}
-        onClose={() => setOpenComplaintModal(false)}
-        shipmentId={item.shipmentId}
-        trackingId={item.trackingId ?? `#SHP-${item.shipmentId}`}
-      />
     </>
   );
 };

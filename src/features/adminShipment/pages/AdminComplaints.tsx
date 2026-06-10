@@ -57,7 +57,7 @@ const AdminComplaints = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+    <div className="rounded-2xl h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-slate-800">
           Customer Complaints

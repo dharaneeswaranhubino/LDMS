@@ -12,6 +12,10 @@ import type {
     ShipmentTimelineResponse,
     ComplaintResponse,
     RaiseComplaintPayload,
+    MyComplaint,
+    MyComplaintPagination,
+    FetchMyComplaintsParams,
+    ComplaintStatus,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -263,6 +267,34 @@ export const raiseComplaint = createAsyncThunk<
 );
 
 
+export const fetchMyComplaints = createAsyncThunk<
+    { complaints: MyComplaint[]; pagination: MyComplaintPagination },
+    FetchMyComplaintsParams,
+    { rejectValue: string }
+>(
+    "complaint/fetchMyComplaints",
+    async ({ page = 1, limit = 6, status } = {}, { rejectWithValue }) => {
+        try {
+            const query = new URLSearchParams({
+                page: String(page),
+                limit: String(limit),
+                ...(status ? { status } : {}),
+            });
+            const res = await api.get(`/complaints/me?${query}`);
+            return res.data.data as {
+                complaints: MyComplaint[];
+                pagination: MyComplaintPagination;
+            };
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch complaints",
+            );
+        }
+    },
+);
+
+
 //initial States
 const today = new Date().toISOString().split("T")[0];
 const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
@@ -295,6 +327,13 @@ const initialState: ShipmentState = {
     raising: false,
     raiseError: null,
     lastRaisedComplaint: null,
+
+    // My Complaints
+    myComplaints: [],
+    myComplaintPagination: null,
+    myComplaintsLoading: false,
+    myComplaintError: null,
+    activeMyComplaintTab: "ALL",
 };
 
 const shipmentSlice = createSlice({
@@ -322,6 +361,13 @@ const shipmentSlice = createSlice({
         },
         clearLastComplaint: (state) => {
             state.lastRaisedComplaint = null;
+        },
+
+        setActiveMyComplaintTab(
+            state,
+            action: PayloadAction<"ALL" | ComplaintStatus>
+        ) {
+            state.activeMyComplaintTab = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -448,9 +494,24 @@ const shipmentSlice = createSlice({
             .addCase(raiseComplaint.rejected, (state, action) => {
                 state.raising = false;
                 state.raiseError = action.payload || "Failed to raise complaint";
-            });
+            })
+
+            // fetchMyComplaints
+            .addCase(fetchMyComplaints.pending, (state) => {
+                state.myComplaintsLoading = true;
+                state.myComplaintError = null;
+            })
+            .addCase(fetchMyComplaints.fulfilled, (state, action) => {
+                state.myComplaintsLoading = false;
+                state.myComplaints = action.payload.complaints;
+                state.myComplaintPagination = action.payload.pagination;
+            })
+            .addCase(fetchMyComplaints.rejected, (state, action) => {
+                state.myComplaintsLoading = false;
+                state.myComplaintError = action.payload || "Failed to fetch complaints";
+            })
     },
 });
 
-export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint, setActiveMyComplaintTab } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

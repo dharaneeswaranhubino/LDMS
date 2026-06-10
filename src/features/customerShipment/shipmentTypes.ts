@@ -61,7 +61,8 @@ export interface ShipmentResponse {
   | "IN_TRANSIT"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "DELAYED";
   amount: number;
   paymentStatus: "PENDING" | "PAID" | "FAILED";
   assignedSlotStart: string | null;
@@ -105,6 +106,13 @@ export interface ShipmentState {
   raising: boolean;
   raiseError: string | null;
   lastRaisedComplaint: ComplaintResponse | null;
+
+  // My Complaints
+  myComplaints: MyComplaint[];
+  myComplaintPagination: MyComplaintPagination | null;
+  myComplaintsLoading: boolean;
+  myComplaintError: string | null;
+  activeMyComplaintTab: "ALL" | ComplaintStatus;
 }
 
 export type ShipmentStatus =
@@ -116,7 +124,8 @@ export type ShipmentStatus =
   | "IN_TRANSIT"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "DELAYED";
 
 export type PriorityType = "STANDARD" | "EXPRESS" | "SAME_DAY";
 export type FilterTab = "ALL" | ShipmentStatus;
@@ -382,7 +391,7 @@ export type ComplaintSubject =
   | "PAYMENT_ISSUE"
   | "OTHER";
 
-export type ComplaintStatus = "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+export type ComplaintStatus = "OPEN" | "IN_REVIEW" | "RESOLVED";
 
 export interface RaiseComplaintPayload {
   subject: ComplaintSubject;
@@ -417,4 +426,28 @@ export interface SubjectMeta {
   value: ComplaintSubject;
   label: string;
   icon: string;
+}
+
+export interface MyComplaint {
+  complaintId: number;
+  shipmentId: number;
+  trackingId: string;
+  subject: string;
+  description: string;
+  status: ComplaintStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MyComplaintPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface FetchMyComplaintsParams {
+  page?: number;
+  limit?: number;
+  status?: ComplaintStatus;
 }

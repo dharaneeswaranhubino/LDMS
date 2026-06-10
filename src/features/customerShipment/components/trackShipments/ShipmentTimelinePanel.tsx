@@ -27,6 +27,23 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
 
   const currentStatus = (timelineData?.currentStatus ??
     shipment.shipmentStatus) as TimelineStatus;
+
+  const getDisplayStatus = (): TimelineStatus => {
+    if (currentStatus !== "DELAYED") return currentStatus;
+
+    const delayedEntry = timelineData?.timeline
+      .slice()
+      .reverse()
+      .find((e) => e.toStatus === "DELAYED");
+
+    if (delayedEntry?.fromStatus) {
+      return delayedEntry.fromStatus as TimelineStatus;
+    }
+    return "IN_TRANSIT";
+  };
+
+  // const displayStatus = getDisplayStatus();
+
   const reversedTimeline = timelineData
     ? [...timelineData.timeline].reverse()
     : [];
@@ -75,7 +92,10 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
           </div>
         </div>
 
-        <TimeLineHorizontalStepper currentStatus={currentStatus} />
+        <TimeLineHorizontalStepper
+          currentStatus={currentStatus}
+          // displayStatus={displayStatus}
+        />
 
         <div className="md:hidden flex-1 overflow-y-auto">
           {timelineLoading ? (

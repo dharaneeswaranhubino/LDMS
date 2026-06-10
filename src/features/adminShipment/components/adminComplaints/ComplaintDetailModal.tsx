@@ -9,31 +9,14 @@ import {
   clearComplaintError,
 } from "../../adminSlice";
 import { type ComplaintStatus } from "../../adminTypes";
-import { formatDate } from "../../utils/adminShipmentHelper";
-
-const STATUS_OPTIONS: { label: string; value: ComplaintStatus }[] = [
-  { label: "Open", value: "OPEN" },
-  { label: "In Review", value: "IN_REVIEW" },
-  { label: "Resolved", value: "RESOLVED" },
-];
-
-const STATUS_STYLES: Record<ComplaintStatus, string> = {
-  OPEN: "bg-red-50 text-red-600 border border-red-200",
-  IN_REVIEW: "bg-amber-50 text-amber-600 border border-amber-200",
-  RESOLVED: "bg-green-50 text-green-600 border border-green-200",
-};
-
-const SUBJECT_LABELS: Record<string, string> = {
-  PACKAGE_NOT_DELIVERED: "Package not delivered",
-  DAMAGED_PACKAGE: "Damaged package",
-  WRONG_ITEM_DELIVERED: "Wrong Item Delivered",
-  DELIVERY_DELAYED: "Delivery Delayed",
-  AGENT_BEHAVIOUR: "Agent Behaviour",
-  PARTIAL_DELIVERY: "Partial Delivery",
-  LOST_PACKAGE: "Lost Package",
-  PAYMENT_ISSUE: "Payment Issue",
-  OTHER: "Other",
-};
+import {
+  COMPLAINT_STATUS_OPTIONS,
+  COMPLAINT_STATUS_STYLES,
+  COMPLAINT_SUBJECT_LABELS,
+  formatDate,
+} from "../../utils/adminShipmentHelper";
+import { GiCheckMark } from "react-icons/gi";
+import { showToast } from "../../../../shared/components/Toast";
 
 const ComplaintDetailModal = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +32,7 @@ const ComplaintDetailModal = () => {
     setPickedStatus(selectedComplaint!.status);
     setShowSuccess(false);
     dispatch(clearComplaintError());
-  }, [selectedComplaint?.complaintId]);
+  }, [selectedComplaint?.complaintId, selectedComplaint?.status]);
 
   const handleClose = () => {
     dispatch(setSelectedComplaint(null));
@@ -70,6 +53,10 @@ const ComplaintDetailModal = () => {
     if (updateComplaintStatus.fulfilled.match(result)) {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2500);
+      showToast({
+        type: "success",
+        message: "Complaint Status Updated successfully!",
+      });
     }
   };
 
@@ -80,12 +67,14 @@ const ComplaintDetailModal = () => {
     trackingId,
     subject,
     description,
-    status,
     customer,
     assignedAgent,
     createdAt,
     shipmentId,
   } = selectedComplaint;
+
+  const liveStatus = selectedComplaint.status;
+  const isResolved = liveStatus === "RESOLVED";
 
   return (
     <div
@@ -124,7 +113,7 @@ const ComplaintDetailModal = () => {
               <div className="bg-slate-50 rounded-xl px-3 py-2.5">
                 <p className="text-[11px] text-slate-400 mb-1">Subject</p>
                 <p className="text-sm font-medium text-slate-700">
-                  {SUBJECT_LABELS[subject] ?? subject}
+                  {COMPLAINT_SUBJECT_LABELS[subject] ?? subject}
                 </p>
               </div>
               <div className="bg-slate-50 rounded-xl px-3 py-2.5">
@@ -132,11 +121,11 @@ const ComplaintDetailModal = () => {
                   Current status
                 </p>
                 <span
-                  className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_STYLES[status]}`}
+                  className={`text-xs px-2.5 py-1 rounded-full font-medium ${COMPLAINT_STATUS_STYLES[liveStatus]}`}
                 >
-                  {status === "IN_REVIEW"
+                  {liveStatus === "IN_REVIEW"
                     ? "In Review"
-                    : status.charAt(0) + status.slice(1).toLowerCase()}
+                    : liveStatus.charAt(0) + liveStatus.slice(1).toLowerCase()}
                 </span>
               </div>
               <div className="bg-slate-50 rounded-xl px-3 py-2.5">
@@ -224,29 +213,48 @@ const ComplaintDetailModal = () => {
                 onChange={(e) =>
                   setPickedStatus(e.target.value as ComplaintStatus)
                 }
-                className="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 outline-none focus:border-indigo-400 bg-white"
+                disabled={isResolved}
+                className={`flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none
+                  ${
+                    isResolved
+                      ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                      : "bg-white text-slate-700 focus:border-indigo-400"
+                  }`}
               >
-                {STATUS_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
+                {COMPLAINT_STATUS_OPTIONS.map((opt) => {
+                  const disableOption =
+                    liveStatus === "IN_REVIEW" && opt.value === "OPEN";
+
+                  return (
+                    <option
+                      key={opt.value}
+                      value={opt.value}
+                      disabled={disableOption}
+                    >
+                      {opt.label}
+                    </option>
+                  );
+                })}
               </select>
+
               <button
                 onClick={handleSave}
                 disabled={
+                  isResolved ||
                   complaintUpdateLoading ||
                   pickedStatus === selectedComplaint.status
                 }
-                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl
+                  hover:bg-indigo-700 transition-colors
+                  disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {complaintUpdateLoading ? "Saving..." : "Save"}
+                {complaintUpdateLoading ? "Updating..." : "Update"}
               </button>
             </div>
 
             {showSuccess && (
-              <p className="text-xs text-green-600 mt-2 font-medium">
-                ✓ Status updated successfully
+              <p className="flex items-center gap-1 text-xs text-green-600 mt-2 font-medium">
+                <GiCheckMark /> Status updated successfully
               </p>
             )}
 
@@ -260,7 +268,7 @@ const ComplaintDetailModal = () => {
         <div className="px-5 py-3 border-t border-slate-100 flex justify-end">
           <button
             onClick={handleClose}
-            className="text-sm px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 transition-colors"
+            className="text-sm px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-200 transition-colors"
           >
             Close
           </button>

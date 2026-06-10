@@ -80,8 +80,9 @@ const getMenu = (
     path: "/adminComplaints",
     section: "MAIN",
     allowedRole: "admin",
-    icon: <TbMessageExclamation size={18}/>,
+    icon: <TbMessageExclamation size={18} />,
   },
+
   // delivery agent
   {
     name: "Agent Dashboard",
@@ -187,6 +188,13 @@ const getMenu = (
     badge: unreadCount,
   },
   {
+    name: "Complaints",
+    path: "/myComplaints",
+    section: "SUPPORT",
+    allowedRole: "customer",
+    icon: <TbMessageExclamation size={18} />,
+  },
+  {
     name: "My profile",
     path: "/profile",
     section: "ACCOUNT",
@@ -237,7 +245,7 @@ const Sidebar = () => {
   useEffect(() => {
     if (user?.role === "customer") {
       dispatch(fetchMyShipments({ page: 1, limit: 100 }));
-    }else if(user?.role === "admin"){
+    } else if (user?.role === "admin") {
       dispatch(fetchAllShipments({ page: 1, limit: 100 }));
     }
   }, [dispatch, user?.role]);
