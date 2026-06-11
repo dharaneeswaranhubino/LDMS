@@ -44,7 +44,7 @@ const AdminAllShipments = () => {
 
   const handleSearchChange = useCallback((val: string) => {
     setSearchQuery(val);
-    setClientPage(1); // event handler-ல — no warning
+    setClientPage(1);
   }, []);
 
   const tabCounts = useMemo(() => {

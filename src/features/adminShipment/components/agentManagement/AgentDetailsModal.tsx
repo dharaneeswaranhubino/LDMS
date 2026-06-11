@@ -2,7 +2,7 @@ import type { AgentDetailsModalProps } from "../../adminTypes";
 
 const AgentDetailsModal = ({ setSelectedAgent, selectedAgent }:AgentDetailsModalProps) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/10 p-4 overflow-y-auto">
       <div className="w-full max-w-2xl rounded-3xl bg-white shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto scrollbar-none">
         {/* Header */}
         <div className="sticky top-0 z-20 bg-gradient-to-r from-sky-500 to-cyan-500 px-6 py-5 flex items-center justify-between">
@@ -16,7 +16,7 @@ const AgentDetailsModal = ({ setSelectedAgent, selectedAgent }:AgentDetailsModal
 
           <button
             onClick={() => setSelectedAgent(null)}
-            className="h-10 w-10 rounded-full bg-white/20 text-white transition hover:bg-red-500"
+            className="h-10 w-10 rounded-full bg-white/20 text-white transition hover:bg-sky-500"
           >
             <i className="fa-solid fa-xmark text-lg"></i>
           </button>

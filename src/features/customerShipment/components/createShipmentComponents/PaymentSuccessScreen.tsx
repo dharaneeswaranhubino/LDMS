@@ -12,7 +12,6 @@ const PaymentSuccessScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showPreview, setShowPreview] = useState(false);
-
   const { razorpayPaymentId, trackingId } = location.state ?? {};
   const { currentShipment } = useAppSelector((state) => state.shipment);
   const prices = currentShipment?.priceBreakdown;

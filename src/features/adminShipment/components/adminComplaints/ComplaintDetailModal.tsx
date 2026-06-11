@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -28,11 +28,9 @@ const ComplaintDetailModal = () => {
   );
   const [showSuccess, setShowSuccess] = useState(false);
 
-  useEffect(() => {
-    setPickedStatus(selectedComplaint!.status);
-    setShowSuccess(false);
-    dispatch(clearComplaintError());
-  }, [selectedComplaint?.complaintId, selectedComplaint?.status]);
+  // useEffect(() => {
+  //   dispatch(clearComplaintError());
+  // }, [selectedComplaint?.complaintId, selectedComplaint?.status]);
 
   const handleClose = () => {
     dispatch(setSelectedComplaint(null));
@@ -58,6 +56,10 @@ const ComplaintDetailModal = () => {
         message: "Complaint Status Updated successfully!",
       });
     }
+
+    if (complaintError) {
+      dispatch(clearComplaintError());
+    }
   };
 
   if (!selectedComplaint) return null;
@@ -78,7 +80,7 @@ const ComplaintDetailModal = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/10 px-4"
       onClick={handleClose}
     >
       <div

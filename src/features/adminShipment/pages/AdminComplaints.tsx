@@ -98,7 +98,7 @@ const AdminComplaints = () => {
         />
       )}
 
-      {selectedComplaint && <ComplaintDetailModal />}
+      {selectedComplaint && <ComplaintDetailModal key={selectedComplaint.complaintId}/>}
     </div>
   );
 };

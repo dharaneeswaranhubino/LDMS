@@ -22,7 +22,6 @@ const CreateShipment = () => {
   const [isInstruc, setIsInstruc] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
-  // Holds the result after createShipment succeeds
   const [createdMeta, setCreatedMeta] = useState<CreatedShipmentMeta | null>(
     null,
   );
@@ -75,34 +74,6 @@ const CreateShipment = () => {
     setStep((p) => p - 1);
   };
 
-  // const handlePackageNext = async () => {
-  //   try {
-  //     setIsCreating(true);
-  //     const result = await dispatch(
-  //       createShipment({
-  //         pickUpAddress,
-  //         deliveryAddress,
-  //         packageDetails,
-  //         // amount: 0,
-  //       })
-  //     ).unwrap();
-
-  //     setCreatedMeta({
-  //       shipmentId: result.shipmentId,
-  //       trackingId: result.trackingId,
-  //       priceBreakdown: result.priceBreakdown!,
-  //       packageWeight: result.packageWeight,
-  //       priority: result.shipmentPriority,
-  //     });
-
-  //     goNext();
-  //   } catch (err) {
-  //     toast.error(typeof err === "string" ? err : "Failed to create shipment");
-  //   } finally {
-  //     setIsCreating(false);
-  //   }
-  // };
-
   const handlePackageNext = async () => {
     try {
       setIsCreating(true);
@@ -112,7 +83,6 @@ const CreateShipment = () => {
       let result;
 
       if (createdMeta) {
-        // Shipment already exists — PATCH with updated data
         result = await dispatch(
           updateShipment({
             shipmentId: createdMeta.shipmentId,
@@ -120,7 +90,6 @@ const CreateShipment = () => {
           }),
         ).unwrap();
       } else {
-        // Fresh — POST
         result = await dispatch(createShipment(payload)).unwrap();
       }
 
