@@ -223,30 +223,21 @@ export interface ShipmentAddressProps {
 
 //PackageDetails.tsx
 export interface PackageDetailsProps {
-  // nextStep: () => void;
-  // prevStep: () => void;
-  // packageDetails: PackageDetailsFormData;
-  // setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
-  onNext: () => Promise<void>;   // ← was "nextStep: () => void"
+  onNext: () => Promise<void>;
   prevStep: () => void;
-  isCreating: boolean;           // ← new: for loading spinner on Next button
+  isCreating: boolean;
   packageDetails: PackageDetailsFormData;
   setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
 }
 
 //PriceBreakdownProps
 export interface PriceBreakdownProps {
-  // prevStep: () => void;
-  // packageDetails: PackageDetailsFormData;
-  // pickUpAddress: Address;
-  // deliveryAddress: Address;
-  // onReset: () => void;
   prevStep: () => void;
   shipmentId: number;
   trackingId: string;
   priceBreakdown: PriceBreakdown;
-  packageWeight: number;         // for display "54kg × ₹20"
-  priority: PriorityType;        // for display "EXPRESS"
+  packageWeight: number;
+  priority: PriorityType;
   onReset: () => void;
 }
 

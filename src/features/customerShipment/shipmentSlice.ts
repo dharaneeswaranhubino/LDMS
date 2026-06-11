@@ -380,6 +380,7 @@ const shipmentSlice = createSlice({
             .addCase(createShipment.fulfilled, (state, action) => {
                 state.loading = false;
                 state.currentShipment = action.payload;
+                // console.log(state.currentShipment);
                 state.shipments = [action.payload, ...state.shipments];
             })
             .addCase(createShipment.rejected, rejected)
@@ -400,6 +401,7 @@ const shipmentSlice = createSlice({
                 state.currentShipment = action.payload;
             })
             .addCase(fetchShipmentById.rejected, rejected)
+
             //fetchPaymentDetails
             .addCase(fetchPaymentDetails.pending, pending)
             .addCase(fetchPaymentDetails.fulfilled, (state, action) => {
@@ -461,7 +463,6 @@ const shipmentSlice = createSlice({
                     notification.isRead = true;
                     state.unreadCount = Math.max(0, state.unreadCount - 1);
                 }
-
             })
             .addCase(markSingleNotificationRead.rejected, (state, action) => {
                 state.markSingleLoading = null;

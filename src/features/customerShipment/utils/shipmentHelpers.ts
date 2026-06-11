@@ -23,6 +23,7 @@ import type {
   TimelineStatus,
   SubjectMeta,
 } from "../shipmentTypes";
+import { StyleSheet } from "@react-pdf/renderer";
 
 export const STATUS_STYLES: Record<ShipmentStatus, string> = {
   PENDING: "bg-amber-100 text-amber-700 border-amber-200",
@@ -143,20 +144,20 @@ export const deliveryPriority = [
   },
   {
     label: "Express",
-    multiplier: "1.3 × rate",
+    multiplier: "1.5 × rate",
     days: "Take's maximum within 3 days",
     value: "EXPRESS" as const,
   },
   {
     label: "Same Day",
-    multiplier: "1.8 × rate",
+    multiplier: "2 × rate",
     days: "Take's 1 day",
     value: "SAME_DAY" as const,
   },
 ];
 
 //razorpay function and variables
-let razorpayFrame: HTMLIFrameElement | null = null;
+// const razorpayFrame: HTMLIFrameElement | null = null;
 
 export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -497,3 +498,70 @@ export const SUBJECT_META: SubjectMeta[] = [
   { value: "PAYMENT_ISSUE", label: "Payment issue", icon: "fa-credit-card" },
   { value: "OTHER", label: "Other", icon: "fa-circle-question" },
 ];
+
+export const pdfStyles = StyleSheet.create({
+  page: {
+    padding: 32,
+    fontFamily: "Helvetica",
+    backgroundColor: "#ffffff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+    marginBottom: 16,
+  },
+  brandName: { fontSize: 18, fontFamily: "Helvetica-Bold", color: "#1e293b" },
+  brandSub: { fontSize: 9, color: "#64748b", marginTop: 2 },
+  badgeWrap: { alignItems: "flex-end" },
+  badge: {
+    backgroundColor: "#dcfce7",
+    color: "#15803d",
+    fontSize: 9,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderRadius: 99,
+    fontFamily: "Helvetica-Bold",
+  },
+  dateText: { fontSize: 8, color: "#64748b", marginTop: 4 },
+  sectionLabel: {
+    fontSize: 8,
+    color: "#94a3b8",
+    letterSpacing: 1.5,
+    fontFamily: "Helvetica-Bold",
+    marginBottom: 8,
+    marginTop: 4,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+  },
+  rowLabel: { fontSize: 10, color: "#64748b" },
+  rowValue: { fontSize: 10, color: "#334155" },
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f0fdf4",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    marginTop: 10,
+  },
+  totalLabel: { fontSize: 13, fontFamily: "Helvetica-Bold", color: "#1e293b" },
+  totalValue: { fontSize: 13, fontFamily: "Helvetica-Bold", color: "#16a34a" },
+  spacer: { marginTop: 14 },
+  footer: {
+    fontSize: 8,
+    color: "#94a3b8",
+    textAlign: "center",
+    marginTop: 28,
+  },
+});
