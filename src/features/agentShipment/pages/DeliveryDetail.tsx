@@ -39,10 +39,28 @@ const DeliveryDetail = () => {
       (a, b) =>
         new Date(a.assignedDate).getTime() - new Date(b.assignedDate).getTime(),
     );
+
   const currentDate = new Date().toISOString().split("T")[0];
-  const today = assignedDeliveries[0]?.assignedDate === currentDate
-  
-  const data = activeDelivery || (today ? assignedDeliveries[0] : undefined);
+
+  const currentHour = Number(
+    new Date()
+      .toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Kolkata",
+        hour12: false,
+      })
+      .split(":")[0],
+  );
+
+  const currentAssignedDelivery = assignedDeliveries.find((delivery) => {
+    if (delivery.assignedDate !== currentDate) return false;
+
+    const startHour = Number(delivery.assignedSlotStart.slice(0, 2));
+    const endHour = Number(delivery.assignedSlotEnd.slice(0, 2));
+
+    return currentHour >= startHour && currentHour < endHour;
+  });
+
+  const data = activeDelivery || currentAssignedDelivery;
 
   const handleDelivered = () => {
     setSwitchingShipment(true);

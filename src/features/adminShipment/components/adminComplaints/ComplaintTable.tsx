@@ -30,33 +30,6 @@ const ComplaintTable = ({
   }
 
   return (
-    // <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-    //   <div className="overflow-x-auto">
-    //     <table className="w-full text-sm">
-    //         <thead>
-    //           <tr className="bg-slate-50 border-b border-slate-100">
-    //             {ComplaintTable_HEADS.map((h) => (
-    //               <th
-    //                 key={h.label}
-    //                 className={`${h.width} px-4 py-3 text-left text-xs font-semibold text-slate-500 tracking-wide`}
-    //               >
-    //                 {h.label}
-    //               </th>
-    //             ))}
-    //           </tr>
-    //         </thead>
-    //         <tbody className="divide-y divide-slate-50">
-    //           {complaints.map((complaint) => (
-    //             <ComplaintTableRow
-    //               key={complaint.complaintId}
-    //               complaint={complaint}
-    //               onView={() => dispatch(setSelectedComplaint(complaint))}
-    //             />
-    //           ))}
-    //         </tbody>
-    //     </table>
-    //   </div>
-    // </div>
     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
       <table className="w-full text-sm">
         <thead>

@@ -94,7 +94,7 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
 
         <TimeLineHorizontalStepper
           currentStatus={currentStatus}
-          // displayStatus={displayStatus}
+          timeline={timelineData?.timeline}
         />
 
         <div className="md:hidden flex-1 overflow-y-auto">

@@ -1,4 +1,4 @@
-import type { TimelineStatus } from "../../shipmentTypes";
+import type { TimelineEntry, TimelineStatus } from "../../shipmentTypes";
 import {
   getProgressPercent,
   ORDERED_STATUSES,
@@ -8,20 +8,44 @@ import { FaExclamation } from "react-icons/fa6";
 
 const TimeLineHorizontalStepper = ({
   currentStatus,
+  timeline,
 }: {
   currentStatus: TimelineStatus;
+  timeline?: TimelineEntry[];
 }) => {
   const isCancelled = currentStatus === "CANCELLED";
   const isDelayed = currentStatus === "DELAYED";
+
+  const getDelayedFromStatus = (): TimelineStatus => {
+    if (!timeline) return "IN_TRANSIT";
+
+    const delayedEntry = [...timeline]
+      .reverse()
+      .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED"); // ✅ skip re-delay entries
+
+    return (delayedEntry?.fromStatus as TimelineStatus) ?? "IN_TRANSIT";
+  };
+
   const displayStatus: TimelineStatus = isDelayed
-    ? "IN_TRANSIT"
+    ? getDelayedFromStatus()
     : isCancelled
       ? "PENDING"
       : currentStatus;
 
+  console.log(
+    "timeline entries:",
+    timeline?.map((e) => `${e.fromStatus} → ${e.toStatus}`),
+  );
+  console.log("delayedFromStatus:", getDelayedFromStatus());
+  // const displayStatus: TimelineStatus = isDelayed
+  //   ? "IN_TRANSIT"
+  //   : isCancelled
+  //     ? "PENDING"
+  //     : currentStatus;
+
   const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
   // const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
-  const pct = getProgressPercent(currentStatus);
+  const pct = getProgressPercent(displayStatus);
 
   function getDotStyle(status: TimelineStatus, idx: number) {
     const isDone = idx < curIdx;

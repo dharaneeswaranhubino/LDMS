@@ -163,7 +163,7 @@ const PriceBreakdown = ({
         </div>
 
         <div className="flex justify-between border-b border-slate-200 pb-3">
-          <p className="text-slate-600">Weight ({packageWeight}kg × rate)</p>
+          <p className="text-slate-600">Weight ({packageWeight}kg)</p>
           <p className="font-medium text-slate-800">₹{weightCharge}</p>
         </div>
 
