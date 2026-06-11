@@ -4,8 +4,6 @@ export interface CreateShipmentPayload {
     pickUpAddress: Address;
     deliveryAddress: Address;
     packageDetails: PackageDetailsFormData & { quantity: string };
-    // paymentId: string;
-    amount: number;
 }
 
 export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
@@ -35,7 +33,4 @@ export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
     preferredDeliveryTo:data.packageDetails.deliveryTo?data.packageDetails.deliveryTo:null,
     shipmentPriority: data.packageDetails.priority,
 
-    // Payment
-    // amount: data.amount,
-    // paymentId: data.paymentId,
 });

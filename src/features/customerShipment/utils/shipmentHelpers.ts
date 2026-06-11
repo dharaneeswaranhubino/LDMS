@@ -158,7 +158,6 @@ export const deliveryPriority = [
 
 //razorpay function and variables
 // const razorpayFrame: HTMLIFrameElement | null = null;
-
 export const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
     if (window.Razorpay) {

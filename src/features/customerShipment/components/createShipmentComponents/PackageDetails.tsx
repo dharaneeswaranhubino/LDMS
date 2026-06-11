@@ -7,6 +7,7 @@ const PackageDetails = ({
   onNext,
   prevStep,
   isCreating,
+  isEditing,
   packageDetails,
   setPackageDetails,
 }: PackageDetailsProps) => {
@@ -265,14 +266,6 @@ const PackageDetails = ({
           {/* <button
             type="button"
             onClick={handleNext}
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-all"
-          >
-            Next
-            <i className="fa-solid fa-angle-right ml-2"></i>
-          </button> */}
-          <button
-            type="button"
-            onClick={handleNext}
             disabled={isCreating}
             className="bg-blue-500 hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-all flex items-center gap-2"
           >
@@ -284,6 +277,24 @@ const PackageDetails = ({
             ) : (
               <>
                 Next
+                <i className="fa-solid fa-angle-right" />
+              </>
+            )}
+          </button> */}
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isCreating}
+            className="bg-blue-500 hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-all flex items-center gap-2"
+          >
+            {isCreating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                {isEditing ? "Updating..." : "Creating..."}
+              </>
+            ) : (
+              <>
+                {isEditing ? "Update & continue" : "Next"}
                 <i className="fa-solid fa-angle-right" />
               </>
             )}

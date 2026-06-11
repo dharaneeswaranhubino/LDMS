@@ -84,6 +84,14 @@ export interface PriceBreakdown {
   total: number;
 }
 
+export interface CreatedShipmentMeta {
+  shipmentId: number;
+  trackingId: string;
+  priceBreakdown: PriceBreakdown;
+  packageWeight: number;
+  priority: "STANDARD" | "EXPRESS" | "SAME_DAY";
+}
+
 export interface Pagination {
   total: number;
   page: number;
@@ -226,6 +234,7 @@ export interface PackageDetailsProps {
   onNext: () => Promise<void>;
   prevStep: () => void;
   isCreating: boolean;
+  isEditing: boolean;
   packageDetails: PackageDetailsFormData;
   setPackageDetails: Dispatch<SetStateAction<PackageDetailsFormData>>;
 }

@@ -39,6 +39,24 @@ export const createShipment = createAsyncThunk<
     }
 );
 
+export const updateShipment = createAsyncThunk<
+    ShipmentResponse,
+    { shipmentId: number; data: CreateShipmentPayload },
+    { rejectValue: string }
+>(
+    "shipment/updateShipment",
+    async ({ shipmentId, data }, { rejectWithValue }) => {
+        try {
+            const payload = mapToBackendPayload(data);
+            const res = await api.patch(`/shipments/${shipmentId}`, payload);
+            return res.data.data;
+        } catch (err: unknown) {
+            const error = err as import("axios").AxiosError<{ message: string }>;
+            return rejectWithValue(error.response?.data?.message || "Failed to update shipment");
+        }
+    }
+);
+
 export const initiatePayment = createAsyncThunk<
     InitiatePaymentResponse,
     number,
@@ -384,6 +402,19 @@ const shipmentSlice = createSlice({
                 state.shipments = [action.payload, ...state.shipments];
             })
             .addCase(createShipment.rejected, rejected)
+
+            //Edit shipments
+            .addCase(updateShipment.pending, pending)
+            .addCase(updateShipment.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentShipment = action.payload;
+                // update in list too if exists
+                const idx = state.shipments.findIndex(
+                    (s) => s.shipmentId === action.payload.shipmentId
+                );
+                if (idx !== -1) state.shipments[idx] = action.payload;
+            })
+            .addCase(updateShipment.rejected, rejected)
 
             //fetchMyShipments
             .addCase(fetchMyShipments.pending, pending)
