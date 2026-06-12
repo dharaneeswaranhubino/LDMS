@@ -10,6 +10,7 @@ import {
   typeConfig,
   formatNotificationTime,
 } from "../features/customerShipment/utils/shipmentHelpers";
+import logo from "../assets/ldms_logo1.png"
 
 const Topbar = () => {
   const dispatch = useAppDispatch();
@@ -67,11 +68,12 @@ const Topbar = () => {
       {/*Logo*/}
       <div className="flex items-center gap-10">
         <Link to={dashboardRoute} className="flex items-center gap-4 group">
-          <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-200 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
-            <i className="fa-solid fa-truck-fast text-white text-[18px] relative z-10" />
+          <div className="relative w-16 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-200 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+            {/* <i className="fa-solid fa-truck-fast text-white text-[18px] relative z-10" /> */}
+            <img src={logo} alt="" className="rounded-xl"/>
           </div>
           <div>
-            <h1 className="text-[21px] font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-none">
+            <h1 className="text-[21px] font-bold tracking-tight bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 bg-clip-text text-transparent leading-none">
               LDMS
             </h1>
             <p className="text-[11px] font-medium tracking-wide text-slate-500 mt-[4px] uppercase">
