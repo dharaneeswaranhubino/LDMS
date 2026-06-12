@@ -37,12 +37,12 @@ const ProfileView = ({ user }: ProfileViewProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+      {/* <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
         <p className="text-sm text-blue-800">
           You can edit your name,and password. Contact admin if you need
           to change your roles.
         </p>
-      </div>
+      </div> */}
     </>
   );
 };

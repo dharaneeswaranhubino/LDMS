@@ -17,9 +17,41 @@ const TimeLineVerticalStepper = ({
   currentStatus,
   timeline,
 }: TimeLineVerticalStepperProps) => {
-  const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
+  // const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
+  // const isCancelled = currentStatus === "CANCELLED";
+  // const isDelayed = currentStatus === "DELAYED";
+
+  // const entryMap = new Map<TimelineStatus, TimelineEntry>();
+  // timeline.forEach((entry) => {
+  //   entryMap.set(entry.toStatus as TimelineStatus, entry);
+  // });
+  // ✅ Replace with this:
   const isCancelled = currentStatus === "CANCELLED";
   const isDelayed = currentStatus === "DELAYED";
+
+  const getDelayedFromStatus = (): TimelineStatus => {
+    if (!timeline) return "IN_TRANSIT";
+
+    const delayedEntry = [...timeline]
+      .reverse()
+      .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED");
+
+    return (delayedEntry?.fromStatus as TimelineStatus) ?? "IN_TRANSIT";
+  };
+
+  const delayedEntry = isDelayed
+    ? [...timeline]
+        .reverse()
+        .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED")
+    : undefined;
+
+  const displayStatus: TimelineStatus = isDelayed
+    ? getDelayedFromStatus()
+    : isCancelled
+      ? "PENDING"
+      : currentStatus;
+
+  const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
 
   const entryMap = new Map<TimelineStatus, TimelineEntry>();
   timeline.forEach((entry) => {
@@ -39,7 +71,9 @@ const TimeLineVerticalStepper = ({
       {ORDERED_STATUSES.map((status, idx) => {
         const dotStyle = getDotStyle(status, idx);
         const isLast = idx === ORDERED_STATUSES.length - 1;
-        const entry = entryMap.get(status);
+        // const entry = entryMap.get(status);
+        const entry =
+          isDelayed && idx === curIdx ? delayedEntry : entryMap.get(status);
         const isCurrent = idx === curIdx;
         const label = STATUS_META[status]?.label ?? status;
 

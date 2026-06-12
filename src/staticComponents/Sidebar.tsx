@@ -69,7 +69,7 @@ const getMenu = (
     icon: <i className="fa-solid fa-users"></i>,
   },
   {
-    name: "Live Tracking",
+    name: "Track shipment",
     path: "/liveTracking",
     section: "MAIN",
     allowedRole: "admin",

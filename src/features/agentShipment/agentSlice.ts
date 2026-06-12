@@ -15,7 +15,7 @@ export const getMyDeliveries = createAsyncThunk<
 >("agent/getMyDeliveries", async (_, { rejectWithValue }) => {
   try {
     const res = await api.get("shipments/myDeliveries");
-    return res.data.data;
+    return res.data.data.shipments;
   } catch (err: unknown) {
     const error = err as AxiosError<{ message: string }>;
 

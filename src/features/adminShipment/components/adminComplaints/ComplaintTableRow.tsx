@@ -67,7 +67,7 @@ const ComplaintTableRow = ({ complaint, onView }: Props) => {
 
       <td className="pl-4 pr-6 py-4">
         <span
-          className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_STYLES[status]}`}
+          className={`text-xs px-2.5 py-1 whitespace-nowrap rounded-full font-medium ${STATUS_STYLES[status]}`}
         >
           {STATUS_LABELS[status] ?? "NA"}
         </span>

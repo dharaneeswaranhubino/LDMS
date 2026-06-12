@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../shared/hooks/reduxHooks";
 const ProfilePage = () => {
   // const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   // const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -47,11 +47,11 @@ const ProfilePage = () => {
       .slice(0, 2);
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setError("");
-    setSuccess("");
-  };
+  // const handleEdit = () => {
+  //   setIsEditing(true);
+  //   setError("");
+  //   setSuccess("");
+  // };
 
   // const handleCancel = () => {
   //   setIsEditing(false);
@@ -108,7 +108,7 @@ const ProfilePage = () => {
                 Manage your account information
               </p>
             </div>
-            {!isEditing && (
+            {/* {!isEditing && (
               <button
                 onClick={handleEdit}
                 title="Edit Profile"
@@ -116,7 +116,7 @@ const ProfilePage = () => {
               >
                 <i className="fa-solid fa-pen-to-square"></i>
               </button>
-            )}
+            )} */}
           </div>
         </div>
 

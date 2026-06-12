@@ -46,6 +46,17 @@ html {
   scroll-behavior: smooth;
 }
 
+.Toastify__toast {
+  min-height: 42px !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+}
+
+.Toastify__toast-body {
+  font-size: 13px !important;
+  font-weight: 500;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
