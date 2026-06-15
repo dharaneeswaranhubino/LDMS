@@ -30,7 +30,7 @@ const ReceiptPreviewModal = ({
   fileName: string;
 }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Modal header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">

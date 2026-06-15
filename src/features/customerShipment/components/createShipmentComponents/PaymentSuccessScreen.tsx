@@ -1,69 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import confetti from "canvas-confetti";
 import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
 import ReceiptPDF from "./ReceiptPDF";
 import ReceiptPreviewModal from "./ReceiptPreviewModal";
+import { BUBBLES, fireConfetti } from "../../utils/shipmentHelpers";
 
-// ── confetti helpers ──────────────────────────────────────────────────────────
-const fireConfetti = () => {
-  // left side burst
-  confetti({
-    particleCount: 80,
-    angle: 60,
-    spread: 70,
-    origin: { x: 0, y: 0.7 },
-    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
-    gravity: 1.2,
-    scalar: 0.9,
-  });
-
-  // right side burst
-  confetti({
-    particleCount: 80,
-    angle: 120,
-    spread: 70,
-    origin: { x: 1, y: 0.7 },
-    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
-    gravity: 1.2,
-    scalar: 0.9,
-  });
-
-  // center top shower after 400ms
-  setTimeout(() => {
-    confetti({
-      particleCount: 60,
-      angle: 90,
-      spread: 120,
-      origin: { x: 0.5, y: 0.3 },
-      colors: ["#6366f1", "#38bdf8", "#34d399"],
-      gravity: 0.9,
-      scalar: 0.8,
-      ticks: 200,
-    });
-  }, 400);
-};
-
-// ── floating bubble config ────────────────────────────────────────────────────
-const BUBBLES = [
-  { size: 18, left: "8%",  delay: "0s",    duration: "7s",  opacity: 0.25 },
-  { size: 28, left: "18%", delay: "1.2s",  duration: "9s",  opacity: 0.18 },
-  { size: 12, left: "32%", delay: "0.5s",  duration: "6s",  opacity: 0.30 },
-  { size: 22, left: "48%", delay: "2s",    duration: "8s",  opacity: 0.20 },
-  { size: 16, left: "60%", delay: "0.8s",  duration: "7.5s",opacity: 0.28 },
-  { size: 30, left: "72%", delay: "1.5s",  duration: "10s", opacity: 0.15 },
-  { size: 14, left: "83%", delay: "0.3s",  duration: "6.5s",opacity: 0.32 },
-  { size: 20, left: "92%", delay: "2.5s",  duration: "8.5s",opacity: 0.22 },
-  { size: 10, left: "25%", delay: "3s",    duration: "7s",  opacity: 0.35 },
-  { size: 24, left: "55%", delay: "1.8s",  duration: "9.5s",opacity: 0.18 },
-];
-
-// ── component ─────────────────────────────────────────────────────────────────
 const PaymentSuccessScreen = () => {
   const location  = useLocation();
   const navigate  = useNavigate();
-  const firedRef  = useRef(false); // prevent double-fire in StrictMode
+  const firedRef  = useRef(false);
   const [showPreview, setShowPreview] = useState(false);
   const [checkVisible, setCheckVisible] = useState(false);
 
@@ -73,25 +19,18 @@ const PaymentSuccessScreen = () => {
   const priority      = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
 
-  // ── redirect guard ────────────────────────────────────────────────────────
   useEffect(() => {
     if (!razorpayPaymentId) {
       navigate("/sendShipment", { replace: true });
     }
   }, [razorpayPaymentId, navigate]);
 
-  // ── fire confetti on mount ────────────────────────────────────────────────
   useEffect(() => {
     if (firedRef.current) return;
     firedRef.current = true;
-
-    // slight delay so the page renders first
-    // const t1 = setTimeout(() => {
-    // }, 0);
     fireConfetti();
     setCheckVisible(true);
 
-    // return () => clearTimeout(t1);
   }, []);
 
   if (!razorpayPaymentId || !prices) return null;
@@ -106,7 +45,6 @@ const PaymentSuccessScreen = () => {
 
   return (
     <>
-      {/* ── CSS keyframes injected once ────────────────────────────────────── */}
       <style>{`
         @keyframes floatUp {
           0%   { transform: translateY(0)   scale(1);    opacity: var(--op); }
@@ -135,7 +73,6 @@ const PaymentSuccessScreen = () => {
         .slide-up  { animation: slideUp 0.5s ease forwards; }
       `}</style>
 
-      {/* ── receipt preview modal ───────────────────────────────────────────── */}
       {showPreview && (
         <ReceiptPreviewModal
           onClose={() => setShowPreview(false)}
@@ -149,10 +86,8 @@ const PaymentSuccessScreen = () => {
         />
       )}
 
-      {/* ── page wrapper ────────────────────────────────────────────────────── */}
       <div className="relative rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-4 overflow-hidden">
 
-        {/* ── floating bubbles background ─────────────────────────────────── */}
         {BUBBLES.map((b, i) => (
           <span
             key={i}
@@ -168,20 +103,13 @@ const PaymentSuccessScreen = () => {
           />
         ))}
 
-        {/* ── success card ────────────────────────────────────────────────── */}
         <div className="relative bg-white border border-slate-200 rounded-2xl p-8 mb-4 flex flex-col items-center gap-3 shadow-sm overflow-hidden">
-
-          {/* subtle inner shimmer stripe */}
           <div className="absolute inset-0 bg-gradient-to-br from-green-50/60 via-transparent to-sky-50/40 pointer-events-none rounded-2xl" />
-
-          {/* check icon — pops in */}
           <div
             className={`text-green-500 text-5xl ${checkVisible ? "pop-in" : "opacity-0"}`}
           >
             <i className="fa-solid fa-circle-check" />
           </div>
-
-          {/* title */}
           <p
             className="text-xl font-bold text-green-600 slide-up"
             style={{ animationDelay: "0.15s", opacity: 0 }}
@@ -189,7 +117,6 @@ const PaymentSuccessScreen = () => {
             Payment Successful!
           </p>
 
-          {/* payment ID */}
           <p
             className="text-slate-500 text-sm slide-up"
             style={{ animationDelay: "0.25s", opacity: 0 }}
@@ -200,7 +127,6 @@ const PaymentSuccessScreen = () => {
             </span>
           </p>
 
-          {/* tracking ID — only if available */}
           {trackingId && (
             <p
               className="text-slate-500 text-sm slide-up"
@@ -213,7 +139,6 @@ const PaymentSuccessScreen = () => {
             </p>
           )}
 
-          {/* description */}
           <p
             className="text-slate-600 text-center text-[14px] slide-up"
             style={{ animationDelay: "0.38s", opacity: 0 }}
@@ -222,12 +147,10 @@ const PaymentSuccessScreen = () => {
             shortly.
           </p>
 
-          {/* preview + download row */}
           <div
             className="flex items-center gap-2 mt-2 w-full max-w-xs slide-up"
             style={{ animationDelay: "0.45s", opacity: 0 }}
           >
-            {/* preview button */}
             <button
               onClick={() => setShowPreview(true)}
               className="flex-1 h-10 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2"
@@ -236,7 +159,6 @@ const PaymentSuccessScreen = () => {
               Preview Receipt
             </button>
 
-            {/* direct download */}
             <PDFDownloadLink
               document={
                 <ReceiptPDF
@@ -263,7 +185,6 @@ const PaymentSuccessScreen = () => {
           </div>
         </div>
 
-        {/* ── action buttons ───────────────────────────────────────────────── */}
         <div
           className="flex flex-col gap-3 slide-up"
           style={{ animationDelay: "0.52s", opacity: 0 }}

@@ -135,6 +135,9 @@ export interface ShipmentState {
 
   // pricing details
   rates: PricingRates | null;
+
+  //Payment history
+  payments: Payment[];
 }
 
 export type ShipmentStatus =
@@ -495,4 +498,26 @@ export interface PricingRates {
   priorityMultipliers: PriorityMultipliers;
   fragileSurcharge: number;
   gstPercent: number;
+}
+
+export interface Payment {
+  id: number;
+  shipmentId: number;
+  trackingId: string;
+  amount: number;
+  paymentStatus: "PAID" | "PENDING" | "FAILED";
+  transactionId: string | null;
+  paidAt: string | null;
+}
+
+export interface PaymentPagination {
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
+  limit: number;
+}
+
+export interface MyPaymentsResponse {
+  payments: Payment[];
+  pagination: PaymentPagination;
 }

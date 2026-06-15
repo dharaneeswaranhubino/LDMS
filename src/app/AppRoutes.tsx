@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
 import LoadingSpinner from "../shared/components/LoadingSpinner";
+import CustomerChat from "../features/customerShipment/pages/CustomerChat";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -117,6 +118,7 @@ const AppRoutes = () => {
             />
             <Route path="/paymentSuccess" element={<PaymentSuccessScreen />} />
             <Route path="/myComplaints" element={<MyComplaints />} />
+            <Route path="/customerChat" element={<CustomerChat/>}/>
             {/* admin screens */}
             <Route
               path="/agentManagement/agentRegisteration"

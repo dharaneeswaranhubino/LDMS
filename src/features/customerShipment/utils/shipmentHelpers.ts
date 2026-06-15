@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import {
   FiClock,
   FiCheckCircle,
@@ -564,3 +565,67 @@ export const pdfStyles = StyleSheet.create({
     marginTop: 28,
   },
 });
+
+
+export const fireConfetti = () => {
+  confetti({
+    particleCount: 80,
+    angle: 60,
+    spread: 70,
+    origin: { x: 0, y: 0.7 },
+    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
+    gravity: 1.2,
+    scalar: 0.9,
+  });
+
+  confetti({
+    particleCount: 80,
+    angle: 120,
+    spread: 70,
+    origin: { x: 1, y: 0.7 },
+    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
+    gravity: 1.2,
+    scalar: 0.9,
+  });
+
+  setTimeout(() => {
+    confetti({
+      particleCount: 60,
+      angle: 90,
+      spread: 120,
+      origin: { x: 0.5, y: 0.3 },
+      colors: ["#6366f1", "#38bdf8", "#34d399"],
+      gravity: 0.9,
+      scalar: 0.8,
+      ticks: 200,
+    });
+  }, 400);
+};
+
+export const BUBBLES = [
+  { size: 18, left: "8%",  delay: "0s",    duration: "7s",  opacity: 0.25 },
+  { size: 28, left: "18%", delay: "1.2s",  duration: "9s",  opacity: 0.18 },
+  { size: 12, left: "32%", delay: "0.5s",  duration: "6s",  opacity: 0.30 },
+  { size: 22, left: "48%", delay: "2s",    duration: "8s",  opacity: 0.20 },
+  { size: 16, left: "60%", delay: "0.8s",  duration: "7.5s",opacity: 0.28 },
+  { size: 30, left: "72%", delay: "1.5s",  duration: "10s", opacity: 0.15 },
+  { size: 14, left: "83%", delay: "0.3s",  duration: "6.5s",opacity: 0.32 },
+  { size: 20, left: "92%", delay: "2.5s",  duration: "8.5s",opacity: 0.22 },
+  { size: 10, left: "25%", delay: "3s",    duration: "7s",  opacity: 0.35 },
+  { size: 24, left: "55%", delay: "1.8s",  duration: "9.5s",opacity: 0.18 },
+];
+
+
+//Payment details
+export const getStatusStyle = (status: string) => {
+  switch (status) {
+    case "PAID":
+      return "bg-lime-100 text-lime-700 border border-lime-200";
+    case "PENDING":
+      return "bg-amber-100 text-amber-700 border border-amber-200";
+    case "FAILED":
+      return "bg-red-100 text-red-700 border border-red-200";
+    default:
+      return "bg-slate-100 text-slate-600 border border-slate-200";
+  }
+};

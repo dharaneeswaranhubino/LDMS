@@ -17,6 +17,7 @@ import type {
     FetchMyComplaintsParams,
     ComplaintStatus,
     PricingRates,
+    MyPaymentsResponse,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -330,6 +331,24 @@ export const fetchPricingRates = createAsyncThunk<
     }
 });
 
+export const fetchMyPayments = createAsyncThunk<
+    MyPaymentsResponse,
+    void,
+    { rejectValue: string }
+>("payment/fetchMyPayments", async (_, { rejectWithValue }) => {
+    try {
+        const res = await api.get("/payments/myPayments", {
+            params: { page: 1, limit: 6 },
+        });
+        return res.data.data as MyPaymentsResponse;
+    } catch (err: unknown) {
+        const error = err as AxiosError<{ message: string }>;
+        return rejectWithValue(
+            error.response?.data?.message || "Failed to fetch payment history",
+        );
+    }
+});
+
 //initial States
 const today = new Date().toISOString().split("T")[0];
 const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
@@ -370,7 +389,11 @@ const initialState: ShipmentState = {
     myComplaintError: null,
     activeMyComplaintTab: "ALL",
 
+    //pricing rates
     rates: null,
+
+    //payment details
+    payments: [],
 };
 
 const shipmentSlice = createSlice({
@@ -574,6 +597,20 @@ const shipmentSlice = createSlice({
             .addCase(fetchPricingRates.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Failed to fetch pricing rates";
+            })
+
+            //payment details
+            .addCase(fetchMyPayments.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchMyPayments.fulfilled, (state, action) => {
+                state.loading = false;
+                state.payments = action.payload.payments;
+            })
+            .addCase(fetchMyPayments.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to fetch payment history";
             });
     },
 });
