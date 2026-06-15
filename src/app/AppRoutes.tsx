@@ -70,6 +70,13 @@ const MyComplaints = lazy(
   () => import("../features/customerShipment/pages/MyComplaints"),
 );
 
+const ShipmentDetailView = lazy(
+  () => import("../features/agentShipment/pages/ShipmentDetailView"),
+);
+const AdminShipmentReassign = lazy(
+  () => import("../features/adminShipment/pages/AdminShipmentReassign"),
+);
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -111,9 +118,16 @@ const AppRoutes = () => {
             <Route path="/paymentSuccess" element={<PaymentSuccessScreen />} />
             <Route path="/myComplaints" element={<MyComplaints />} />
             {/* admin screens */}
-            <Route path="/agentRegisteration" element={<CreateAgent />} />
+            <Route
+              path="/agentManagement/agentRegisteration"
+              element={<CreateAgent />}
+            />
             <Route path="/agentManagement" element={<AgentManagement />} />
             <Route path="/allShipment" element={<AdminAllShipments />} />
+            <Route
+              path="/allShipment/reassign/:shipmentId"
+              element={<AdminShipmentReassign />}
+            />
             <Route path="/liveTracking" element={<AdminLiveTracking />} />
             <Route
               path="/liveTracking/:shipmentId"
@@ -124,6 +138,10 @@ const AppRoutes = () => {
             {/* agent screens */}
             <Route path="/agentDashboard" element={<AgentDashboard />} />
             <Route path="/deliveryDetail" element={<DeliveryDetail />} />
+            <Route
+              path="/deliveryDetail/:shipmentId"
+              element={<ShipmentDetailView />}
+            />
             <Route path="/deliveryHistory" element={<DeliveryHistory />} />
             <Route path="/payments/" element={<PaymentDetails />} />
             <Route path="/agentTracking/" element={<AgentTracking />} />

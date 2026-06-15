@@ -246,3 +246,25 @@ export const COMPLAINT_SUBJECT_LABELS: Record<string, string> = {
   PAYMENT_ISSUE: "Payment Issue",
   OTHER: "Other",
 };
+
+//Admin slot reassign
+export const formatSlot = (
+  start: string | null,
+  end: string | null,
+  date: string | null,
+): string => {
+  if (!start || !end) return "";
+  const fmt = (t: string) => {
+    const [h, m] = t.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hour = h % 12 || 12;
+    return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
+  };
+  const dateStr = date
+    ? new Date(date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+      })
+    : "";
+  return `${fmt(start)} – ${fmt(end)}${dateStr ? ` · ${dateStr}` : ""}`;
+};

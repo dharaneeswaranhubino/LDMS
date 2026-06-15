@@ -9,6 +9,7 @@ import { getAllAgents } from "../adminSlice";
 import type { DeliveryAgent } from "../adminTypes";
 import AgentDetailsModal from "../components/agentManagement/AgentDetailsModal";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import Pagination from "../../../shared/components/Pagination";
 
 const getStatusStyle = (status: string) => {
   switch (status) {
@@ -20,6 +21,15 @@ const getStatusStyle = (status: string) => {
       return "bg-slate-100 text-slate-600 border border-slate-200";
   }
 };
+
+const getIsActiveStyle = (status:boolean) =>{
+  switch(status){
+    case true:
+      return "bg-lime-100 text-lime-700 border border-lime-200";
+    case false:
+      return "bg-slate-100 text-slate-600 border border-slate-200"
+  }
+}
 
 const getProgressColor = (value: number) => {
   if (value >= 6) return "bg-red-400";
@@ -36,6 +46,8 @@ const AgentManagement = () => {
   const [selectedAgent, setSelectedAgent] = useState<DeliveryAgent | null>(
     null,
   );
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
     dispatch(getAllAgents());
@@ -55,7 +67,7 @@ const AgentManagement = () => {
   }, [agents, statusFilter, searchQuery]);
 
   const sendShipment = () => {
-    navigate("/agentRegisteration");
+    navigate("/agentManagement/agentRegisteration");
   };
 
   const totalAgents = agents.length;
@@ -67,7 +79,15 @@ const AgentManagement = () => {
     (a) => a.availabilityStatus === "UNAVAILABLE",
   ).length;
 
-  if (loading) {
+  const totalFiltered = filteredAgents.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+
+  const paginatedAgents = useMemo(() => {
+    const start = (page - 1) * limit;
+    return filteredAgents.slice(start, start + limit);
+  }, [filteredAgents, page, limit]);
+
+   if (loading) {
     return (
       <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
         <LoadingSpinner />
@@ -171,36 +191,52 @@ const AgentManagement = () => {
       </div>
 
       <div className="mt-5 rounded-3xl border border-cyan-100 bg-white shadow-sm overflow-hidden">
-        <div className="overflow-x-auto max-h-[420px] overflow-y-auto scrollbar-none">
+        <div className="overflow-x-auto max-h-[350px] overflow-y-auto scrollbar-none">
           <table className="w-full border-collapse min-w-[1000px]">
             <thead className="bg-sky-50 sticky top-0 z-10">
-              <tr className="text-[13px] uppercase tracking-wide text-slate-500">
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Agent</th>
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Phone</th>
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Status</th>
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">
+              <tr className="text-[10px] uppercase tracking-wide text-slate-500">
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Agent
+                </th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Phone
+                </th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Available Status
+                </th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Active Status
+                </th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
                   Today's Workload
                 </th>
 
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
                   Total Deliveries
                 </th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Total Delayed
+                </th>
 
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Joined</th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Joined
+                </th>
 
-                <th className="px-3 md:px-6 py-4 md:py-5 text-left font-semibold">Actions</th>
+                <th className="px-3 md:px-6 py-2 md:py-2 text-left font-semibold">
+                  Actions
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              {filteredAgents.map((agent) => (
+              {paginatedAgents.map((agent) => (
                 <tr
                   key={agent.id}
                   className="border-t border-sky-100 hover:bg-sky-50/70"
                 >
-                  <td className="px-3 md:px-6 py-4 md:py-5">
+                  <td className="px-3 md:px-6 py-2 md:py-2">
                     <div className="flex items-center gap-2 md:gap-3">
-                      <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-100 to-cyan-100 text-sm font-bold text-sky-700">
+                      <div className="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br from-sky-100 to-cyan-100 text-sm font-bold text-sky-700">
                         {agent.agentName
                           ?.split(" ")
                           .map((n) => n[0])
@@ -209,22 +245,22 @@ const AgentManagement = () => {
                       </div>
 
                       <div>
-                        <h3 className="font-semibold text-sm md:text-base text-slate-800">
+                        <h3 className="font-semibold text-sm md:text-sm text-slate-800">
                           {agent.agentName}
                         </h3>
 
-                        <p className="text-xs md:text-sm text-slate-400">
+                        <p className="text-xs md:text-sm whitespace-nowrap text-slate-400">
                           #AGT-{agent.agentId}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  <td className="px-6 py-5 font-medium text-slate-700">
+                  <td className="px-6 py-2 test-sm text-slate-700">
                     {agent.phoneNumber}
                   </td>
 
-                  <td className="px-6 py-5">
+                  <td className="px-6 py-2">
                     <span
                       className={`rounded-full px-4 py-1 text-sm font-semibold ${getStatusStyle(
                         agent.availabilityStatus,
@@ -233,8 +269,17 @@ const AgentManagement = () => {
                       {agent.availabilityStatus}
                     </span>
                   </td>
+                  <td className="px-6 py-2">
+                    <span
+                      className={`rounded-full whitespace-nowrap px-4 py-1 text-sm font-semibold ${getIsActiveStyle(
+                        agent.isActive,
+                      )}`}
+                    >
+                      {agent.isActive ? "Active" :"In Active"}
+                    </span>
+                  </td>
 
-                  <td className="px-6 py-5">
+                  <td className="px-6 py-2">
                     <div className="flex items-center gap-3">
                       <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-200">
                         <div
@@ -253,15 +298,18 @@ const AgentManagement = () => {
                     </div>
                   </td>
 
-                  <td className="px-6 py-5 font-semibold text-slate-800">
-                    {agent.totalDeliveries ?? "N/A"}
+                  <td className="px-6 py-2 font-semibold text-slate-800">
+                    {agent.deliveredCount ?? "N/A"}
+                  </td>
+                  <td className="px-6 py-2 font-semibold text-slate-800">
+                    {agent.delayedCount ?? "N/A"}
                   </td>
 
-                  <td className="px-6 py-5 text-slate-500">
+                  <td className="px-6 py-2 text-slate-500">
                     {new Date(agent.createdAt).toLocaleDateString()}
                   </td>
 
-                  <td className="px-6 py-5">
+                  <td className="px-6 py-2">
                     <button
                       onClick={() => setSelectedAgent(agent)}
                       className="flex items-center gap-2 rounded-xl border border-sky-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-sky-50"
@@ -283,6 +331,16 @@ const AgentManagement = () => {
             </div>
           )}
         </div>
+        {totalFiltered > 0 && (
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            total={totalFiltered}
+            limit={limit}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+          />
+        )}
       </div>
 
       {selectedAgent && (

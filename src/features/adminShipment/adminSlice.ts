@@ -15,6 +15,7 @@ import {
   type DashboardDateParams,
   type DeliveryAgent,
   type FetchComplaintsParams,
+  type ReassignResponse,
   type UpdateComplaintStatusResponse,
 } from "./adminTypes";
 import { AxiosError } from "axios";
@@ -39,7 +40,7 @@ function generateMockDashboard(
   // seed = numeric representation of fromDate
   const seed = new Date(fromDate).getTime() / 86400000;
 
-  const totalShipments = Math.round(50 + seededRand(seed, 1) * 150); // 50–200
+  const totalShipments = Math.round(50 + seededRand(seed, 1) * 150);
   const deliveredShipments = Math.round(
     totalShipments * (0.5 + seededRand(seed, 2) * 0.4),
   );
@@ -215,21 +216,6 @@ export const createAgentDetails = createAsyncThunk<
   },
 );
 
-// export const fetchMyShipments = createAsyncThunk<
-//   ShipmentResponse[],
-//   void,
-//   { rejectValue: string }
-// >("shipment/fetchMyShipments", async (_, { rejectWithValue }) => {
-//   try {
-//     const res = await api.get("/shipments/myShipments");
-//     return res.data.data as ShipmentResponse[];
-//   } catch (err: unknown) {
-//     const error = err as AxiosError<{ message: string }>;
-//     return rejectWithValue(
-//       error.response?.data?.message || "Failed to fetch shipments",
-//     );
-//   }
-// });
 
 export const getAllAgents = createAsyncThunk<
   DeliveryAgent[],
@@ -329,6 +315,46 @@ export const updateComplaintStatus = createAsyncThunk(
   }
 );
 
+export const reassignShipmentAgent = createAsyncThunk<
+  ReassignResponse,
+  { shipmentId: number; newAgentId: number },
+  { rejectValue: string }
+>(
+  "admin/reassignShipmentAgent",
+  async ({ shipmentId, newAgentId }, { rejectWithValue }) => {
+    try {
+      const res = await api.patch(
+        `/deliveryAgents/reassign/${shipmentId}`,
+        { newAgentId },
+      );
+      return res.data.data as ReassignResponse;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to reassign agent",
+      );
+    }
+  },
+);
+
+export const toggleAgentActiveStatus = createAsyncThunk<
+  { id: number; isActive: boolean },
+  number,
+  { rejectValue: string }
+>("admin/toggleAgentActiveStatus", async (agentId, { rejectWithValue }) => {
+  try {
+    const res = await api.patch(
+      `/deliveryAgents/${agentId}/toggleStatus`
+    );
+    return res.data.data;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to update agent status",
+    );
+  }
+});
+
 const initialState: AgentDetailsState = {
   shipments: [],
   agents: [],
@@ -353,6 +379,11 @@ const initialState: AgentDetailsState = {
   activeComplaintTab: "ALL",
   selectedComplaint: null,
   complaintError: null,
+
+  reassignLoading: false,
+  reassignSuccess: false,
+  reassignResult: null,
+  reassignError: null,
 };
 
 const adminSlice = createSlice({
@@ -375,6 +406,13 @@ const adminSlice = createSlice({
     clearComplaintError(state) {
       state.complaintError = null;
       state.complaintUpdateLoading = false;
+    },
+
+    clearReassignState(state) {
+      state.reassignLoading = false;
+      state.reassignSuccess = false;
+      state.reassignResult = null;
+      state.reassignError = null;
     },
   },
 
@@ -474,9 +512,31 @@ const adminSlice = createSlice({
       .addCase(updateComplaintStatus.rejected, (state, action) => {
         state.complaintUpdateLoading = false;
         state.complaintError = action.payload as string;
+      })
+
+      // Reassign Shipment Agent
+      .addCase(reassignShipmentAgent.pending, (state) => {
+        state.reassignLoading = true;
+        state.reassignSuccess = false;
+        state.reassignError = null;
+      })
+      .addCase(reassignShipmentAgent.fulfilled, (state, action) => {
+        state.reassignLoading = false;
+        state.reassignSuccess = true;
+        state.reassignResult = action.payload;
+      })
+      .addCase(reassignShipmentAgent.rejected, (state, action) => {
+        state.reassignLoading = false;
+        state.reassignError = action.payload || "Failed to reassign agent";
+      })
+
+      .addCase(toggleAgentActiveStatus.fulfilled, (state, action) => {
+        const { id, isActive } = action.payload;
+        const agent = state.agents.find((a) => a.id === id);
+        if (agent) agent.isActive = isActive;
       });
   },
 });
 
-export const { clearTimeline, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, } = adminSlice.actions;
+export const { clearTimeline, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, clearReassignState } = adminSlice.actions;
 export default adminSlice.reducer;

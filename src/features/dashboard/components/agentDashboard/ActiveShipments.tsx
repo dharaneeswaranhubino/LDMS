@@ -13,7 +13,7 @@ const ActiveShipments = ({
         <div className="flex items-center gap-2">
           <i className="fa-solid fa-truck text-blue-600 text-[15px]" />
           <span className="text-[13px] font-semibold text-slate-800">
-            Active Shipments
+            Active Shipment
           </span>
         </div>
         {activeDelivery ? (

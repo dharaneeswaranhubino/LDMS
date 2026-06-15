@@ -61,13 +61,13 @@ const getMenu = (
     allowedRole: "admin",
     icon: <i className="fa-solid fa-user-gear"></i>,
   },
-  {
-    name: "Agent Registeration",
-    path: "/agentRegisteration",
-    section: "MAIN",
-    allowedRole: "admin",
-    icon: <i className="fa-solid fa-users"></i>,
-  },
+  // {
+  //   name: "Agent Registeration",
+  //   path: "/agentRegisteration",
+  //   section: "MAIN",
+  //   allowedRole: "admin",
+  //   icon: <i className="fa-solid fa-users"></i>,
+  // },
   {
     name: "Track shipment",
     path: "/liveTracking",

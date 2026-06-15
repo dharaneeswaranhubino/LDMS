@@ -34,7 +34,6 @@ const ReceiverDetails = ({ data }: ReceiverDetailCard) => {
             label="Deliver to"
             value={`${data?.deliveryAddress},${data?.deliveryCity}`}
           />
-          {/* <DetailRow label="Gate code" value="1234" /> */}
           <DetailRow label="Pincode" value={data?.deliveryPincode} />
         </div>
       </div>

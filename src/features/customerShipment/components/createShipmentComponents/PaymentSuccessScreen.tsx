@@ -1,42 +1,141 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  PDFDownloadLink,
-} from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import confetti from "canvas-confetti";
 import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
 import ReceiptPDF from "./ReceiptPDF";
 import ReceiptPreviewModal from "./ReceiptPreviewModal";
 
-//Main Screen
+// ── confetti helpers ──────────────────────────────────────────────────────────
+const fireConfetti = () => {
+  // left side burst
+  confetti({
+    particleCount: 80,
+    angle: 60,
+    spread: 70,
+    origin: { x: 0, y: 0.7 },
+    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
+    gravity: 1.2,
+    scalar: 0.9,
+  });
+
+  // right side burst
+  confetti({
+    particleCount: 80,
+    angle: 120,
+    spread: 70,
+    origin: { x: 1, y: 0.7 },
+    colors: ["#6366f1", "#38bdf8", "#34d399", "#f472b6", "#fbbf24"],
+    gravity: 1.2,
+    scalar: 0.9,
+  });
+
+  // center top shower after 400ms
+  setTimeout(() => {
+    confetti({
+      particleCount: 60,
+      angle: 90,
+      spread: 120,
+      origin: { x: 0.5, y: 0.3 },
+      colors: ["#6366f1", "#38bdf8", "#34d399"],
+      gravity: 0.9,
+      scalar: 0.8,
+      ticks: 200,
+    });
+  }, 400);
+};
+
+// ── floating bubble config ────────────────────────────────────────────────────
+const BUBBLES = [
+  { size: 18, left: "8%",  delay: "0s",    duration: "7s",  opacity: 0.25 },
+  { size: 28, left: "18%", delay: "1.2s",  duration: "9s",  opacity: 0.18 },
+  { size: 12, left: "32%", delay: "0.5s",  duration: "6s",  opacity: 0.30 },
+  { size: 22, left: "48%", delay: "2s",    duration: "8s",  opacity: 0.20 },
+  { size: 16, left: "60%", delay: "0.8s",  duration: "7.5s",opacity: 0.28 },
+  { size: 30, left: "72%", delay: "1.5s",  duration: "10s", opacity: 0.15 },
+  { size: 14, left: "83%", delay: "0.3s",  duration: "6.5s",opacity: 0.32 },
+  { size: 20, left: "92%", delay: "2.5s",  duration: "8.5s",opacity: 0.22 },
+  { size: 10, left: "25%", delay: "3s",    duration: "7s",  opacity: 0.35 },
+  { size: 24, left: "55%", delay: "1.8s",  duration: "9.5s",opacity: 0.18 },
+];
+
+// ── component ─────────────────────────────────────────────────────────────────
 const PaymentSuccessScreen = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location  = useLocation();
+  const navigate  = useNavigate();
+  const firedRef  = useRef(false); // prevent double-fire in StrictMode
   const [showPreview, setShowPreview] = useState(false);
+  const [checkVisible, setCheckVisible] = useState(false);
+
   const { razorpayPaymentId, trackingId } = location.state ?? {};
   const { currentShipment } = useAppSelector((state) => state.shipment);
-  const prices = currentShipment?.priceBreakdown;
-  const priority = currentShipment?.shipmentPriority;
+  const prices        = currentShipment?.priceBreakdown;
+  const priority      = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
 
+  // ── redirect guard ────────────────────────────────────────────────────────
   useEffect(() => {
     if (!razorpayPaymentId) {
       navigate("/sendShipment", { replace: true });
     }
   }, [razorpayPaymentId, navigate]);
 
+  // ── fire confetti on mount ────────────────────────────────────────────────
+  useEffect(() => {
+    if (firedRef.current) return;
+    firedRef.current = true;
+
+    // slight delay so the page renders first
+    // const t1 = setTimeout(() => {
+    // }, 0);
+    fireConfetti();
+    setCheckVisible(true);
+
+    // return () => clearTimeout(t1);
+  }, []);
+
   if (!razorpayPaymentId || !prices) return null;
 
   const today = new Date().toLocaleDateString("en-IN", {
-    day: "2-digit",
+    day:   "2-digit",
     month: "short",
-    year: "numeric",
+    year:  "numeric",
   });
 
   const fileName = `ShipFast-Receipt-${razorpayPaymentId}.pdf`;
 
   return (
     <>
-      {/* Preview Modal */}
+      {/* ── CSS keyframes injected once ────────────────────────────────────── */}
+      <style>{`
+        @keyframes floatUp {
+          0%   { transform: translateY(0)   scale(1);    opacity: var(--op); }
+          50%  { transform: translateY(-55px) scale(1.08); opacity: calc(var(--op) * 0.7); }
+          100% { transform: translateY(-110px) scale(0.9); opacity: 0; }
+        }
+        @keyframes popIn {
+          0%   { transform: scale(0.3); opacity: 0; }
+          60%  { transform: scale(1.18); opacity: 1; }
+          80%  { transform: scale(0.92); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slideUp {
+          0%   { transform: translateY(24px); opacity: 0; }
+          100% { transform: translateY(0);    opacity: 1; }
+        }
+        .bubble {
+          position: absolute;
+          bottom: -40px;
+          border-radius: 50%;
+          background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent);
+          border: 1px solid rgba(255,255,255,0.4);
+          animation: floatUp var(--dur) var(--delay) ease-in-out infinite;
+        }
+        .pop-in    { animation: popIn   0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+        .slide-up  { animation: slideUp 0.5s ease forwards; }
+      `}</style>
+
+      {/* ── receipt preview modal ───────────────────────────────────────────── */}
       {showPreview && (
         <ReceiptPreviewModal
           onClose={() => setShowPreview(false)}
@@ -50,26 +149,85 @@ const PaymentSuccessScreen = () => {
         />
       )}
 
-      <div className="rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-4">
-        {/* Success card */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-8 mb-4 flex flex-col items-center gap-3 shadow-sm">
-          <div className="text-green-500 text-5xl">
-            <i className="fa-solid fa-circle-check"></i>
+      {/* ── page wrapper ────────────────────────────────────────────────────── */}
+      <div className="relative rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-4 overflow-hidden">
+
+        {/* ── floating bubbles background ─────────────────────────────────── */}
+        {BUBBLES.map((b, i) => (
+          <span
+            key={i}
+            className="bubble"
+            style={{
+              width:     b.size,
+              height:    b.size,
+              left:      b.left,
+              "--op":    b.opacity,
+              "--dur":   b.duration,
+              "--delay": b.delay,
+            } as React.CSSProperties}
+          />
+        ))}
+
+        {/* ── success card ────────────────────────────────────────────────── */}
+        <div className="relative bg-white border border-slate-200 rounded-2xl p-8 mb-4 flex flex-col items-center gap-3 shadow-sm overflow-hidden">
+
+          {/* subtle inner shimmer stripe */}
+          <div className="absolute inset-0 bg-gradient-to-br from-green-50/60 via-transparent to-sky-50/40 pointer-events-none rounded-2xl" />
+
+          {/* check icon — pops in */}
+          <div
+            className={`text-green-500 text-5xl ${checkVisible ? "pop-in" : "opacity-0"}`}
+          >
+            <i className="fa-solid fa-circle-check" />
           </div>
-          <p className="text-xl font-bold text-green-600">
+
+          {/* title */}
+          <p
+            className="text-xl font-bold text-green-600 slide-up"
+            style={{ animationDelay: "0.15s", opacity: 0 }}
+          >
             Payment Successful!
           </p>
-          <p className="text-slate-500 text-sm">
-            Payment ID: {razorpayPaymentId}
+
+          {/* payment ID */}
+          <p
+            className="text-slate-500 text-sm slide-up"
+            style={{ animationDelay: "0.25s", opacity: 0 }}
+          >
+            Payment ID:{" "}
+            <span className="font-mono font-medium text-slate-600">
+              {razorpayPaymentId}
+            </span>
           </p>
-          <p className="text-slate-600 text-center text-[14px]">
+
+          {/* tracking ID — only if available */}
+          {trackingId && (
+            <p
+              className="text-slate-500 text-sm slide-up"
+              style={{ animationDelay: "0.32s", opacity: 0 }}
+            >
+              Tracking ID:{" "}
+              <span className="font-mono font-medium text-indigo-500">
+                {trackingId}
+              </span>
+            </p>
+          )}
+
+          {/* description */}
+          <p
+            className="text-slate-600 text-center text-[14px] slide-up"
+            style={{ animationDelay: "0.38s", opacity: 0 }}
+          >
             Your shipment has been created. Admin will assign a delivery slot
             shortly.
           </p>
 
-          {/* Preview/Download button row */}
-          <div className="flex items-center gap-2 mt-2 w-full max-w-xs">
-            {/* Preview button */}
+          {/* preview + download row */}
+          <div
+            className="flex items-center gap-2 mt-2 w-full max-w-xs slide-up"
+            style={{ animationDelay: "0.45s", opacity: 0 }}
+          >
+            {/* preview button */}
             <button
               onClick={() => setShowPreview(true)}
               className="flex-1 h-10 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2"
@@ -78,7 +236,7 @@ const PaymentSuccessScreen = () => {
               Preview Receipt
             </button>
 
-            {/* Direct download icon button */}
+            {/* direct download */}
             <PDFDownloadLink
               document={
                 <ReceiptPDF
@@ -105,23 +263,27 @@ const PaymentSuccessScreen = () => {
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-col gap-3">
+        {/* ── action buttons ───────────────────────────────────────────────── */}
+        <div
+          className="flex flex-col gap-3 slide-up"
+          style={{ animationDelay: "0.52s", opacity: 0 }}
+        >
           <button
             onClick={() => navigate("/sendShipment")}
             className="w-full h-11 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl font-medium transition-all"
           >
-            <i className="fa-solid fa-plus mr-2"></i>
+            <i className="fa-solid fa-plus mr-2" />
             Create New Shipment
           </button>
           <button
             onClick={() => navigate("/myShipments")}
             className="w-full h-11 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-medium transition-all"
           >
-            <i className="fa-solid fa-box mr-2"></i>
+            <i className="fa-solid fa-box mr-2" />
             View My Shipments
           </button>
         </div>
+
       </div>
     </>
   );

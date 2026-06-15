@@ -113,6 +113,8 @@ export interface DeliveryCheckpointsProps {
   data: DeliveryItem;
   otpVerified: boolean;
   onDelivered: () => void;
+
+  onOtpVerified: (value: boolean) => void;
 }
 
 //UpdateStatus Modal Props
@@ -121,6 +123,9 @@ export interface UpdateStatusModalProps {
   currentStatus: ShipmentStatus;
   onUpdate: (nextStatus: ShipmentStatus) => void; // string → ShipmentStatus
   shipmentId: number;
+
+  assignedSlotStart: string;
+  assignedSlotEnd: string;
 }
 
 //Delivery Details Modal props interface

@@ -12,6 +12,7 @@ import { formatTime, formatDate } from "../../utils/statusHelpers";
 
 interface Props {
   item: DeliveryItem;
+  onView: () => void;
 }
 const DeliveryCard = ({ item }: Props) => {
   const [isView, setIsView] = useState<boolean>(false);

@@ -39,7 +39,7 @@ const AgentTracking = () => {
   function handleSearch() {
     setSearchNotFound(false);
 
-    const val = searchInput.trim().toUpperCase();
+    const val = searchInput.trim().toLowerCase();
     if (!val) return;
     const found = deliveries.find((s) => {
       const trackingId = s.trackingId?.toLowerCase() ?? "";
@@ -110,6 +110,9 @@ const AgentTracking = () => {
               Search
             </button>
           </div>
+          {searchNotFound && (
+            <div className="text-sm text-red-600">{searchInput} not found</div>
+          )}
         </div>
 
         <div className="rounded-2xl flex flex-1 min-h-0">
@@ -173,7 +176,7 @@ const AgentTracking = () => {
             {shipmentId && (
               <div className="flex items-center px-4 py-2.5 border-b border-gray-100 md:hidden">
                 <button
-                  onClick={() => navigate("/liveTracking")}
+                  onClick={() => navigate("/agentTracking")}
                   className="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-600 transition-colors"
                 >
                   <svg

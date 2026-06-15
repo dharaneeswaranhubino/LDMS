@@ -67,6 +67,8 @@ export interface DeliveryAgent {
   isActive: boolean;
   serviceZone: string;
   createdAt: string;
+  deliveredCount:number;
+  delayedCount:number;
   agentId: number;
   agentName: string;
   agentEmail: string;
@@ -165,6 +167,11 @@ export interface AgentDetailsState {
   activeComplaintTab: "ALL" | ComplaintStatus;
   selectedComplaint: AdminComplaint | null;
   complaintError: string | null;
+
+  reassignLoading: boolean;
+  reassignSuccess: boolean;
+  reassignResult: ReassignResponse | null;
+  reassignError: string | null;
 }
 
 // admin dashboard types/Interfaces
@@ -396,4 +403,21 @@ export interface ComplaintFiltersProps {
 export interface ComplaintTableProps {
   complaints: AdminComplaint[];
   complaintsLoading: boolean;
+}
+
+//Admin slot reassign
+export interface ReassignSlot {
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface ReassignResponse {
+  shipmentId: number;
+  previousAgentId: number | null;
+  newAgentId: number;
+  newSlotId: number;
+  newSlot: ReassignSlot;
+  shipmentStatus: ShipmentStatus;
+  message: string;
 }

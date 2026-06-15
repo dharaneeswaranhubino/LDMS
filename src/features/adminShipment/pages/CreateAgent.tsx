@@ -9,6 +9,7 @@ import { createAgentDetails } from "../adminSlice";
 import { toast } from "react-toastify";
 import notificationSound from "../../../assets/universfield-new-notification-051-494246.mp3";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 const vehicleTypes = ["Bike", "Scooter", "Van", "Mini Truck", "Truck"];
 
@@ -96,14 +97,23 @@ const CreateAgent = () => {
 
   return (
     <div className="rounded-2xl w-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 min-h-screen py-4 px-2 lg:p-6 overflow-hidden">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-800">
-          Create New Agent Details
-        </h1>
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-800">
+            Create New Agent Details
+          </h1>
 
-        <p className="text-[14px] text-slate-500 mt-1">
-          Fill in details below to create your new Agent Details
-        </p>
+          <p className="text-[14px] text-slate-500 mt-1">
+            Fill in details below to create your new Agent Details
+          </p>
+        </div>
+
+        <Link to={"/agentManagement"}
+          className="flex h-[44px] w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 text-[13px] font-medium text-white shadow-md"
+        >
+          {/* <i className="fa-solid fa-plus text-[11px]"></i> */}
+          Back
+        </Link>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm">

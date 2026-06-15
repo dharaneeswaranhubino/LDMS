@@ -117,6 +117,9 @@ const TrackShipmentPage = () => {
               Search
             </button>
           </div>
+          {searchNotFound && (
+            <div className="text-sm text-red-600">{searchInput} not found</div>
+          )}
         </div>
 
         <div className="rounded-2xl flex flex-1 min-h-0">

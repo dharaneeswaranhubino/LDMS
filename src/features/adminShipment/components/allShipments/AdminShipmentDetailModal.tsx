@@ -1,13 +1,18 @@
+import { useEffect } from "react";
 import type { AllShipments } from "../../adminTypes";
 import {
   avatarColor,
-  formatDate,
   getInitials,
   PRIORITY_LABEL,
   PRIORITY_STYLE,
   STATUS_LABEL,
   STATUS_STYLE,
 } from "../../utils/adminShipmentHelper";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../shared/hooks/reduxHooks";
+import { fetchPaymentDetails } from "../../../customerShipment/shipmentSlice";
 
 const formatSlot = (
   start: string | null,
@@ -36,6 +41,15 @@ interface Props {
 }
 
 const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
+  const dispatch = useAppDispatch();
+  const { paymentDetails, loading } = useAppSelector((state) => state.shipment);
+  const shipmentId = shipment?.shipmentId;
+  useEffect(() => {
+    if (shipmentId) {
+      dispatch(fetchPaymentDetails(shipmentId));
+    }
+  }, [dispatch, shipmentId]);
+
   if (!shipment) return null;
 
   return (
@@ -224,39 +238,82 @@ const AdminShipmentDetailModal = ({ shipment, onClose }: Props) => {
           </section>
 
           {/* Payment */}
-          <section>
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
-              Payment
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-slate-50 rounded-xl p-3">
-                <p className="text-[10px] text-slate-400 mb-1">Amount</p>
-                <p className="text-[14px] font-semibold text-slate-800">
-                  ₹{shipment.amount}
-                </p>
-              </div>
-              <div className="bg-slate-50 rounded-xl p-3">
-                <p className="text-[10px] text-slate-400 mb-1">Payment</p>
-                <p
-                  className={`text-[12px] font-semibold ${
-                    shipment.paymentStatus === "PAID"
-                      ? "text-green-600"
-                      : shipment.paymentStatus === "FAILED"
-                        ? "text-red-500"
-                        : "text-sky-600"
-                  }`}
-                >
-                  {shipment.paymentStatus}
-                </p>
-              </div>
-              <div className="bg-slate-50 rounded-xl p-3">
-                <p className="text-[10px] text-slate-400 mb-1">Created</p>
-                <p className="text-[11px] font-medium text-slate-600">
-                  {formatDate(shipment.createdAt)}
-                </p>
-              </div>
+          {loading ? (
+            <div className="py-10 text-center text-slate-500">
+              <i className="fa-solid fa-spinner fa-spin mr-2" />
+              Loading payment details...
             </div>
-          </section>
+          ) : !paymentDetails ? (
+            <div className="py-10 text-center text-slate-500">
+              Payment details not found
+            </div>
+          ) : (
+            <section>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                Payment Details
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">Amount</p>
+                  <p className="text-[14px] font-semibold text-slate-800">
+                    ₹{paymentDetails?.amount}
+                  </p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">Payment</p>
+                  <p
+                    className={`text-[12px] font-semibold ${
+                      paymentDetails?.paymentStatus === "PAID"
+                        ? "text-green-600"
+                        : paymentDetails?.paymentStatus === "FAILED"
+                          ? "text-red-500"
+                          : "text-sky-600"
+                    }`}
+                  >
+                    {paymentDetails?.paymentStatus}
+                  </p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">Paid Date</p>
+                  <p className="text-[11px] font-medium text-slate-600">
+                    {new Date(paymentDetails?.paidAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">Paid Time</p>
+                  <p className="text-[11px] font-medium text-slate-600">
+                    {new Date(paymentDetails?.paidAt).toLocaleTimeString()}
+                  </p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">
+                    Transaction ID
+                  </p>
+                  <p className="text-[12px] font-medium text-slate-600">
+                    {paymentDetails?.transactionId}
+                  </p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">
+                    Transaction ID
+                  </p>
+                  <p className="text-[12px] font-medium text-slate-600">
+                    {paymentDetails?.razorpayOrderId}
+                  </p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-400 mb-1">
+                    Razorpay Order ID
+                  </p>
+                  <p className="text-[12px] font-medium text-slate-600">
+                    {paymentDetails?.razorpayPaymentId}
+                  </p>
+                </div>
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { AdminShipmentTableRowProps } from "../../adminTypes";
 import {
   avatarColor,
@@ -30,19 +31,28 @@ const formatSlot = (
   return `${fmt(start)} – ${fmt(end)}${dateStr ? ` · ${dateStr}` : ""}`;
 };
 
-const AdminShipmentTableRow = ({ shipment: s, onView, onComplete }: AdminShipmentTableRowProps) => {
+const AdminShipmentTableRow = ({
+  shipment: s,
+  onView,
+  onComplete,
+}: AdminShipmentTableRowProps) => {
+  const navigate = useNavigate();
   const renderAction = () => {
     if (s.shipmentStatus === "CONFIRMED" || s.shipmentStatus === "DELAYED") {
       return (
         <button
-          disabled
-          title="Reassign — coming soon"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/allShipment/reassign/${s.shipmentId}`, {
+              state: { shipment: s },
+            });
+          }}
           className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium
-            border cursor-not-allowed opacity-50 whitespace-nowrap
+            border whitespace-nowrap transition-all
             ${
               s.shipmentStatus === "DELAYED"
-                ? "bg-red-50 text-red-700 border-red-200"
-                : "bg-sky-50 text-sky-700 border-sky-200"
+                ? "bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                : "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100"
             }`}
         >
           <i className="fa-solid fa-rotate-right text-[10px]" />

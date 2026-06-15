@@ -40,26 +40,51 @@ const AdminLiveTracking = () => {
     isActive(s.shipmentStatus),
   );
 
+  // function handleSearch() {
+  //   setSearchNotFound(false);
+  //   const val = searchInput.trim().toUpperCase();
+  //   if (!val) return;
+  //   const found = allShipments.find((s) => {
+  //     const trackingId = s.trackingId?.toLowerCase() ?? "";
+  //     const packageName = s.itemName?.toLowerCase() ?? "";
+  //     const agentName = s.assignedAgent?.name.toLowerCase() ?? "";
+
+  //     return (
+  //       trackingId.includes(val) ||
+  //       packageName.includes(val) ||
+  //       agentName.includes(val)
+  //     );
+  //   });
+  //   if (found) {
+  //     navigate(`/liveTracking/${found.shipmentId}`);
+  //   } else {
+  //     setSearchNotFound(true);
+  //     navigate(`/liveTracking`);
+  //   }
+  // }
   function handleSearch() {
     setSearchNotFound(false);
-    const val = searchInput.trim().toUpperCase();
-    if (!val) return;
+
+    const search = searchInput.trim().toLowerCase();
+    if (!search) return;
+
     const found = allShipments.find((s) => {
       const trackingId = s.trackingId?.toLowerCase() ?? "";
       const packageName = s.itemName?.toLowerCase() ?? "";
-      const agentName = s.assignedAgent?.name.toLowerCase() ?? "";
+      const agentName = s.assignedAgent?.name?.toLowerCase() ?? "";
 
       return (
-        trackingId.includes(val) ||
-        packageName.includes(val) ||
-        agentName.includes(val)
+        trackingId.includes(search) ||
+        packageName.includes(search) ||
+        agentName.includes(search)
       );
     });
+
     if (found) {
-      navigate(`/trackShipments/${found.shipmentId}`);
+      navigate(`/liveTracking/${found.shipmentId}`);
     } else {
       setSearchNotFound(true);
-      navigate(`/trackShipments`);
+      navigate(`/liveTracking`);
     }
   }
 
@@ -117,6 +142,9 @@ const AdminLiveTracking = () => {
               Search
             </button>
           </div>
+          {searchNotFound && (
+            <div className="text-sm text-red-600">{searchInput} not found</div>
+          )}
         </div>
 
         <div className="rounded-2xl flex flex-1 min-h-0">
