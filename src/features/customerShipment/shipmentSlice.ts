@@ -16,10 +16,12 @@ import type {
     MyComplaintPagination,
     FetchMyComplaintsParams,
     ComplaintStatus,
+    PricingRates,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
 import { getMockCustomerDashboard } from "../dashboard/utils/CustomerDashboardHelper";
+import type { AxiosError } from "axios";
 
 export const createShipment = createAsyncThunk<
     ShipmentResponse,       // return type
@@ -33,7 +35,7 @@ export const createShipment = createAsyncThunk<
             const res = await api.post("/shipments", payload);
             return res.data.data;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to create shipment");
         }
     }
@@ -51,7 +53,7 @@ export const updateShipment = createAsyncThunk<
             const res = await api.patch(`/shipments/${shipmentId}`, payload);
             return res.data.data;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to update shipment");
         }
     }
@@ -71,7 +73,7 @@ export const initiatePayment = createAsyncThunk<
             // console.log("res.data.data :", res.data.data);
             return res.data.data;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
 
             return rejectWithValue(
                 error.response?.data?.message || "Failed to initiate payment"
@@ -98,7 +100,7 @@ export const verifyPayment = createAsyncThunk<
             // console.log("res.data.data :", res.data.data);
             return res.data.data;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
 
             return rejectWithValue(
                 error.response?.data?.message || "Payment verification failed"
@@ -121,7 +123,7 @@ export const fetchMyShipments = createAsyncThunk<
                 pagination: res.data.data.pagination,
             };
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to fetch shipments");
         }
     }
@@ -138,7 +140,7 @@ export const fetchShipmentById = createAsyncThunk<
             const res = await api.get(`/shipments/${id}`);
             return res.data.data as ShipmentResponse;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to fetch shipment");
         }
     }
@@ -155,7 +157,7 @@ export const fetchPaymentDetails = createAsyncThunk<
             const res = await api.get(`/payments/${shipmentId}`);
             return res.data.data;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(
                 error.response?.data?.message || "Failed to fetch payment details"
             );
@@ -191,7 +193,7 @@ export const fetchCustomerDashboard = createAsyncThunk<
 //             const res = await api.get(`/dashboard/customer?from=${from}&to=${to}`);
 //             return res.data.data;
 //         } catch (err: unknown) {
-//             const error = err as import("axios").AxiosError<{ message: string }>;
+//             const error = err as AxiosError<{ message: string }>;
 //             return rejectWithValue(error.response?.data?.message || "Failed to fetch dashboard");
 //         }
 //     }
@@ -209,7 +211,7 @@ export const fetchNotifications = createAsyncThunk<
             const res = await api.get(`/notifications/me?page=${page}&limit=${limit}`);
             return res.data.data as FetchNotificationsResponse;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to fetch notifications");
         }
     }
@@ -225,7 +227,7 @@ export const markAllNotificationsRead = createAsyncThunk<
         try {
             await api.patch("/notifications/readAll");
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to mark all as read");
         }
     }
@@ -242,7 +244,7 @@ export const markSingleNotificationRead = createAsyncThunk<
             await api.patch(`/notifications/read/${notificationId}`);
             return notificationId;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to mark as read");
         }
     }
@@ -259,7 +261,7 @@ export const fetchShipmentTimeline = createAsyncThunk<
             const res = await api.get(`/shipments/${shipmentId}/timeline`);
             return res.data.data as ShipmentTimelineResponse;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(error.response?.data?.message || "Failed to fetch timeline");
         }
     }
@@ -276,7 +278,7 @@ export const raiseComplaint = createAsyncThunk<
             const res = await api.post(`/complaints/${shipmentId}`, payload);
             return res.data.data as ComplaintResponse;
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(
                 error.response?.data?.message || "Failed to raise complaint"
             );
@@ -304,7 +306,7 @@ export const fetchMyComplaints = createAsyncThunk<
                 pagination: MyComplaintPagination;
             };
         } catch (err: unknown) {
-            const error = err as import("axios").AxiosError<{ message: string }>;
+            const error = err as AxiosError<{ message: string }>;
             return rejectWithValue(
                 error.response?.data?.message || "Failed to fetch complaints",
             );
@@ -312,6 +314,21 @@ export const fetchMyComplaints = createAsyncThunk<
     },
 );
 
+export const fetchPricingRates = createAsyncThunk<
+    PricingRates,
+    void,
+    { rejectValue: string }
+>("pricing/fetchRates", async (_, { rejectWithValue }) => {
+    try {
+        const res = await api.get("/pricing/rates");
+        return res.data.data as PricingRates;
+    } catch (err: unknown) {
+        const error = err as AxiosError<{ message: string }>;
+        return rejectWithValue(
+            error.response?.data?.message || "Failed to fetch pricing rates",
+        );
+    }
+});
 
 //initial States
 const today = new Date().toISOString().split("T")[0];
@@ -352,6 +369,8 @@ const initialState: ShipmentState = {
     myComplaintsLoading: false,
     myComplaintError: null,
     activeMyComplaintTab: "ALL",
+
+    rates: null,
 };
 
 const shipmentSlice = createSlice({
@@ -542,6 +561,20 @@ const shipmentSlice = createSlice({
                 state.myComplaintsLoading = false;
                 state.myComplaintError = action.payload || "Failed to fetch complaints";
             })
+
+            //Pricing details
+            .addCase(fetchPricingRates.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchPricingRates.fulfilled, (state, action) => {
+                state.loading = false;
+                state.rates = action.payload;
+            })
+            .addCase(fetchPricingRates.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to fetch pricing rates";
+            });
     },
 });
 

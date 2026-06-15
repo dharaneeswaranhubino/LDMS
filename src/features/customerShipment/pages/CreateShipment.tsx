@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
-import { PiReadCvLogoLight } from "react-icons/pi";
+// import { PiReadCvLogoLight } from "react-icons/pi";
 import PackageDetails from "../components/createShipmentComponents/PackageDetails";
 import PriceBreakdown from "../components/createShipmentComponents/PriceBreakdown";
 import ShipmentAddress from "../components/createShipmentComponents/ShipmentAddress";
@@ -13,12 +13,14 @@ import type {
   CreatedShipmentMeta,
   PackageDetailsFormData,
 } from "../shipmentTypes";
+import ShipmentPricingModal from "../components/createShipmentComponents/ShipmentPricingModal";
 
 const CreateShipment = () => {
   const dispatch = useAppDispatch();
 
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
+  const [showPricingModal, setShowPricingModal] = useState(false);
   const [isInstruc, setIsInstruc] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -77,11 +79,8 @@ const CreateShipment = () => {
   const handlePackageNext = async () => {
     try {
       setIsCreating(true);
-
       const payload = { pickUpAddress, deliveryAddress, packageDetails };
-
       let result;
-
       if (createdMeta) {
         result = await dispatch(
           updateShipment({
@@ -151,12 +150,22 @@ const CreateShipment = () => {
               Fill in details below to create your shipment
             </p>
           </div>
-          <div
-            onClick={() => setIsInstruc(true)}
-            className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
-          >
-            <PiReadCvLogoLight size={18} />
-            Instructions
+          <div className="flex gap-3">
+            <div
+              onClick={() => setShowPricingModal(true)}
+              className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
+            >
+              <i className="fa-solid fa-tags text-sky-500"></i>
+              Price Details
+            </div>
+            <div
+              onClick={() => setIsInstruc(true)}
+              className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
+            >
+              {/* <PiReadCvLogoLight size={18} />
+              Instructions */}
+              <i className="fa-solid fa-circle-info"></i>
+            </div>
           </div>
         </div>
 
@@ -226,6 +235,9 @@ const CreateShipment = () => {
         </AnimatePresence>
       </div>
 
+      {showPricingModal && (
+        <ShipmentPricingModal onClose={() => setShowPricingModal(false)} />
+      )}
       {isInstruc && <DeliveryInstruc setIsInstruc={setIsInstruc} />}
     </>
   );

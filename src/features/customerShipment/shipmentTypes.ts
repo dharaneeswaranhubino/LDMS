@@ -132,6 +132,9 @@ export interface ShipmentState {
   myComplaintsLoading: boolean;
   myComplaintError: string | null;
   activeMyComplaintTab: "ALL" | ComplaintStatus;
+
+  // pricing details
+  rates: PricingRates | null;
 }
 
 export type ShipmentStatus =
@@ -473,4 +476,23 @@ export interface FetchMyComplaintsParams {
   page?: number;
   limit?: number;
   status?: ComplaintStatus;
+}
+
+export interface WeightSlab {
+  upTo: number | null;
+  ratePerKg: number;
+}
+
+export interface PriorityMultipliers {
+  STANDARD: number;
+  EXPRESS: number;
+  SAME_DAY: number;
+}
+
+export interface PricingRates {
+  platformFee: number;
+  weightSlabs: WeightSlab[];
+  priorityMultipliers: PriorityMultipliers;
+  fragileSurcharge: number;
+  gstPercent: number;
 }
