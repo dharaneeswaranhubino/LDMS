@@ -78,6 +78,10 @@ const AdminShipmentReassign = lazy(
   () => import("../features/adminShipment/pages/AdminShipmentReassign"),
 );
 
+const AgentChat = lazy(
+  () => import("../features/agentShipment/pages/AgentChat"),
+);
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -118,7 +122,7 @@ const AppRoutes = () => {
             />
             <Route path="/paymentSuccess" element={<PaymentSuccessScreen />} />
             <Route path="/myComplaints" element={<MyComplaints />} />
-            <Route path="/customerChat" element={<CustomerChat/>}/>
+            <Route path="/customerChat" element={<CustomerChat />} />
             {/* admin screens */}
             <Route
               path="/agentManagement/agentRegisteration"
@@ -151,6 +155,7 @@ const AppRoutes = () => {
               path="/agentTracking/:shipmentId"
               element={<AgentTracking />}
             />
+            <Route path="/agentChat" element={<AgentChat />} />
             {/* <Route path="/payments/:shipmentId" element={<PaymentDetails />} /> */}
           </Route>
         </Routes>

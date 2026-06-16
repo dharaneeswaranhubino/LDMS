@@ -114,7 +114,7 @@ const getMenu = (
   },
   {
     name: "Chat to Customer",
-    path: "/customerChat",
+    path: "/agentChat",
     section: "SUPPORT",
     allowedRole: "deliveryAgent",
     icon: <i className="fa-regular fa-comment text-[13px]"></i>,

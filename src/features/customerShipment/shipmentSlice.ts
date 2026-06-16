@@ -18,6 +18,8 @@ import type {
     ComplaintStatus,
     PricingRates,
     MyPaymentsResponse,
+    ChatData,
+    ChatMessage,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -349,6 +351,38 @@ export const fetchMyPayments = createAsyncThunk<
     }
 });
 
+// Fetch chat history
+export const fetchChatMessages = createAsyncThunk(
+    'chat/fetchMessages',
+    async ({ shipmentId, page = 1, limit = 20 }: { shipmentId: number; page?: number; limit?: number }, { rejectWithValue }) => {
+        try {
+            const res = await api.get(`/chat/${shipmentId}`, { params: { page, limit } });
+            return res.data.data as ChatData;
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch messages",
+            );
+        }
+    }
+);
+
+// Send message via REST (socket handles real-time delivery)
+export const sendMessage = createAsyncThunk(
+    'chat/sendMessage',
+    async ({ shipmentId, message }: { shipmentId: number; message: string }, { rejectWithValue }) => {
+        try {
+            const res = await api.post(`/chat/${shipmentId}`, { message });
+            return res.data.data as ChatMessage;
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to send message",
+            );
+        }
+    }
+);
+
 //initial States
 const today = new Date().toISOString().split("T")[0];
 const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
@@ -394,6 +428,13 @@ const initialState: ShipmentState = {
 
     //payment details
     payments: [],
+
+    //Chat
+    activeShipmentId: null,
+    messages: [],
+    chatPagination: null,
+    loadingHistory: false,
+    sendingMessage: false,
 };
 
 const shipmentSlice = createSlice({
@@ -428,6 +469,25 @@ const shipmentSlice = createSlice({
             action: PayloadAction<"ALL" | ComplaintStatus>
         ) {
             state.activeMyComplaintTab = action.payload;
+        },
+
+        //chat
+        setActiveShipment(state, action: PayloadAction<number | null>) {
+            state.activeShipmentId = action.payload;
+            state.messages = [];
+            state.pagination = null;
+        },
+        appendMessage(state, action: PayloadAction<ChatMessage>) {
+            const exists = state.messages.some((m) => m.id === action.payload.id);
+            if (!exists) {
+                state.messages.push(action.payload);
+            }
+        },
+        clearChat(state) {
+            state.activeShipmentId = null;
+            state.messages = [];
+            state.pagination = null;
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
@@ -611,9 +671,37 @@ const shipmentSlice = createSlice({
             .addCase(fetchMyPayments.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Failed to fetch payment history";
+            })
+
+            //Chat get history
+            .addCase(fetchChatMessages.pending, (state) => {
+                state.loadingHistory = true;
+                state.error = null;
+            })
+            .addCase(fetchChatMessages.fulfilled, (state, action) => {
+                state.loadingHistory = false;
+                state.messages = action.payload.messages ?? [];
+                state.pagination = action.payload.pagination;
+            })
+            .addCase(fetchChatMessages.rejected, (state, action) => {
+                state.loadingHistory = false;
+                state.error = action.payload as string;
+            })
+
+            //chat send msg
+            .addCase(sendMessage.pending, (state) => {
+                state.sendingMessage = true;
+            })
+            .addCase(sendMessage.fulfilled, (state) => {
+                state.sendingMessage = false;
+                // appendMessage handles dedup, so dispatch separately from component
+            })
+            .addCase(sendMessage.rejected, (state, action) => {
+                state.sendingMessage = false;
+                state.error = action.payload as string;
             });
     },
 });
 
-export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint, setActiveMyComplaintTab } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint, setActiveMyComplaintTab, setActiveShipment, appendMessage, clearChat } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

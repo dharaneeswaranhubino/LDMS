@@ -1,0 +1,123 @@
+import { useEffect, useRef, useState } from 'react';
+import { Send, Loader2 } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { appendMessage, fetchChatMessages, sendMessage } from '../../features/customerShipment/shipmentSlice';
+import { getSocket } from '../../features/customerShipment/utils/socketService';
+import type { ChatMessage } from '../../features/customerShipment/shipmentTypes';
+
+interface Props {
+  shipmentId: number;
+  currentUserId: number;
+}
+
+const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
+  const dispatch = useAppDispatch();
+  const { messages, loadingHistory, sendingMessage } = useAppSelector((s) => s.shipment);
+  const token = useAppSelector((s) => s.auth.accessToken); // adjust to your auth slice
+  const [input, setInput] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Load history + join socket room
+  useEffect(() => {
+    dispatch(fetchChatMessages({ shipmentId }));
+
+    const socket = getSocket(token!);
+
+    socket.emit('join_chat', { shipmentId });
+
+    socket.on('new_message', (msg: ChatMessage) => {
+      dispatch(appendMessage(msg));
+    });
+
+    return () => {
+      socket.emit('leave_chat', { shipmentId });
+      socket.off('new_message');
+    };
+  }, [shipmentId]);
+
+  // Auto scroll to bottom on new message
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
+    const trimmed = input.trim();
+    if (!trimmed || sendingMessage) return;
+    setInput('');
+    const result = await dispatch(sendMessage({ shipmentId, message: trimmed }));
+    if (sendMessage.fulfilled.match(result)) {
+      dispatch(appendMessage(result.payload));
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  if (loadingHistory) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-400">
+        <Loader2 className="animate-spin mr-2" size={20} />
+        Loading messages...
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {messages.length === 0 && (
+          <p className="text-center text-gray-400 text-sm mt-8">No messages yet. Say hi!</p>
+        )}
+        {messages.map((msg) => {
+          const isMe = msg.senderId === currentUserId;
+          return (
+            <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-[70%] rounded-2xl px-4 py-2 shadow-sm ${
+                isMe
+                  ? 'bg-blue-600 text-white rounded-br-sm'
+                  : 'bg-white text-gray-800 rounded-bl-sm border border-gray-100'
+              }`}>
+                {!isMe && (
+                  <p className="text-xs font-semibold text-blue-500 mb-1">{msg.senderName}</p>
+                )}
+                <p className="text-sm leading-relaxed">{msg.message}</p>
+                <p className={`text-xs mt-1 ${isMe ? 'text-blue-200' : 'text-gray-400'} text-right`}>
+                  {new Date(msg.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
+          <input
+            type="text"
+            className="flex-1 bg-transparent text-sm outline-none placeholder-gray-400"
+            placeholder="Type a message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || sendingMessage}
+            className="text-blue-600 hover:text-blue-700 disabled:text-gray-300 transition-colors"
+          >
+            {sendingMessage ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatWindow;

@@ -138,6 +138,13 @@ export interface ShipmentState {
 
   //Payment history
   payments: Payment[];
+
+  //Chat
+  activeShipmentId: number | null;
+  messages: ChatMessage[];
+  chatPagination: ChatData['pagination'] | null;
+  loadingHistory: boolean;
+  sendingMessage: boolean;
 }
 
 export type ShipmentStatus =
@@ -520,4 +527,32 @@ export interface PaymentPagination {
 export interface MyPaymentsResponse {
   payments: Payment[];
   pagination: PaymentPagination;
+}
+
+//Chat types
+export interface ChatMessage {
+  id: number;
+  senderId: number;
+  senderName: string;
+  senderRole: 'CUSTOMER' | 'DELIVERY_AGENT' | 'ADMIN';
+  message: string;
+  createdAt: string;
+}
+
+export interface ChatPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ChatData {
+  shipmentId: number;
+  messages: ChatMessage[];
+  pagination: ChatPagination;
+}
+
+export interface SendMessagePayload {
+  shipmentId: number;
+  message: string;
 }
