@@ -16,6 +16,8 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
 
   const { paymentDetails, loading } = useAppSelector((state) => state.shipment);
 
+  const status = paymentDetails?.paymentStatus;
+
   useEffect(() => {
     if (open && shipmentId) {
       dispatch(fetchPaymentDetails(shipmentId));
@@ -65,7 +67,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                 <div>
                   <p className="text-xs text-slate-400">Payment Status</p>
 
-                  <div className="mt-1 inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                  <div
+                    className={`mt-1 inline-flex px-3 py-1 rounded-full ${status == "PENDING" ? "bg-amber-100 text-amber-700" : " bg-green-100 text-green-700"}  text-sm font-semibold`}
+                  >
                     {paymentDetails.paymentStatus}
                   </div>
                 </div>
@@ -73,7 +77,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                 <div>
                   <p className="text-xs text-slate-400">Amount</p>
 
-                  <h2 className="text-2xl font-bold text-slate-800 mt-1">
+                  <h2
+                    className={`text-2xl inline-flex font-bold mt-1 ${status == "PENDING" ? "bg-amber-100 text-amber-700 px-2 rounded-full" : " text-slate-800"}`}
+                  >
                     ₹{paymentDetails.amount}
                   </h2>
                 </div>
