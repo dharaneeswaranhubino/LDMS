@@ -14,7 +14,6 @@ const PaymentChart = ({ paid, pending, failed }: PaymentChartProps) => {
         </span>
       </div>
 
-      {/* <DonutChart paid={paid} pending={pending} failed={failed} /> */}
       <DonutChart
         labels={["Paid", "Pending", "Failed"]}
         values={[paid, pending, failed]}

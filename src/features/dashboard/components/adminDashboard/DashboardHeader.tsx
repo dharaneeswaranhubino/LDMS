@@ -2,12 +2,14 @@ import type {
   DashboardHeaderProps,
   StatsProps,
 } from "../../../adminShipment/adminTypes";
-import DateRangePicker, { displayDate } from "./DateRangePicker";
+// import DateRangePicker, { displayDate } from "./DateRangePicker";
 import StatCard from "./StatCardInfo";
 import { CgCheckO } from "react-icons/cg";
 import { GoAlert } from "react-icons/go";
 import { TbTruckDelivery } from "react-icons/tb";
 import { LuAlarmClockCheck } from "react-icons/lu";
+import DateRangePicker from "../../../../shared/components/DateRangePicker";
+import { displayDate } from "../../../../shared/utils";
 
 const DashboardHeader = ({
   fromDate,
@@ -85,7 +87,6 @@ const DashboardHeader = ({
         />
       </div>
 
-      {/* Alert */}
       {delayedShipments > 0 && (
         <div className="mb-5 flex items-center gap-2.5 rounded-lg border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-800">
           <span className="text-base">

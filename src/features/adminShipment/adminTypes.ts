@@ -67,8 +67,8 @@ export interface DeliveryAgent {
   isActive: boolean;
   serviceZone: string;
   createdAt: string;
-  deliveredCount:number;
-  delayedCount:number;
+  deliveredCount: number;
+  delayedCount: number;
   agentId: number;
   agentName: string;
   agentEmail: string;
@@ -100,27 +100,31 @@ export interface RecentShipment {
   trackingId: string;
   customerName: string;
   shipmentStatus: ShipmentStatus;
+  isDelayed: boolean;
   paymentStatus: "PAID" | "PENDING" | "FAILED";
   createdAt: string;
 }
 
 // export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_REVIEW";
 
-export interface CustomerComplaint {
-  id: number;
+export interface DashboardComplaint {
+  complaintId: number;
   trackingId: string;
   customerName: string;
   message: string;
   status: ComplaintStatus;
   shipmentStatus: ShipmentStatus;
+  isDelayed: boolean;
+  resolvedAt: string | null;
   createdAt: string;
 }
 
 export type RevenueTab = "Daily" | "Weekly" | "Monthly";
+export type GroupBy = "daily" | "weekly" | "monthly";
 
 export interface RevenueDataPoint {
-  label: string;
-  value: number;
+  period: string;
+  revenue: number;
 }
 
 export interface AdminDashboardData {
@@ -130,17 +134,18 @@ export interface AdminDashboardData {
   pendingShipments: number;
   delayedShipments: number;
   totalRevenue: number;
+  revenueChangePercent: number | null;
   paymentSummary: PaymentSummary;
   agentPerformance: AgentPerformance[];
   recentShipments: RecentShipment[];
-  complaints: CustomerComplaint[];
-  revenueByTab: Record<RevenueTab, RevenueDataPoint[]>;
+  complaints: DashboardComplaint[];
+  revenueStats: RevenueDataPoint[];
 }
 
-//Date Range Params
 export interface DashboardDateParams {
-  fromDate: string; // "YYYY-MM-DD"
-  toDate: string; // "YYYY-MM-DD"
+  fromDate: string;
+  toDate: string;
+  groupBy: GroupBy;
 }
 
 export interface AgentDetailsState {
@@ -148,6 +153,7 @@ export interface AgentDetailsState {
   agents: DeliveryAgent[];
   dashboard: AdminDashboardData | null;
   dashboardLoading: boolean;
+  activeRevenueTab: RevenueTab;
 
   allShipments: AllShipments[];
   shipmentPagination: ShipmentPagination | null;
@@ -174,7 +180,6 @@ export interface AgentDetailsState {
   reassignError: string | null;
 }
 
-// admin dashboard types/Interfaces
 export interface StatCardProps {
   icon: ReactNode | string;
   value: number;
@@ -199,9 +204,10 @@ export interface StatsProps {
 
 export interface RevenueChartProps {
   totalRevenue: number;
-  revenueByTab: Record<RevenueTab, { label: string; value: number }[]>;
-  fromDate: string;
-  toDate: string;
+  revenueChangePercent: number | null;
+  revenueStats: RevenueDataPoint[];
+  activeTab: RevenueTab;
+  onTabChange: (tab: RevenueTab) => void;
 }
 
 export interface PaymentChartProps {
@@ -219,7 +225,7 @@ export interface RecentShipmentsTableProps {
 }
 
 export interface CustomerComplaintsProps {
-  complaints: CustomerComplaint[];
+  complaints: DashboardComplaint[];
 }
 
 

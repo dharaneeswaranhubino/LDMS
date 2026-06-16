@@ -1,3 +1,5 @@
+import type { ComplaintStatus } from "../../adminShipment/adminTypes";
+
 export const formatCurrency = (n: number) => {
   return "₹" + n.toLocaleString("en-IN");
 };
@@ -20,3 +22,82 @@ export function timeAgo(iso: string) {
   if (h < 24) return `${h} hrs ago`;
   return "Yesterday";
 }
+
+
+export const STATUS_COLORS: Record<
+  string,
+  { className: string; label: string }
+> = {
+  IN_TRANSIT: {
+    className: "bg-blue-100 text-blue-700",
+    label: "In Transit",
+  },
+  CONFIRMED: {
+    className: "bg-teal-100 text-teal-700",
+    label: "Confirmed",
+  },
+  ASSIGNED: {
+    className: "bg-indigo-100 text-indigo-700",
+    label: "Assigned",
+  },
+  PENDING: {
+    className: "bg-yellow-100 text-yellow-700",
+    label: "Pending",
+  },
+  DELAYED: {
+    className: "bg-red-100 text-red-700",
+    label: "Delayed",
+  },
+  DELIVERED: {
+    className: "bg-green-100 text-green-700",
+    label: "Delivered",
+  },
+  PICKED_UP: {
+    className: "bg-blue-100 text-blue-700",
+    label: "Picked Up",
+  },
+  OUT_FOR_PICKUP: {
+    className: "bg-orange-100 text-orange-700",
+    label: "Out for Pickup",
+  },
+  OUT_FOR_DELIVERY: {
+    className: "bg-violet-100 text-violet-700",
+    label: "Out for Delivery",
+  },
+  CANCELLED: {
+    className: "bg-red-100 text-red-700",
+    label: "Cancelled",
+  },
+};
+
+
+
+export const PAY_COLORS: Record<string, { className: string }> = {
+  PAID: {
+    className: "bg-green-100 text-green-700",
+  },
+  PENDING: {
+    className: "bg-yellow-100 text-yellow-700",
+  },
+  FAILED: {
+    className: "bg-red-100 text-red-700",
+  },
+};
+
+export const COMPLAINT_COLORS: Record<
+  ComplaintStatus,
+  { className: string; label: string }
+> = {
+  OPEN: {
+    className: "bg-red-100 text-red-700",
+    label: "Open",
+  },
+  IN_REVIEW: {
+    className: "bg-yellow-100 text-yellow-700",
+    label: "In Review",
+  },
+  RESOLVED: {
+    className: "bg-green-100 text-green-700",
+    label: "Resolved",
+  },
+};
