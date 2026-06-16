@@ -21,7 +21,7 @@ const TimeLineHorizontalStepper = ({
 
     const delayedEntry = [...timeline]
       .reverse()
-      .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED"); // ✅ skip re-delay entries
+      .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED");
 
     return (delayedEntry?.fromStatus as TimelineStatus) ?? "IN_TRANSIT";
   };
@@ -37,14 +37,8 @@ const TimeLineHorizontalStepper = ({
     timeline?.map((e) => `${e.fromStatus} → ${e.toStatus}`),
   );
   console.log("delayedFromStatus:", getDelayedFromStatus());
-  // const displayStatus: TimelineStatus = isDelayed
-  //   ? "IN_TRANSIT"
-  //   : isCancelled
-  //     ? "PENDING"
-  //     : currentStatus;
 
   const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
-  // const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
   const pct = getProgressPercent(displayStatus);
 
   function getDotStyle(status: TimelineStatus, idx: number) {
@@ -193,12 +187,17 @@ const TimeLineHorizontalStepper = ({
                         </span>
                       )}
                       {dotStyle === "delayed" && (
-                        <span
-                          className="text-white font-bold"
-                          style={{ fontSize: "8px" }}
-                        >
-                          <FaExclamation size={12} />
-                        </span>
+                        <>
+                          <span className="absolute -top-6 text-[10px] text-amber-600 font-semibold whitespace-nowrap">
+                            Delayed
+                          </span>
+                          <span
+                            className="text-white font-bold"
+                            style={{ fontSize: "8px" }}
+                          >
+                            <FaExclamation size={12} />
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>

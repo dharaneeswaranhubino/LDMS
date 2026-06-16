@@ -48,7 +48,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
         </div>
 
         {/* Body */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto max-h-[400px] scrollbar-none">
           {loading ? (
             <div className="py-10 text-center text-slate-500">
               <i className="fa-solid fa-spinner fa-spin mr-2" />

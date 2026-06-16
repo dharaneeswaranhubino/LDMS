@@ -5,17 +5,35 @@ import {
 } from "../../../shared/hooks/reduxHooks";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import Pagination from "../../../shared/components/Pagination";
-import { fetchMyPayments } from "../shipmentSlice";
+import {
+  fetchMyPayments,
+  fetchPaymentDetails,
+  fetchShipmentById,
+} from "../shipmentSlice";
 import { formatDateTime, getStatusStyle } from "../utils/shipmentHelpers";
+import ReceiptPreviewModal from "../components/createShipmentComponents/ReceiptPreviewModal";
 
 const PaymentDetails = () => {
   const dispatch = useAppDispatch();
-  const { payments, loading } = useAppSelector((state) => state.shipment);
+  const { payments, loading, paymentDetails, currentShipment } = useAppSelector(
+    (state) => state.shipment,
+  );
+
+  console.log("paymentDetails.paidAt :", paymentDetails);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const trackingId = currentShipment?.trackingId;
+  const prices = currentShipment?.priceBreakdown;
+  console.log("prices :", prices);
+
+  const priority = currentShipment?.shipmentPriority;
+  const packageWeight = currentShipment?.packageWeight;
+  const fileName = `ShipFast-Receipt-${paymentDetails?.razorpayPaymentId}.pdf`;
 
   useEffect(() => {
     dispatch(fetchMyPayments());
@@ -45,6 +63,15 @@ const PaymentDetails = () => {
     setPrevFilterKey(filterKey);
     setPage(1);
   }
+
+  const downloadCLick = async (shipmentId: number) => {
+    await Promise.all([
+      dispatch(fetchShipmentById(shipmentId)),
+      dispatch(fetchPaymentDetails(shipmentId)),
+    ]);
+
+    // setShowPreview(true);
+  };
 
   if (loading && payments.length === 0) {
     return (
@@ -147,7 +174,7 @@ const PaymentDetails = () => {
                   </td>
                   <td className="px-3 md:px-6 py-2">
                     <button
-                      // onClick={() => generateReceiptPdf(payment)}
+                      onClick={() => downloadCLick(payment.shipmentId)}
                       disabled={payment.paymentStatus !== "PAID"}
                       title={
                         payment.paymentStatus === "PAID"
@@ -188,6 +215,18 @@ const PaymentDetails = () => {
           />
         )}
       </div>
+      {showPreview && (
+        <ReceiptPreviewModal
+          onClose={() => setShowPreview(false)}
+          razorpayPaymentId={paymentDetails?.razorpayPaymentId}
+          trackingId={trackingId}
+          prices={prices}
+          priority={priority}
+          packageWeight={packageWeight}
+          today={paymentDetails?.paidAt}
+          fileName={fileName}
+        />
+      )}
     </div>
   );
 };

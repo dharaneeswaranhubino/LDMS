@@ -7,16 +7,17 @@ import ReceiptPreviewModal from "./ReceiptPreviewModal";
 import { BUBBLES, fireConfetti } from "../../utils/shipmentHelpers";
 
 const PaymentSuccessScreen = () => {
-  const location  = useLocation();
-  const navigate  = useNavigate();
-  const firedRef  = useRef(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const firedRef = useRef(false);
   const [showPreview, setShowPreview] = useState(false);
   const [checkVisible, setCheckVisible] = useState(false);
 
   const { razorpayPaymentId, trackingId } = location.state ?? {};
   const { currentShipment } = useAppSelector((state) => state.shipment);
-  const prices        = currentShipment?.priceBreakdown;
-  const priority      = currentShipment?.shipmentPriority;
+
+  const prices = currentShipment?.priceBreakdown;
+  const priority = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
 
   useEffect(() => {
@@ -30,15 +31,14 @@ const PaymentSuccessScreen = () => {
     firedRef.current = true;
     fireConfetti();
     setCheckVisible(true);
-
   }, []);
 
   if (!razorpayPaymentId || !prices) return null;
 
   const today = new Date().toLocaleDateString("en-IN", {
-    day:   "2-digit",
+    day: "2-digit",
     month: "short",
-    year:  "numeric",
+    year: "numeric",
   });
 
   const fileName = `ShipFast-Receipt-${razorpayPaymentId}.pdf`;
@@ -87,19 +87,20 @@ const PaymentSuccessScreen = () => {
       )}
 
       <div className="relative rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-4 overflow-hidden">
-
         {BUBBLES.map((b, i) => (
           <span
             key={i}
             className="bubble"
-            style={{
-              width:     b.size,
-              height:    b.size,
-              left:      b.left,
-              "--op":    b.opacity,
-              "--dur":   b.duration,
-              "--delay": b.delay,
-            } as React.CSSProperties}
+            style={
+              {
+                width: b.size,
+                height: b.size,
+                left: b.left,
+                "--op": b.opacity,
+                "--dur": b.duration,
+                "--delay": b.delay,
+              } as React.CSSProperties
+            }
           />
         ))}
 
@@ -204,7 +205,6 @@ const PaymentSuccessScreen = () => {
             View My Shipments
           </button>
         </div>
-
       </div>
     </>
   );

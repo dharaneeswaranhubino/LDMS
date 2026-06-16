@@ -13,7 +13,7 @@ const ReceiptPreviewModal = ({
   fileName,
 }: {
   onClose: () => void;
-  razorpayPaymentId: string;
+  razorpayPaymentId: string | undefined;
   trackingId?: string;
   prices: {
     platformFee: number;

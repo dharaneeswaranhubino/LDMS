@@ -17,15 +17,6 @@ const TimeLineVerticalStepper = ({
   currentStatus,
   timeline,
 }: TimeLineVerticalStepperProps) => {
-  // const curIdx = ORDERED_STATUSES.indexOf(currentStatus);
-  // const isCancelled = currentStatus === "CANCELLED";
-  // const isDelayed = currentStatus === "DELAYED";
-
-  // const entryMap = new Map<TimelineStatus, TimelineEntry>();
-  // timeline.forEach((entry) => {
-  //   entryMap.set(entry.toStatus as TimelineStatus, entry);
-  // });
-  // ✅ Replace with this:
   const isCancelled = currentStatus === "CANCELLED";
   const isDelayed = currentStatus === "DELAYED";
 
@@ -115,7 +106,9 @@ const TimeLineVerticalStepper = ({
                   />
                 )}
                 {dotStyle === "delayed" && (
-                  <FaExclamation size={9} className="text-white" />
+                  <>
+                    <FaExclamation size={9} className="text-white" />
+                  </>
                 )}
               </div>
 
