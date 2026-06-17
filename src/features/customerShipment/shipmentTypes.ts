@@ -359,7 +359,6 @@ export interface FetchNotificationsResponse {
   pagination: NotificationPagination;
 }
 
-
 export type FilterType = "ALL" | "UNREAD" | NotificationType;
 
 export interface NotificationCardProps {
@@ -532,6 +531,7 @@ export interface MyPaymentsResponse {
 //Chat types
 export interface ChatMessage {
   id: number;
+  shipmentId: number;
   senderId: number;
   senderName: string;
   senderRole: 'CUSTOMER' | 'DELIVERY_AGENT' | 'ADMIN';

@@ -255,7 +255,7 @@ export const markSingleNotificationRead = createAsyncThunk<
 
 export const fetchShipmentTimeline = createAsyncThunk<
     ShipmentTimelineResponse,
-    number,                     // shipmentId
+    number,                     
     { rejectValue: string }
 >(
     "shipment/fetchShipmentTimeline",
@@ -354,7 +354,7 @@ export const fetchMyPayments = createAsyncThunk<
 // Fetch chat history
 export const fetchChatMessages = createAsyncThunk(
     'chat/fetchMessages',
-    async ({ shipmentId, page = 1, limit = 20 }: {
+    async ({ shipmentId, page = 1, limit = 200 }: {
         shipmentId: number; page?: number; limit?: number
     }, { rejectWithValue }) => {
         try {
@@ -488,6 +488,8 @@ const shipmentSlice = createSlice({
             state.pagination = null;
         },
         appendMessage(state, action: PayloadAction<ChatMessage>) {
+            if (action.payload.shipmentId !== state.activeShipmentId) return;
+
             const exists = state.messages.some((m) => m.id === action.payload.id);
             if (!exists) {
                 state.messages.push(action.payload);
@@ -690,8 +692,13 @@ const shipmentSlice = createSlice({
             })
             .addCase(fetchChatMessages.fulfilled, (state, action) => {
                 state.loadingHistory = false;
-                state.messages = action.payload.messages ?? [];
-                state.pagination = action.payload.pagination;
+                const fetched = action.payload.messages ?? [];
+
+                const fetchedIds = new Set(fetched.map((m) => m.id));
+                const liveMessages = state.messages.filter((m) => !fetchedIds.has(m.id));
+
+                state.messages = [...fetched, ...liveMessages];
+                state.chatPagination = action.payload.pagination;
             })
             .addCase(fetchChatMessages.rejected, (state, action) => {
                 state.loadingHistory = false;

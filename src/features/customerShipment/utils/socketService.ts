@@ -14,6 +14,20 @@ export const getSocket = (token: string): Socket => {
     return socket;
 };
 
+export const emitWhenConnected = (
+    socket: Socket,
+    event: string,
+    data: unknown
+) => {
+    if (socket.connected) {
+        socket.emit(event, data);
+    } else {
+        socket.once('connect', () => {
+            socket.emit(event, data);
+        });
+    }
+};
+
 export const disconnectSocket = () => {
     if (socket) {
         socket.disconnect();
