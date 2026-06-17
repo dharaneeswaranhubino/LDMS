@@ -354,7 +354,7 @@ export const fetchMyPayments = createAsyncThunk<
 // Fetch chat history
 export const fetchChatMessages = createAsyncThunk(
     'chat/fetchMessages',
-    async ({ shipmentId, page = 1, limit = 200 }: {
+    async ({ shipmentId, page = 1, limit = 1000 }: {
         shipmentId: number; page?: number; limit?: number
     }, { rejectWithValue }) => {
         try {

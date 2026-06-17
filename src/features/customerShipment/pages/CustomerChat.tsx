@@ -57,16 +57,16 @@ const CustomerChat = () => {
   );
 
   return (
-    <div className="flex h-[calc(100vh-72px)]">
-      <div className="w-72 border-r border-gray-200 bg-white flex flex-col">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="font-semibold text-gray-800">Your Shipments</h2>
-          <p className="text-xs text-gray-400 mt-1">
+    <div className="flex h-[calc(100vh-72px)] rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
+      <div className="rounded-l-2xl w-72 border-r border-gray-200 bg-slate-50 flex flex-col">
+        <div className="rounded-tl-2xl px-4 py-3 border-b border-gray-200 bg-blue-600">
+          <h2 className="font-semibold text-white">Your Shipments</h2>
+          <p className="text-xs text-blue-200 mt-1">
             Select a shipment to chat with your agent
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-none">
           {chattableShipments.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 p-4 text-center">
               <Package size={40} className="mb-2 opacity-50" />
@@ -79,23 +79,23 @@ const CustomerChat = () => {
               <button
                 key={shipment.shipmentId}
                 onClick={() => handleSelectShipment(shipment.shipmentId)}
-                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-slate-100 transition-all duration-200 hover:shadow-md ${
                   activeShipmentId === shipment.shipmentId
-                    ? "bg-blue-50 border-l-4 border-l-blue-500"
+                    ? "bg-indigo-50 border-l-4 border-l-indigo-600 shadow-sm"
                     : ""
                 }`}
               >
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-sm font-medium text-slate-800">
                   {shipment.trackingId}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5 truncate">
+                <p className="text-xs text-slate-500 mt-0.5 truncate">
                   {shipment.pickupAddress} → {shipment.deliveryAddress}
                 </p>
                 <span
                   className={`text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full ${
                     shipment.shipmentStatus === "IN_TRANSIT"
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-yellow-100 text-yellow-600"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-amber-100 text-amber-700"
                   }`}
                 >
                   {shipment.shipmentStatus}
@@ -106,10 +106,10 @@ const CustomerChat = () => {
         </div>
       </div>
 
-      <div className="flex-1 bg-gray-50 flex flex-col">
+      <div className="rounded-r-2xl flex-1 bg-gray-50 flex flex-col min-h-0">
         {activeShipmentId && currentUserId ? (
           <>
-            <div className="px-6 py-4 border-b border-gray-200 bg-white">
+            <div className="px-6 py-4 border-b border-gray-200 bg-white rounded-tr-2xl">
               <p className="text-sm font-semibold text-gray-800">
                 Tracking ID: {activeShipment?.trackingId}
               </p>

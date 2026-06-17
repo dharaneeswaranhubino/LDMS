@@ -70,17 +70,18 @@ const AgentChat = () => {
   );
 
   return (
-    <div className="flex h-[calc(100vh-72px)]">
+    <div className="flex h-[calc(100vh-72px)] rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
       {/* Left sidebar - WhatsApp style */}
-      <div className="w-80 border-r border-gray-200 bg-white flex flex-col">
-        <div className="p-4 border-b border-gray-200 bg-blue-600">
+      {/* <div className="rounded-l-2xl w-80 border-r border-gray-200 bg-white flex flex-col"> */}
+      <div className="rounded-l-2xl w-72 border-r border-gray-200 bg-slate-50 flex flex-col">
+        <div className="rounded-tl-2xl px-4 py-3 border-b border-gray-200 bg-blue-600">
           <h2 className="font-semibold text-white">Customer Chats</h2>
           <p className="text-xs text-blue-200 mt-1">
             {activeDeliveries.length} active deliveries
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-none">
           {activeDeliveries.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 p-4 text-center">
               <Package size={40} className="mb-2 opacity-50" />
@@ -91,9 +92,9 @@ const AgentChat = () => {
               <button
                 key={delivery.shipmentId}
                 onClick={() => dispatch(setActiveShipment(delivery.shipmentId))}
-                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors flex items-center gap-3 ${
+                className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-slate-100 transition-all duration-200 hover:shadow-md flex items-center gap-3 ${
                   activeShipmentId === delivery.shipmentId
-                    ? "bg-blue-50 border-l-4 border-l-blue-600"
+                    ? "bg-indigo-50 border-l-4 border-l-indigo-600 shadow-sm"
                     : ""
                 }`}
               >
@@ -105,15 +106,15 @@ const AgentChat = () => {
                   <p className="text-sm font-medium text-gray-800 truncate">
                     {delivery.receiverName}
                   </p>
-                  <p className="text-xs text-gray-400 truncate">
+                  <p className="text-xs text-slate-500 truncate">
                     {delivery.trackingId}
                   </p>
                 </div>
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${
                     delivery.shipmentStatus === "IN_TRANSIT"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-yellow-100 text-yellow-600"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-amber-100 text-amber-700"
                   }`}
                 >
                   {delivery.shipmentStatus}
@@ -125,11 +126,11 @@ const AgentChat = () => {
       </div>
 
       {/* Right: Chat window */}
-      <div className="flex-1 bg-gray-50 flex flex-col">
+      <div className="flex-1 bg-gray-50 flex flex-col rounded-r-2xl">
         {activeShipmentId && currentUserId ? (
           <>
             {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-200 bg-white flex items-center gap-3">
+            <div className="rounded-tr-2xl px-6 py-4 border-b border-gray-200 bg-white flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-sm">
                 {activeDelivery?.receiverName?.[0]?.toUpperCase() ?? "C"}
               </div>

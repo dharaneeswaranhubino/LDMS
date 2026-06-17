@@ -55,8 +55,8 @@ const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 && (
           <p className="text-center text-gray-400 text-sm mt-8">
             No messages yet. Say hi!
@@ -99,7 +99,7 @@ const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t border-gray-200 bg-white">
+      <div className="p-4 border-t border-gray-200 bg-white rounded-br-2xl">
         <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
           <input
             type="text"
