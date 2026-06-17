@@ -4,20 +4,23 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import {
-  type AdminComplaint,
-  type AdminDashboardData,
-  type AgentDetailsState,
-  type AgentFormData,
-  type AllShipmentsResponse,
-  type ComplaintPagination,
-  type ComplaintStatus,
-  type DashboardDateParams,
-  type DeliveryAgent,
-  type FetchComplaintsParams,
-  type ReassignResponse,
-  type RevenueTab,
-  type UpdateComplaintStatusResponse,
+import type {
+  AdminComplaint,
+  AdminDashboardData,
+  AdminState,
+  AgentFormData,
+  AllShipmentsResponse,
+  ChatHistoryShipmentInfo,
+  ChatMessage,
+  ChatPagination,
+  ComplaintPagination,
+  ComplaintStatus,
+  DashboardDateParams,
+  DeliveryAgent,
+  FetchComplaintsParams,
+  ReassignResponse,
+  RevenueTab,
+  UpdateComplaintStatusResponse,
 } from "./adminTypes";
 import { AxiosError } from "axios";
 
@@ -180,7 +183,37 @@ export const toggleAgentActiveStatus = createAsyncThunk<
   }
 });
 
-const initialState: AgentDetailsState = {
+
+export const fetchChatHistory = createAsyncThunk<
+  {
+    messages: ChatMessage[];
+    shipmentInfo: ChatHistoryShipmentInfo;
+    pagination: ChatPagination;
+  },
+  { shipmentId: number; page?: number; limit?: number },
+  { rejectValue: string }
+>(
+  "chat/fetchHistory",
+  async ({ shipmentId, page = 1, limit = 50 }, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`/chat/${shipmentId}/history`, {
+        params: { page, limit },
+      });
+      return {
+        messages: res.data.data,
+        shipmentInfo: res.data.shipmentInfo,
+        pagination: res.data.pagination,
+      };
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch chat history",
+      );
+    }
+  },
+);
+
+const initialState: AdminState = {
   shipments: [],
   agents: [],
   dashboard: null,
@@ -210,6 +243,12 @@ const initialState: AgentDetailsState = {
   reassignSuccess: false,
   reassignResult: null,
   reassignError: null,
+
+  chatHistory: [],
+  chatHistoryShipmentInfo: null,
+  chatHistoryPagination: null,
+  chatHistoryLoading: false,
+  chatHistoryError: null,
 };
 
 const adminSlice = createSlice({
@@ -243,16 +282,23 @@ const adminSlice = createSlice({
       state.reassignResult = null;
       state.reassignError = null;
     },
+
+    clearChatHistory(state) {
+      state.chatHistory = [];
+      state.chatHistoryShipmentInfo = null;
+      state.chatHistoryPagination = null;
+      state.chatHistoryError = null;
+    },
   },
 
   extraReducers: (builder) => {
-    const pending = (state: AgentDetailsState) => {
+    const pending = (state: AdminState) => {
       state.loading = true;
       state.error = null;
     };
 
     const rejected = (
-      state: AgentDetailsState,
+      state: AdminState,
       action: PayloadAction<string | undefined>,
     ) => {
       state.loading = false;
@@ -365,9 +411,24 @@ const adminSlice = createSlice({
         const { id, isActive } = action.payload;
         const agent = state.agents.find((a) => a.id === id);
         if (agent) agent.isActive = isActive;
+      })
+
+      .addCase(fetchChatHistory.pending, (state) => {
+        state.chatHistoryLoading = true;
+        state.chatHistoryError = null;
+      })
+      .addCase(fetchChatHistory.fulfilled, (state, action) => {
+        state.chatHistoryLoading = false;
+        state.chatHistory = action.payload.messages;
+        state.chatHistoryShipmentInfo = action.payload.shipmentInfo;
+        state.chatHistoryPagination = action.payload.pagination;
+      })
+      .addCase(fetchChatHistory.rejected, (state, action) => {
+        state.chatHistoryLoading = false;
+        state.chatHistoryError = action.payload || "Failed to fetch chat history";
       });
   },
 });
 
-export const { clearTimeline, setActiveRevenueTab, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, clearReassignState } = adminSlice.actions;
+export const { clearTimeline, setActiveRevenueTab, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, clearReassignState, clearChatHistory } = adminSlice.actions;
 export default adminSlice.reducer;

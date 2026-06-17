@@ -148,7 +148,7 @@ export interface DashboardDateParams {
   groupBy: GroupBy;
 }
 
-export interface AgentDetailsState {
+export interface AdminState {
   shipments: AgentFormData[];
   agents: DeliveryAgent[];
   dashboard: AdminDashboardData | null;
@@ -178,6 +178,13 @@ export interface AgentDetailsState {
   reassignSuccess: boolean;
   reassignResult: ReassignResponse | null;
   reassignError: string | null;
+
+  // Admin chat history
+  chatHistory: ChatMessage[];
+  chatHistoryShipmentInfo: ChatHistoryShipmentInfo | null;
+  chatHistoryPagination: ChatPagination | null;
+  chatHistoryLoading: boolean;
+  chatHistoryError: string | null;
 }
 
 export interface StatCardProps {
@@ -426,4 +433,28 @@ export interface ReassignResponse {
   newSlot: ReassignSlot;
   shipmentStatus: ShipmentStatus;
   message: string;
+}
+
+// Chat History Types
+export interface ChatMessage {
+  id: number;
+  senderId: number;
+  senderName: string;
+  senderRole: "CUSTOMER" | "DELIVERY_AGENT" | "ADMIN";
+  message: string;
+  createdAt: string;
+}
+
+export interface ChatHistoryShipmentInfo {
+  shipmentId: number;
+  shipmentStatus: string;
+  customer: { id: number; name: string };
+  assignedAgent: { id: number; name: string };
+}
+
+export interface ChatPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

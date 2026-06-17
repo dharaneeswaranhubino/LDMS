@@ -268,3 +268,32 @@ export const formatSlot = (
     : "";
   return `${fmt(start)} – ${fmt(end)}${dateStr ? ` · ${dateStr}` : ""}`;
 };
+
+
+//chat history
+export const formatChatTime = (iso: string) =>
+  new Date(iso).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+export const ROLE_STYLE: Record<string, string> = {
+  CUSTOMER: "bg-blue-50 border-blue-100",
+  DELIVERY_AGENT: "bg-green-50 border-green-100",
+  ADMIN: "bg-violet-50 border-violet-100",
+};
+
+export const ROLE_BADGE: Record<string, string> = {
+  CUSTOMER: "bg-blue-100 text-blue-600",
+  DELIVERY_AGENT: "bg-green-100 text-green-600",
+  ADMIN: "bg-violet-100 text-violet-600",
+};
+
+export const ROLE_LABEL: Record<string, string> = {
+  CUSTOMER: "Customer",
+  DELIVERY_AGENT: "Agent",
+  ADMIN: "Admin",
+};
