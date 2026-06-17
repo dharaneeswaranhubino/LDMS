@@ -95,15 +95,6 @@ export interface AgentPerformance {
   completedShipments: number;
 }
 
-export interface RecentShipment {
-  shipmentId: number;
-  trackingId: string;
-  customerName: string;
-  shipmentStatus: ShipmentStatus;
-  isDelayed: boolean;
-  paymentStatus: "PAID" | "PENDING" | "FAILED";
-  createdAt: string;
-}
 
 // export type ComplaintStatus = "OPEN" | "RESOLVED" | "IN_REVIEW";
 
@@ -119,41 +110,26 @@ export interface DashboardComplaint {
   createdAt: string;
 }
 
-export type RevenueTab = "Daily" | "Weekly" | "Monthly";
-export type GroupBy = "daily" | "weekly" | "monthly";
 
-export interface RevenueDataPoint {
-  period: string;
-  revenue: number;
-}
 
 export interface AdminDashboardData {
   totalShipments: number;
   deliveredShipments: number;
   activeDeliveries: number;
-  pendingShipments: number;
   delayedShipments: number;
   totalRevenue: number;
-  revenueChangePercent: number | null;
   paymentSummary: PaymentSummary;
   agentPerformance: AgentPerformance[];
-  recentShipments: RecentShipment[];
   complaints: DashboardComplaint[];
-  revenueStats: RevenueDataPoint[];
 }
 
-export interface DashboardDateParams {
-  fromDate: string;
-  toDate: string;
-  groupBy: GroupBy;
-}
+
 
 export interface AdminState {
   shipments: AgentFormData[];
   agents: DeliveryAgent[];
   dashboard: AdminDashboardData | null;
   dashboardLoading: boolean;
-  activeRevenueTab: RevenueTab;
 
   allShipments: AllShipments[];
   shipmentPagination: ShipmentPagination | null;
@@ -185,6 +161,10 @@ export interface AdminState {
   chatHistoryPagination: ChatPagination | null;
   chatHistoryLoading: boolean;
   chatHistoryError: string | null;
+
+  //admin completed status
+  completeShipmentLoading: boolean;
+  completeShipmentError: string | null;
 }
 
 export interface StatCardProps {
@@ -193,12 +173,18 @@ export interface StatCardProps {
   label: string;
   iconBg: string;
   accent: string;
+  formatValue?: (v: number) => string;
+}
+export interface DashboardDateParams {
+  fromDate: string;
+  toDate: string;
 }
 
 export interface DashboardHeaderProps {
   fromDate: string;
   toDate: string;
   onApply: (from: string, to: string) => void;
+  totalRevenue: number;
 }
 
 export interface StatsProps {
@@ -206,16 +192,9 @@ export interface StatsProps {
   deliveredShipments: number;
   activeDeliveries: number;
   delayedShipments: number;
-  pendingShipments: number;
 }
 
-export interface RevenueChartProps {
-  totalRevenue: number;
-  revenueChangePercent: number | null;
-  revenueStats: RevenueDataPoint[];
-  activeTab: RevenueTab;
-  onTabChange: (tab: RevenueTab) => void;
-}
+
 
 export interface PaymentChartProps {
   paid: number;
@@ -227,9 +206,6 @@ export interface AgentPerformanceTableProps {
   agentPerformance: AgentPerformance[];
 }
 
-export interface RecentShipmentsTableProps {
-  recentShipments: RecentShipment[];
-}
 
 export interface CustomerComplaintsProps {
   complaints: DashboardComplaint[];
@@ -457,4 +433,23 @@ export interface ChatPagination {
   page: number;
   limit: number;
   totalPages: number;
+}
+
+//Admin Completed status
+export interface UpdateShipmentStatusResponse {
+  shipmentId: number;
+  trackingId: string;
+  shipmentStatus: ShipmentStatus;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  deliverySlotId: number | null;
+  deliveryRemarks: string | null;
+  deliveryAgentId: number | null;
+  deliveryAgentName: string | null;
+  deliveryAgentEmail: string | null;
+}
+ 
+export interface UpdateShipmentStatusPayload {
+  shipmentId: number;
+  status: "OUT_FOR_PICKUP" | "PICKED_UP" | "IN_TRANSIT" | "OUT_FOR_DELIVERY" | "DELIVERED" | "COMPLETED";
+  remarks?: string;
 }

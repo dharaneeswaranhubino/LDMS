@@ -19,8 +19,9 @@ import type {
   DeliveryAgent,
   FetchComplaintsParams,
   ReassignResponse,
-  RevenueTab,
   UpdateComplaintStatusResponse,
+  UpdateShipmentStatusPayload,
+  UpdateShipmentStatusResponse,
 } from "./adminTypes";
 import { AxiosError } from "axios";
 
@@ -60,16 +61,36 @@ export const getAllAgents = createAsyncThunk<
   }
 });
 
+// export const fetchAdminDashboard = createAsyncThunk<
+//   AdminDashboardData,
+//   DashboardDateParams,
+//   { rejectValue: string }
+// >(
+//   "admin/fetchDashboard",
+//   async ({ fromDate, toDate, groupBy }, { rejectWithValue }) => {
+//     try {
+//       const res = await api.get("/dashboard/admin", {
+//         params: { fromDate, toDate, groupBy },
+//       });
+//       return res.data.data as AdminDashboardData;
+//     } catch (err: unknown) {
+//       const error = err as AxiosError<{ message: string }>;
+//       return rejectWithValue(
+//         error.response?.data?.message || "Failed to load dashboard",
+//       );
+//     }
+//   },
+// );
 export const fetchAdminDashboard = createAsyncThunk<
   AdminDashboardData,
   DashboardDateParams,
   { rejectValue: string }
 >(
   "admin/fetchDashboard",
-  async ({ fromDate, toDate, groupBy }, { rejectWithValue }) => {
+  async ({ fromDate, toDate }, { rejectWithValue }) => {
     try {
       const res = await api.get("/dashboard/admin", {
-        params: { fromDate, toDate, groupBy },
+        params: { fromDate, toDate },
       });
       return res.data.data as AdminDashboardData;
     } catch (err: unknown) {
@@ -213,12 +234,34 @@ export const fetchChatHistory = createAsyncThunk<
   },
 );
 
+//Admin completed status
+export const updateShipmentStatus = createAsyncThunk<
+  UpdateShipmentStatusResponse,
+  UpdateShipmentStatusPayload,
+  { rejectValue: string }
+>(
+  "admin/updateShipmentStatus",
+  async ({ shipmentId, status, remarks }, { rejectWithValue }) => {
+    try {
+      const res = await api.patch(`/shipments/status/${shipmentId}`, {
+        status,
+        ...(remarks ? { remarks } : {}),
+      });
+      return res.data.data as UpdateShipmentStatusResponse;
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update shipment status",
+      );
+    }
+  },
+);
+
 const initialState: AdminState = {
   shipments: [],
   agents: [],
   dashboard: null,
   dashboardLoading: false,
-  activeRevenueTab: "Weekly",
 
   allShipments: [],
   shipmentPagination: null,
@@ -249,6 +292,9 @@ const initialState: AdminState = {
   chatHistoryPagination: null,
   chatHistoryLoading: false,
   chatHistoryError: null,
+
+  completeShipmentLoading: false,
+  completeShipmentError: null,
 };
 
 const adminSlice = createSlice({
@@ -261,9 +307,6 @@ const adminSlice = createSlice({
       state.timelineError = null;
     },
 
-    setActiveRevenueTab(state, action: PayloadAction<RevenueTab>) {
-      state.activeRevenueTab = action.payload;
-    },
     //Complaints
     setActiveComplaintTab(state, action: PayloadAction<"ALL" | ComplaintStatus>) {
       state.activeComplaintTab = action.payload;
@@ -288,6 +331,10 @@ const adminSlice = createSlice({
       state.chatHistoryShipmentInfo = null;
       state.chatHistoryPagination = null;
       state.chatHistoryError = null;
+    },
+
+    clearCompleteShipmentError(state) {
+      state.completeShipmentError = null;
     },
   },
 
@@ -426,9 +473,29 @@ const adminSlice = createSlice({
       .addCase(fetchChatHistory.rejected, (state, action) => {
         state.chatHistoryLoading = false;
         state.chatHistoryError = action.payload || "Failed to fetch chat history";
+      })
+
+      //Admin completed status
+      .addCase(updateShipmentStatus.pending, (state) => {
+        state.completeShipmentLoading = true;
+        state.completeShipmentError = null;
+      })
+      .addCase(updateShipmentStatus.fulfilled, (state, action) => {
+        state.completeShipmentLoading = false;
+        // Update the shipment in allShipments array
+        const idx = state.allShipments.findIndex(
+          (s) => s.shipmentId === action.payload.shipmentId
+        );
+        if (idx !== -1) {
+          state.allShipments[idx].shipmentStatus = action.payload.shipmentStatus;
+        }
+      })
+      .addCase(updateShipmentStatus.rejected, (state, action) => {
+        state.completeShipmentLoading = false;
+        state.completeShipmentError = action.payload || "Failed to update status";
       });
   },
 });
 
-export const { clearTimeline, setActiveRevenueTab, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, clearReassignState, clearChatHistory } = adminSlice.actions;
+export const { clearTimeline, setActiveComplaintTab, setSelectedComplaint, clearComplaintError, clearReassignState, clearChatHistory, clearCompleteShipmentError } = adminSlice.actions;
 export default adminSlice.reducer;

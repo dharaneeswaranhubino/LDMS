@@ -2,14 +2,14 @@ import type {
   DashboardHeaderProps,
   StatsProps,
 } from "../../../adminShipment/adminTypes";
-// import DateRangePicker, { displayDate } from "./DateRangePicker";
 import StatCard from "./StatCardInfo";
 import { CgCheckO } from "react-icons/cg";
 import { GoAlert } from "react-icons/go";
 import { TbTruckDelivery } from "react-icons/tb";
-import { LuAlarmClockCheck } from "react-icons/lu";
+import { MdCurrencyRupee } from "react-icons/md";
 import DateRangePicker from "../../../../shared/components/DateRangePicker";
 import { displayDate } from "../../../../shared/utils";
+import { formatCurrency } from "../../utils/AdminDashboardHelper";
 
 const DashboardHeader = ({
   fromDate,
@@ -19,16 +19,15 @@ const DashboardHeader = ({
   deliveredShipments,
   activeDeliveries,
   delayedShipments,
-  pendingShipments,
+  totalRevenue,
 }: DashboardHeaderProps & StatsProps) => {
   return (
     <>
-      <div className="mb-6 flex flex-wrap gap-3 items-start justify-between">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="m-0 text-3xl font-extrabold tracking-tight text-cyan-800">
             Admin Dashboard
           </h1>
-
           <p className="mt-1 text-sm font-normal text-slate-500">
             Operations overview —{" "}
             <span className="font-medium text-cyan-600">
@@ -37,7 +36,6 @@ const DashboardHeader = ({
             </span>
           </p>
         </div>
-
         <DateRangePicker
           fromDate={fromDate}
           toDate={toDate}
@@ -53,7 +51,6 @@ const DashboardHeader = ({
           iconBg="#e0f2fe"
           accent="#0369a1"
         />
-
         <StatCard
           icon={<CgCheckO />}
           value={deliveredShipments}
@@ -61,7 +58,6 @@ const DashboardHeader = ({
           iconBg="#dcfce7"
           accent="#15803d"
         />
-
         <StatCard
           icon={<TbTruckDelivery />}
           value={activeDeliveries}
@@ -69,7 +65,6 @@ const DashboardHeader = ({
           iconBg="#fef9c3"
           accent="#a16207"
         />
-
         <StatCard
           icon={<GoAlert />}
           value={delayedShipments}
@@ -77,13 +72,13 @@ const DashboardHeader = ({
           iconBg="#fee2e2"
           accent="#b91c1c"
         />
-
         <StatCard
-          icon={<LuAlarmClockCheck />}
-          value={pendingShipments}
-          label="Pending"
-          iconBg="#f1f5f9"
-          accent="#475569"
+          icon={<MdCurrencyRupee />}
+          value={totalRevenue}
+          label="Total Revenue"
+          iconBg="#f0fdf4"
+          accent="#15803d"
+          formatValue={formatCurrency}
         />
       </div>
 
@@ -92,7 +87,6 @@ const DashboardHeader = ({
           <span className="text-base">
             <GoAlert />
           </span>
-
           <span>
             <strong>{delayedShipments} shipments delayed</strong> — exceeded
             assigned delivery slots. Review and reassign immediately.

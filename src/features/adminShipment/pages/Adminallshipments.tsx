@@ -26,7 +26,6 @@ const AdminAllShipments = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [viewModal, setViewModal] = useState<AllShipments | null>(null);
   const [completeModal, setCompleteModal] = useState<AllShipments | null>(null);
-  const [completeLoading, setCompleteLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAllShipments({ page: 1, limit: 500 }));
@@ -46,6 +45,11 @@ const AdminAllShipments = () => {
     setSearchQuery(val);
     setClientPage(1);
   }, []);
+
+  // Called by modal on success — refetch to sync latest status from server
+  const handleCompleteSuccess = useCallback(() => {
+    dispatch(fetchAllShipments({ page: 1, limit: 500 }));
+  }, [dispatch]);
 
   const tabCounts = useMemo(() => {
     const c: Record<string, number> = { ALL: shipments.length };
@@ -105,17 +109,6 @@ const AdminAllShipments = () => {
     return filteredAndSorted.slice(start, start + limit);
   }, [filteredAndSorted, safePage, limit]);
 
-  const handleComplete = async () => {
-    if (!completeModal) return;
-    setCompleteLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, 800));
-      setCompleteModal(null);
-    } finally {
-      setCompleteLoading(false);
-    }
-  };
-
   return (
     <div className="rounded-2xl h-[calc(100vh-72px)] overflow-y-auto scrollbar-none bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3 sm:p-4 lg:p-5">
       <AllShipmentHeader />
@@ -162,11 +155,11 @@ const AdminAllShipments = () => {
         onClose={() => setViewModal(null)}
       />
 
+      {/* Complete modal — self-contained, dispatches its own thunk */}
       <AdminShipmentCompleteModal
         shipment={completeModal}
-        loading={completeLoading}
-        onConfirm={handleComplete}
         onClose={() => setCompleteModal(null)}
+        onSuccess={handleCompleteSuccess}
       />
     </div>
   );

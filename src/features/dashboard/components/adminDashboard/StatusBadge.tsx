@@ -1,8 +1,6 @@
 import type { ShipmentStatus } from "../../../adminShipment/adminTypes";
 import { PAY_COLORS, STATUS_COLORS } from "../../utils/AdminDashboardHelper";
 
-
-
 export function StatusBadge({ status }: { status: ShipmentStatus }) {
   const c = STATUS_COLORS[status] ?? {
     className: "bg-slate-100 text-slate-500",

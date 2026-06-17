@@ -1,6 +1,6 @@
 import type { StatCardProps } from "../../../adminShipment/adminTypes";
 
-const StatCard = ({ icon, value, label, iconBg, accent }: StatCardProps) => {
+const StatCard = ({ icon, value, label, iconBg, accent, formatValue }: StatCardProps) => {
   return (
     <div className="flex flex-1 justify-between items-center gap-3 rounded-xl border-l-5 border-cyan-300 bg-white px-5 py-[18px] shadow-md">
       <div>
@@ -8,9 +8,8 @@ const StatCard = ({ icon, value, label, iconBg, accent }: StatCardProps) => {
           className="text-[34px] font-extrabold leading-none"
           style={{ color: accent }}
         >
-          {value}
+          {formatValue ? formatValue(value) : value}
         </div>
-
         <div className="text-[11px] font-medium uppercase tracking-[0.07em] text-slate-500 mt-2">
           {label}
         </div>

@@ -1,36 +1,22 @@
-import { useEffect } from "react";
-import {
-  fetchAdminDashboard,
-  setActiveRevenueTab,
-} from "../../adminShipment/adminSlice";
+import { useEffect, useState } from "react";
+import { fetchAdminDashboard } from "../../adminShipment/adminSlice";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../shared/hooks/reduxHooks";
-import type { GroupBy, RevenueTab } from "../../adminShipment/adminTypes";
 
 import DashboardHeader from "../components/adminDashboard/DashboardHeader";
-import RevenueChart from "../components/adminDashboard/RevenueChart";
 import PaymentChart from "../components/adminDashboard/PaymentChart";
 import AgentPerformanceTable from "../components/adminDashboard/AgentPerformanceTable";
-import RecentShipmentsTable from "../components/adminDashboard/RecentShipmentsTable";
 import CustomerComplaints from "../components/adminDashboard/CustomerComplaints";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
-import { useState } from "react";
 
 const formatDate = (date: Date) => date.toISOString().split("T")[0];
 const today = formatDate(new Date());
 
-const TAB_TO_GROUPBY: Record<RevenueTab, GroupBy> = {
-  Daily: "daily",
-  Weekly: "weekly",
-  Monthly: "monthly",
-};
-
 const AdminDashboard = () => {
   const dispatch = useAppDispatch();
-
-  const { dashboard, dashboardLoading, activeRevenueTab } = useAppSelector(
+  const { dashboard, dashboardLoading } = useAppSelector(
     (state) => state.admin,
   );
 
@@ -39,35 +25,18 @@ const AdminDashboard = () => {
     d.setDate(d.getDate() - 7);
     return formatDate(d);
   };
+
   const [fromDate, setFromDate] = useState(getDefaultFromDate);
   const [toDate, setToDate] = useState(today);
 
-  // Initial load always weekly
   useEffect(() => {
-    dispatch(fetchAdminDashboard({ fromDate, toDate, groupBy: "weekly" }));
+    dispatch(fetchAdminDashboard({ fromDate, toDate }));
   }, []);
 
   const handleDateApply = (from: string, to: string) => {
     setFromDate(from);
     setToDate(to);
-    dispatch(
-      fetchAdminDashboard({
-        fromDate: from,
-        toDate: to,
-        groupBy: TAB_TO_GROUPBY[activeRevenueTab],
-      }),
-    );
-  };
-
-  const handleRevenueTabChange = (tab: RevenueTab) => {
-    dispatch(setActiveRevenueTab(tab));
-    dispatch(
-      fetchAdminDashboard({
-        fromDate,
-        toDate,
-        groupBy: TAB_TO_GROUPBY[tab],
-      }),
-    );
+    dispatch(fetchAdminDashboard({ fromDate: from, toDate: to }));
   };
 
   if (dashboardLoading || !dashboard) {
@@ -83,14 +52,10 @@ const AdminDashboard = () => {
     deliveredShipments,
     activeDeliveries,
     delayedShipments,
-    pendingShipments,
     totalRevenue,
-    revenueChangePercent,
     paymentSummary,
     agentPerformance,
-    recentShipments,
     complaints,
-    revenueStats,
   } = dashboard;
 
   return (
@@ -103,18 +68,10 @@ const AdminDashboard = () => {
         deliveredShipments={deliveredShipments}
         activeDeliveries={activeDeliveries}
         delayedShipments={delayedShipments}
-        pendingShipments={pendingShipments}
+        totalRevenue={totalRevenue}
       />
 
-      <div className="mb-4 grid gap-4 md:grid-cols-2">
-        <RevenueChart
-          totalRevenue={totalRevenue}
-          revenueChangePercent={revenueChangePercent}
-          revenueStats={revenueStats}
-          activeTab={activeRevenueTab}
-          onTabChange={handleRevenueTabChange}
-        />
-
+      <div className="mb-4">
         <PaymentChart
           paid={paymentSummary.paid}
           pending={paymentSummary.pending}
@@ -122,9 +79,8 @@ const AdminDashboard = () => {
         />
       </div>
 
-      <div className="mb-4 grid gap-4 md:grid-cols-2">
+      <div className="mb-4">
         <AgentPerformanceTable agentPerformance={agentPerformance} />
-        <RecentShipmentsTable recentShipments={recentShipments} />
       </div>
 
       <CustomerComplaints complaints={complaints} />
