@@ -13,7 +13,7 @@ interface Props {
 const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
   const dispatch = useAppDispatch();
   const { messages, loadingHistory, sendingMessage } = useAppSelector((s) => s.shipment);
-  const token = useAppSelector((s) => s.auth.accessToken); // adjust to your auth slice
+  const token = useAppSelector((s) => s.auth.accessToken);
   const [input, setInput] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
 

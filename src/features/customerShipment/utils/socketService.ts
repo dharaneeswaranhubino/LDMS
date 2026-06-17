@@ -4,16 +4,6 @@ const BASE_URL = 'https://logisticsanddeliverymanagementsystem.onrender.com';
 
 let socket: Socket | null = null;
 
-// export const getSocket = (token: string): Socket => {
-//   if (!socket) {
-//     socket = io(BASE_URL, {
-//       auth: { token },
-//       transports: ['websocket'],
-//     });
-//   }
-//   return socket;
-// };
-
 export const getSocket = (token: string): Socket => {
     if (socket?.connected) return socket;
     if (socket) socket.disconnect();

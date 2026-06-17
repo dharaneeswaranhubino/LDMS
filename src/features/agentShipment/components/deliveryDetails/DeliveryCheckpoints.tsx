@@ -46,7 +46,7 @@ const DeliveryCheckpoints = ({
   );
 
   const handleUpdateClick = () => {
-    const nextStatus = statusOrder[currentIndex + 1] as ShipmentStatus;
+    // const nextStatus = statusOrder[currentIndex + 1] as ShipmentStatus;
 
     if (displayStatus === "OUT_FOR_DELIVERY") {
       if (!otpVerified) {

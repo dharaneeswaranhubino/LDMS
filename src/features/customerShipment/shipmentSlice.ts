@@ -354,20 +354,30 @@ export const fetchMyPayments = createAsyncThunk<
 // Fetch chat history
 export const fetchChatMessages = createAsyncThunk(
     'chat/fetchMessages',
-    async ({ shipmentId, page = 1, limit = 20 }: { shipmentId: number; page?: number; limit?: number }, { rejectWithValue }) => {
+    async ({ shipmentId, page = 1, limit = 20 }: {
+        shipmentId: number; page?: number; limit?: number
+    }, { rejectWithValue }) => {
         try {
             const res = await api.get(`/chat/${shipmentId}`, { params: { page, limit } });
-            return res.data.data as ChatData;
+            const raw = res.data.data;
+            if (Array.isArray(raw)) {
+                return {
+                    shipmentId,
+                    messages: raw,
+                    pagination: res.data.pagination ?? {
+                        total: raw.length, page: 1, limit: 20, totalPages: 1
+                    }
+                } as ChatData;
+            }
+            return raw as ChatData;
         } catch (err: unknown) {
             const error = err as AxiosError<{ message: string }>;
-            return rejectWithValue(
-                error.response?.data?.message || "Failed to fetch messages",
-            );
+            return rejectWithValue(error.response?.data?.message || "Failed to fetch messages");
         }
     }
 );
 
-// Send message via REST (socket handles real-time delivery)
+// Send message via REST (socket handles realtime delivery)
 export const sendMessage = createAsyncThunk(
     'chat/sendMessage',
     async ({ shipmentId, message }: { shipmentId: number; message: string }, { rejectWithValue }) => {
