@@ -1,6 +1,6 @@
-import { Badge, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import type { DashboardPaymentRecord } from "../../../customerShipment/shipmentTypes";
-import { fmtAmt, fmtDate, PAYMENT_STATUS_CONFIG } from "../../utils/CustomerDashboardHelper";
+import { fmtAmt, fmtDate } from "../../utils/CustomerDashboardHelper";
 
 const PaymentHistoryList = ({
   payments,
@@ -55,7 +55,6 @@ const PaymentHistoryList = ({
             <span className="text-sm font-semibold text-gray-800">
               {fmtAmt(p.amount)}
             </span>
-            {/* <Badge status={p.paymentStatus} config={PAYMENT_STATUS_CONFIG} /> */}
           </div>
         </div>
       ))}

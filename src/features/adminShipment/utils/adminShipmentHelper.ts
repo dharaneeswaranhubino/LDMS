@@ -103,6 +103,7 @@ export const STATUS_STYLE: Record<ShipmentStatus, string> = {
   DELAYED: "bg-orange-100 text-orange-700 border-orange-200",
   DELIVERED: "bg-green-100 text-green-700 border-green-200",
   CANCELLED: "bg-red-100 text-red-700 border-red-200",
+  COMPLETED: "bg-green-100 text-green-700 border-green-200",
 };
 
 export const STATUS_LABEL: Record<ShipmentStatus, string> = {
@@ -116,6 +117,7 @@ export const STATUS_LABEL: Record<ShipmentStatus, string> = {
   DELAYED: "Delayed",
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
+  COMPLETED: "Completed",
 };
 
 export const PRIORITY_STYLE: Record<Priority, string> = {

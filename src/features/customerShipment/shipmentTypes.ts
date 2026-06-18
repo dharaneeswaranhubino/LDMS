@@ -62,7 +62,8 @@ export interface ShipmentResponse {
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
   | "CANCELLED"
-  | "DELAYED";
+  | "DELAYED"
+  | "COMPLETED";
   amount: number;
   paymentStatus: "PENDING" | "PAID" | "FAILED";
   assignedSlotStart: string | null;
@@ -157,7 +158,8 @@ export type ShipmentStatus =
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
   | "CANCELLED"
-  | "DELAYED";
+  | "DELAYED"
+  | "COMPLETED";
 
 export type PriorityType = "STANDARD" | "EXPRESS" | "SAME_DAY";
 export type FilterTab = "ALL" | ShipmentStatus;
@@ -555,4 +557,46 @@ export interface ChatData {
 export interface SendMessagePayload {
   shipmentId: number;
   message: string;
+}
+
+//customer Dashboard
+// export type LastMessageBy = "DELIVERY_AGENT" | "CUSTOMER" | "ADMIN";
+
+export interface DashboardRecentShipment {
+  shipmentId: number;
+  trackingId: string;
+  itemName: string;
+  shipmentStatus: ShipmentStatus;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  deliveryAddress: string;
+  deliveryCity: string;
+  createdAt: string;
+}
+
+export interface DashboardPaymentRecord {
+  paymentId: number;
+  shipmentId: number;
+  amount: number;
+  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paidAt: string | null;
+}
+
+export interface DashboardSupportChat {
+  shipmentId: number;
+  trackingId: string;
+  lastMessage: string;
+  lastMessageBy: LastMessageBy;
+  updatedAt: string;
+}
+
+export interface CustomerDashboardData {
+  activeShipments: number;
+  totalShipments: number;
+  deliveredShipments: number;
+  pendingShipments: number;
+  pendingPayments: number;
+  unreadNotifications: number;
+  recentShipments: DashboardRecentShipment[];
+  paymentHistory: DashboardPaymentRecord[];
+  recentSupportChats: DashboardSupportChat[];
 }

@@ -4,7 +4,12 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import { api } from "../../lib/axios";
-import type { UpdateTrackStatus, DeliveryItem, AgentState } from "./agentTypes";
+import type {
+  UpdateTrackStatus,
+  DeliveryItem,
+  AgentState,
+  AgentDashboardData,
+} from "./agentTypes";
 import type { AxiosError } from "axios";
 
 export const getMyDeliveries = createAsyncThunk<
@@ -59,6 +64,22 @@ export const toggleAvailability = createAsyncThunk(
   },
 );
 
+export const fetchAgentDashboard = createAsyncThunk<
+  AgentDashboardData,
+  void,
+  { rejectValue: string }
+>("agent/fetchAgentDashboard", async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get("dashboard/deliveryAgent");
+    return res.data.data;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch agent dashboard",
+    );
+  }
+});
+
 const initialState: AgentState = {
   deliveries: [],
   // deliveries: [],
@@ -78,6 +99,10 @@ const initialState: AgentState = {
   timelineData: null,
   timelineLoading: false,
   timelineError: null,
+
+  dashboardData: null,
+  dashboardLoading: false,
+  dashboardError: null,
 };
 
 const agentSlice = createSlice({
@@ -163,10 +188,32 @@ const agentSlice = createSlice({
         state.availabilityLoading = false;
         state.error =
           (action.payload as string) || "Failed to toggle availability";
+      })
+
+      .addCase(fetchAgentDashboard.pending, (state) => {
+        state.dashboardLoading = true;
+        state.dashboardError = null;
+      })
+      .addCase(fetchAgentDashboard.fulfilled, (state, action) => {
+        state.dashboardLoading = false;
+        state.dashboardData = action.payload;
+        // Sync isActive → availability
+        state.availability = action.payload.isActive
+          ? "AVAILABLE"
+          : "UNAVAILABLE";
+      })
+      .addCase(fetchAgentDashboard.rejected, (state, action) => {
+        state.dashboardLoading = false;
+        state.dashboardError = action.payload || "Failed to fetch dashboard";
       });
   },
 });
 
-export const { setSearch, setPriorityFilter, setActiveTab, setCurrentPage, clearTimeline } =
-  agentSlice.actions;
+export const {
+  setSearch,
+  setPriorityFilter,
+  setActiveTab,
+  setCurrentPage,
+  clearTimeline,
+} = agentSlice.actions;
 export default agentSlice.reducer;

@@ -21,6 +21,7 @@ export type ShipmentStatus =
   | "DELIVERED"
   | "CANCELLED"
   | "DELAYED";
+  // | "COMPLETED";
 
 export interface DeliveryItem {
   shipmentId: number;
@@ -69,6 +70,10 @@ export interface AgentState {
   timelineData: ShipmentTimelineResponse | null;
   timelineLoading: boolean;
   timelineError: string | null;
+
+  dashboardData: AgentDashboardData | null;
+  dashboardLoading: boolean;
+  dashboardError: string | null;
 }
 
 export interface DeliveriesResponse {
@@ -121,7 +126,7 @@ export interface DeliveryCheckpointsProps {
 export interface UpdateStatusModalProps {
   onClose: () => void;
   currentStatus: ShipmentStatus;
-  onUpdate: (nextStatus: ShipmentStatus) => void; // string → ShipmentStatus
+  onUpdate: (nextStatus: ShipmentStatus) => void;
   shipmentId: number;
 
   assignedSlotStart: string;
@@ -211,3 +216,34 @@ export interface ShipmentTimelineResponse {
   currentStatus: TimelineStatus;
   timeline: TimelineEntry[];
 }
+
+// Agent Dashboard
+export interface CustomerMessage {
+  shipmentId: number;
+  trackingId: string;
+  customerName: string;
+  message: string;
+  sentAt: string;
+}
+
+export interface AgentDashboardData {
+  isActive: boolean;
+  assignedDeliveries: number;
+  activeShipments: number;
+  completedDeliveries: number;
+  pendingAssignments: number;
+  todaysSchedule: AgentScheduleSlot[];
+  customerMessages: CustomerMessage[];
+}
+
+export interface AgentScheduleSlot {
+  shipmentId?: number;
+  trackingId?: string;
+  assignedSlotStart?: string;
+  assignedSlotEnd?: string;
+  shipmentStatus?: ShipmentStatus;
+  customerName?: string;
+  pickupCity?: string;
+  deliveryCity?: string;
+}
+

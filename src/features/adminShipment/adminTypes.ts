@@ -23,7 +23,8 @@ export type ShipmentStatus =
   | "DELAYED"
   | "DELIVERED"
   | "CANCELLED"
-  | "DELAYED";
+  | "DELAYED"
+  | "COMPLETED";
 
 export type Priority = "STANDARD" | "EXPRESS" | "SAME_DAY";
 
@@ -109,8 +110,6 @@ export interface DashboardComplaint {
   resolvedAt: string | null;
   createdAt: string;
 }
-
-
 
 export interface AdminDashboardData {
   totalShipments: number;

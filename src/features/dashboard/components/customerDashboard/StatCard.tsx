@@ -32,7 +32,6 @@ const StatCard = ({
         className={`flex h-14 w-14 items-center justify-center rounded-[10px] text-[2em] ${iconBg} ${accent}`}
       >
         {icon}
-        {/* <Icon size={13} /> */}
       </div>
     </div>
   );

@@ -176,32 +176,14 @@ export const fetchCustomerDashboard = createAsyncThunk<
     "customerDashboard/fetch",
     async ({ from, to }, { rejectWithValue }) => {
         try {
-            await new Promise((res) => setTimeout(res, 500));
-            return getMockCustomerDashboard(from, to);
-        } catch {
-            return rejectWithValue("Failed to load mock dashboard");
+            const res = await api.get(`/dashboard/customer?from=${from}&to=${to}`);
+            return res.data.data;
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message: string }>;
+            return rejectWithValue(error.response?.data?.message || "Failed to fetch dashboard");
         }
     }
 );
-
-// API is ready
-// export const fetchCustomerDashboard = createAsyncThunk<
-//     CustomerDashboardData,
-//     { from: string; to: string },
-//     { rejectValue: string }
-// >(
-//     "customerDashboard/fetch",
-//     async ({ from, to }, { rejectWithValue }) => {
-//         try {
-//             const res = await api.get(`/dashboard/customer?from=${from}&to=${to}`);
-//             return res.data.data;
-//         } catch (err: unknown) {
-//             const error = err as AxiosError<{ message: string }>;
-//             return rejectWithValue(error.response?.data?.message || "Failed to fetch dashboard");
-//         }
-//     }
-// );
-
 
 export const fetchNotifications = createAsyncThunk<
     FetchNotificationsResponse,
@@ -392,6 +374,7 @@ export const sendMessage = createAsyncThunk(
         }
     }
 );
+
 
 //initial States
 const today = new Date().toISOString().split("T")[0];
