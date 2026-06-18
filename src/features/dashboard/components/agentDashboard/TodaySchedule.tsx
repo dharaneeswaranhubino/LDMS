@@ -8,7 +8,8 @@ interface Props {
   isActive: (s: ShipmentStatus) => boolean;
 }
 
-const TodaySchedule = ({ schedule, ALL_SLOTS, STATUS_CONFIG, isDone, isActive }: Props) => {
+// const TodaySchedule = ({ schedule, ALL_SLOTS, STATUS_CONFIG, isDone, isActive }: Props) => {
+const TodaySchedule = ({ schedule, STATUS_CONFIG, isActive }: Props) => {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
@@ -33,7 +34,7 @@ const TodaySchedule = ({ schedule, ALL_SLOTS, STATUS_CONFIG, isDone, isActive }:
         <div className="divide-y divide-slate-100 max-h-[420px] overflow-y-auto scrollbar-none">
           {schedule.map((slot, idx) => {
             const cfg = slot.shipmentStatus ? STATUS_CONFIG[slot.shipmentStatus] : null;
-            const done = slot.shipmentStatus ? isDone(slot.shipmentStatus) : false;
+            // const done = slot.shipmentStatus ? isDone(slot.shipmentStatus) : false;
             const active = slot.shipmentStatus ? isActive(slot.shipmentStatus) : false;
 
             return (

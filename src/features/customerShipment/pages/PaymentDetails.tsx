@@ -11,7 +11,7 @@ import {
   fetchShipmentById,
 } from "../shipmentSlice";
 import { formatDateTime, getStatusStyle } from "../utils/shipmentHelpers";
-import ReceiptPreviewModal from "../components/createShipmentComponents/ReceiptPreviewModal";
+// import ReceiptPreviewModal from "../components/createShipmentComponents/ReceiptPreviewModal";
 
 const PaymentDetails = () => {
   const dispatch = useAppDispatch();
@@ -25,15 +25,15 @@ const PaymentDetails = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [showPreview, setShowPreview] = useState(false);
+  // const [showPreview, setShowPreview] = useState(false);
 
-  const trackingId = currentShipment?.trackingId;
+  // const trackingId = currentShipment?.trackingId;
   const prices = currentShipment?.priceBreakdown;
   console.log("prices :", prices);
 
-  const priority = currentShipment?.shipmentPriority;
-  const packageWeight = currentShipment?.packageWeight;
-  const fileName = `ShipFast-Receipt-${paymentDetails?.razorpayPaymentId}.pdf`;
+  // const priority = currentShipment?.shipmentPriority;
+  // const packageWeight = currentShipment?.packageWeight;
+  // const fileName = `ShipFast-Receipt-${paymentDetails?.razorpayPaymentId}.pdf`;
 
   useEffect(() => {
     dispatch(fetchMyPayments());
@@ -215,7 +215,7 @@ const PaymentDetails = () => {
           />
         )}
       </div>
-      {showPreview && (
+      {/* {showPreview && (
         <ReceiptPreviewModal
           onClose={() => setShowPreview(false)}
           razorpayPaymentId={paymentDetails?.razorpayPaymentId}
@@ -226,7 +226,7 @@ const PaymentDetails = () => {
           today={paymentDetails?.paidAt}
           fileName={fileName}
         />
-      )}
+      )} */}
     </div>
   );
 };

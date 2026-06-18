@@ -41,7 +41,7 @@ const TimeLineHorizontalStepper = ({
   const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
   const pct = getProgressPercent(displayStatus);
 
-  function getDotStyle(status: TimelineStatus, idx: number) {
+  function getDotStyle(idx: number) {
     const isDone = idx < curIdx;
     const isCurrent = idx === curIdx;
 
@@ -79,7 +79,7 @@ const TimeLineHorizontalStepper = ({
 
           <div className="relative flex items-start justify-between">
             {ORDERED_STATUSES.map((status, idx) => {
-              const dotStyle = getDotStyle(status, idx);
+              const dotStyle = getDotStyle(idx);
               const isCurrent = idx === curIdx;
 
               return (

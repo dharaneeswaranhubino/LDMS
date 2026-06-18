@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { Bell, Package, Receipt, MessageCircle, AlertCircle } from "lucide-react";
+import { Package, Receipt, MessageCircle, AlertCircle } from "lucide-react";
 import { fetchCustomerDashboard, setDateRange } from "../../customerShipment/shipmentSlice";
 import { useAppDispatch, useAppSelector } from "../../../shared/hooks/reduxHooks";
 import DateRangePicker from "../../../shared/components/DateRangePicker";

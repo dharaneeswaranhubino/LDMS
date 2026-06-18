@@ -118,7 +118,7 @@
 
 // export default RevenueChart;
 
-import React from 'react'
+// import React from 'react'
 
 const RevenueChart = () => {
   return (

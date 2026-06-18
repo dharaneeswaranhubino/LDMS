@@ -8,8 +8,8 @@ import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import DashboardStats from "../components/agentDashboard/DashboardStats";
 import CustomerMessages from "../components/agentDashboard/CustomerMessages";
 import TodaySchedule from "../components/agentDashboard/TodaySchedule";
-import CompletedToday from "../components/agentDashboard/CompletedToday";
-import ActiveShipments from "../components/agentDashboard/ActiveShipments";
+// import CompletedToday from "../components/agentDashboard/CompletedToday";
+// import ActiveShipments from "../components/agentDashboard/ActiveShipments";
 import { getGreeting, today, ALL_SLOTS, STATUS_CONFIG, isActive, isDone } from "../utils/AgentDashboardHelper";
 
 const AgentDashboard = () => {

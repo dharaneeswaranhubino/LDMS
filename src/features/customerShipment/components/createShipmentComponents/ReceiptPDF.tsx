@@ -14,7 +14,7 @@ const ReceiptPDF = ({
   packageWeight,
   today,
 }: {
-  razorpayPaymentId: string;
+  razorpayPaymentId: string | undefined;
   trackingId?: string;
   prices: {
     platformFee: number;

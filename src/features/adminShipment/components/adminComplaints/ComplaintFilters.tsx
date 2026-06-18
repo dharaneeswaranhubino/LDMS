@@ -3,7 +3,7 @@ import { ComplaintFiltersTABS } from "../../utils/adminShipmentHelper";
 
 const ComplaintFilters = ({
   activeTab,
-  pagination,
+  // pagination,
   onTabChange,
 }: ComplaintFiltersProps) => {
   // console.log(pagination);

@@ -23,7 +23,7 @@ import type {
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
-import { getMockCustomerDashboard } from "../dashboard/utils/CustomerDashboardHelper";
+// import { getMockCustomerDashboard } from "../dashboard/utils/CustomerDashboardHelper";
 import type { AxiosError } from "axios";
 
 export const createShipment = createAsyncThunk<

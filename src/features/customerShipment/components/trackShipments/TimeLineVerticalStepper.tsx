@@ -49,7 +49,7 @@ const TimeLineVerticalStepper = ({
     entryMap.set(entry.toStatus as TimelineStatus, entry);
   });
 
-  function getDotStyle(status: TimelineStatus, idx: number) {
+  function getDotStyle(idx: number) {
     if (isCancelled && idx === curIdx) return "cancelled";
     if (isDelayed && idx === curIdx) return "delayed";
     if (idx < curIdx) return "done";
@@ -60,7 +60,7 @@ const TimeLineVerticalStepper = ({
   return (
     <div className="px-4 py-4 flex-1 overflow-y-auto">
       {ORDERED_STATUSES.map((status, idx) => {
-        const dotStyle = getDotStyle(status, idx);
+        const dotStyle = getDotStyle(idx);
         const isLast = idx === ORDERED_STATUSES.length - 1;
         // const entry = entryMap.get(status);
         const entry =

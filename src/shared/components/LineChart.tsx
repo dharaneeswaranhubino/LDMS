@@ -29,8 +29,10 @@ interface LineChartProps {
 const LineChart = ({
   data,
   datasetLabel = "Data",
-  tooltipFormatter = (value) => value.toString(),
-  yAxisFormatter = (value) => value.toString(),
+  // tooltipFormatter = (value) => value.toString() ?? "0",
+  // yAxisFormatter = (value) => value.toString() ?? "0",
+  tooltipFormatter = (value) => (value !== null ? value.toString() : "-"),
+  yAxisFormatter = (value) => (value !== null ? value.toString() : "0"),
 }: LineChartProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);

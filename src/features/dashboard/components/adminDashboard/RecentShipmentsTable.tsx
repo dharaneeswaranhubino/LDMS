@@ -65,7 +65,7 @@
 // };
 
 // export default RecentShipmentsTable;
-import React from 'react'
+// import React from 'react'
 
 const RecentShipmentsTable = () => {
   return (
