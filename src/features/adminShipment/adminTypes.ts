@@ -111,12 +111,29 @@ export interface DashboardComplaint {
   createdAt: string;
 }
 
+export interface RevenueDataPoint {
+  period: string;
+  revenue: number;
+}
+
+// export interface AdminDashboardData {
+//   totalShipments: number;
+//   deliveredShipments: number;
+//   activeDeliveries: number;
+//   delayedShipments: number;
+//   totalRevenue: number;
+//   paymentSummary: PaymentSummary;
+//   agentPerformance: AgentPerformance[];
+//   complaints: DashboardComplaint[];
+// }
 export interface AdminDashboardData {
   totalShipments: number;
   deliveredShipments: number;
   activeDeliveries: number;
   delayedShipments: number;
   totalRevenue: number;
+  granularity: string;             
+  revenueStats: RevenueDataPoint[];
   paymentSummary: PaymentSummary;
   agentPerformance: AgentPerformance[];
   complaints: DashboardComplaint[];
