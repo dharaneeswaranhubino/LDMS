@@ -15,18 +15,18 @@ const ReceiptPreviewModal = ({
   onClose: () => void;
   razorpayPaymentId: string | undefined;
   trackingId?: string;
-  prices: {
+  prices?: {
     platformFee: number;
     weightCharge: number;
     priorityCharge: number;
-    fragileCharge: number;
+    fragileCharge: number | undefined;
     subtotal: number;
     gst: number;
     total: number;
   };
   priority: string | undefined;
   packageWeight: number | undefined;
-  today: string;
+  today?: string;
   fileName: string;
 }) => {
   return (
@@ -89,38 +89,38 @@ const ReceiptPreviewModal = ({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-slate-500">Base rate</span>
-              <span className="text-slate-700">₹{prices.platformFee}</span>
+              <span className="text-slate-700">₹{prices?.platformFee}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-500">
                 Weight ({packageWeight}kg)
               </span>
-              <span className="text-slate-700">₹{prices.weightCharge}</span>
+              <span className="text-slate-700">₹{prices?.weightCharge}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-500">Priority ({priority})</span>
-              <span className="text-slate-700">₹{prices.priorityCharge}</span>
+              <span className="text-slate-700">₹{prices?.priorityCharge}</span>
             </div>
-            {prices.fragileCharge > 0 && (
+            {(prices?.fragileCharge ?? 0) > 0 && (
               <div className="flex justify-between">
                 <span className="text-slate-500">Fragile handling</span>
-                <span className="text-slate-700">₹{prices.fragileCharge}</span>
+                <span className="text-slate-700">₹{prices?.fragileCharge}</span>
               </div>
             )}
             <div className="flex justify-between border-t border-slate-200 pt-2">
               <span className="text-slate-500">Subtotal</span>
-              <span className="text-slate-700">₹{prices.subtotal}</span>
+              <span className="text-slate-700">₹{prices?.subtotal}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-500">GST (18%)</span>
-              <span className="text-slate-700">₹{prices.gst}</span>
+              <span className="text-slate-700">₹{prices?.gst}</span>
             </div>
             <div className="flex justify-between border-t border-slate-300 pt-3">
               <span className="font-semibold text-slate-800 text-base">
                 Total
               </span>
               <span className="font-semibold text-green-600 text-base">
-                ₹{prices.total}
+                ₹{prices?.total}
               </span>
             </div>
           </div>

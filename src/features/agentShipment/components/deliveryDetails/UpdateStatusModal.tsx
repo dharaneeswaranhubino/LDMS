@@ -90,7 +90,7 @@ const UpdateStatusModal = ({
       type: "success",
       message:
         nextStatus === "DELIVERED"
-          ? "Shipment delivered successfully 🎉"
+          ? "Shipment delivered successfully"
           : `Status updated to ${nextStatusMeta?.label}`,
     });
 

@@ -16,18 +16,18 @@ const ReceiptPDF = ({
 }: {
   razorpayPaymentId: string | undefined;
   trackingId?: string;
-  prices: {
+  prices?: {
     platformFee: number;
     weightCharge: number;
     priorityCharge: number;
-    fragileCharge: number;
+    fragileCharge: number | undefined;
     subtotal: number;
     gst: number;
     total: number;
   };
   priority: string | undefined;
   packageWeight: number | undefined;
-  today: string;
+  today?: string;
 }) => (
   <Document>
     <Page size="A4" style={pdfStyles.page}>
@@ -58,33 +58,33 @@ const ReceiptPDF = ({
       <Text style={pdfStyles.sectionLabel}>PRICE BREAKDOWN</Text>
       <View style={pdfStyles.row}>
         <Text style={pdfStyles.rowLabel}>Base rate</Text>
-        <Text style={pdfStyles.rowValue}>Rs. {prices.platformFee}</Text>
+        <Text style={pdfStyles.rowValue}>Rs. {prices?.platformFee}</Text>
       </View>
       <View style={pdfStyles.row}>
         <Text style={pdfStyles.rowLabel}>Weight ({packageWeight}kg)</Text>
-        <Text style={pdfStyles.rowValue}>Rs. {prices.weightCharge}</Text>
+        <Text style={pdfStyles.rowValue}>Rs. {prices?.weightCharge}</Text>
       </View>
       <View style={pdfStyles.row}>
         <Text style={pdfStyles.rowLabel}>Priority ({priority})</Text>
-        <Text style={pdfStyles.rowValue}>Rs. {prices.priorityCharge}</Text>
+        <Text style={pdfStyles.rowValue}>Rs. {prices?.priorityCharge}</Text>
       </View>
-      {prices.fragileCharge > 0 && (
+      {(prices?.fragileCharge ?? 0) > 0 && (
         <View style={pdfStyles.row}>
           <Text style={pdfStyles.rowLabel}>Fragile handling</Text>
-          <Text style={pdfStyles.rowValue}>Rs. {prices.fragileCharge}</Text>
+          <Text style={pdfStyles.rowValue}>Rs. {prices?.fragileCharge}</Text>
         </View>
       )}
       <View style={pdfStyles.row}>
         <Text style={pdfStyles.rowLabel}>Subtotal</Text>
-        <Text style={pdfStyles.rowValue}>Rs. {prices.subtotal}</Text>
+        <Text style={pdfStyles.rowValue}>Rs. {prices?.subtotal}</Text>
       </View>
       <View style={pdfStyles.row}>
         <Text style={pdfStyles.rowLabel}>GST (18%)</Text>
-        <Text style={pdfStyles.rowValue}>Rs. {prices.gst}</Text>
+        <Text style={pdfStyles.rowValue}>Rs. {prices?.gst}</Text>
       </View>
       <View style={pdfStyles.totalRow}>
         <Text style={pdfStyles.totalLabel}>Total</Text>
-        <Text style={pdfStyles.totalValue}>Rs. {prices.total}</Text>
+        <Text style={pdfStyles.totalValue}>Rs. {prices?.total}</Text>
       </View>
 
       <Text style={pdfStyles.footer}>

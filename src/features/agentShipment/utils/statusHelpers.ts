@@ -74,6 +74,8 @@ export const STATUS_BADGE: Record<
   CONFIRMED: { label: "Confirmed", bg: "#F0FDF4", color: "#14532D", dot: "#4ade80" },
   CANCELLED: { label: "Cancelled", bg: "#FEF2F2", color: "#991B1B", dot: "#f87171" },
   DELAYED: { label: "Delayed", bg: "#FFF7ED", color: "#9A3412", dot: "#fb923c" },
+  // COMPLETED: { label: "Completed", bg: "#f5f9f4", color: "#129a19", dot: "#38ae24" },
+  COMPLETED: { label: "Completed", bg: "#F0FDF4", color: "#166534", dot: "#4ade80" },
 };
 
 
@@ -196,16 +198,20 @@ export const STATUS_CONFIG: Record<
     badgeColor: "#9A3412",
     icon: "fa-solid fa-triangle-exclamation",
   },
+  // COMPLETED: {
+  //   title: "Shipment Completed",
+  //   subtitle: "Delivery is Completed",
+  //   badgeLabel: "Completed",
+  //   badgeBg: "#edffef",
+  //   badgeColor: "#129a19",
+  //   icon: "fa-solid fa-circle-check",
+  // },
+  COMPLETED: {
+    title: "Shipment completed",
+    subtitle: "Delivery has been completed successfully",
+    badgeLabel: "Completed",
+    badgeBg: "#F0FDF4",
+    badgeColor: "#166534",
+    icon: "fa-solid fa-circle-check",
+  },
 };
-
-// const formatSlot = (time: string): string => {
-//   if (!time) return "";
-//   const [h, m] = time.split(":");
-//   const d = new Date();
-//   d.setHours(Number(h), Number(m));
-//   return d.toLocaleTimeString("en-IN", {
-//     hour: "2-digit",
-//     minute: "2-digit",
-//     hour12: true,
-//   });
-// };

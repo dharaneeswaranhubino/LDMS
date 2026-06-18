@@ -100,11 +100,6 @@ const ShipmentDetailView = () => {
             <i className="fa-regular fa-clock" />
             {formatSlot(delivery.assignedSlotStart)} – {formatSlot(delivery.assignedSlotEnd)}
           </span>
-
-          <button className="flex h-8 items-center gap-2 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-600 px-3 text-[11px] font-medium text-white shadow-sm">
-            <i className="fa-brands fa-rocketchat" />
-            Chat with customer
-          </button>
         </div>
       </div>
 

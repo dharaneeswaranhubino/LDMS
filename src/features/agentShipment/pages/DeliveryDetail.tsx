@@ -102,9 +102,15 @@ const DeliveryDetail = () => {
   const preSelectedId =
     (location.state as { shipmentId?: number } | null)?.shipmentId ?? null;
 
+  // const todaysDeliveries = useMemo(() => {
+  //   const today = getTodayIST();
+  //   return deliveries.filter((d) => d.assignedDate === today);
+  // }, [deliveries]);
   const todaysDeliveries = useMemo(() => {
     const today = getTodayIST();
-    return deliveries.filter((d) => d.assignedDate === today);
+    return deliveries.filter(
+      (d) => d.assignedDate === today && d.shipmentStatus !== "COMPLETED",
+    );
   }, [deliveries]);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);

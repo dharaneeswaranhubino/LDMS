@@ -78,6 +78,11 @@ export const STATUS_CONFIG: Record<
     style: "bg-orange-100 text-orange-700 border-orange-200",
     icon: "fa-triangle-exclamation",
   },
+  COMPLETED: {
+    label: "Completed",
+    style: "bg-green-100 text-green-700 border-green-200",
+    icon: "fa-circle-check",
+  },
 };
 
 export const isActive = (status: ShipmentStatus): boolean =>
