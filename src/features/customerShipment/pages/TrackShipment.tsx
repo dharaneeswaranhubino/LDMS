@@ -70,7 +70,7 @@ const TrackShipmentPage = () => {
 
   return (
     <>
-      <div className="rounded-2xl flex flex-col h-full bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-3">
+      <div className="rounded-2xl flex flex-col h-full bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-3">
         <div
           className={`border-b border-gray-100 py-4 flex-shrink-0 ${shipmentId ? "hidden md:block" : "block"}`}
         >

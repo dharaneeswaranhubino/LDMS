@@ -239,11 +239,12 @@ export interface AgentDashboardData {
 export interface AgentScheduleSlot {
   shipmentId?: number;
   trackingId?: string;
-  assignedSlotStart?: string;
-  assignedSlotEnd?: string;
-  shipmentStatus?: ShipmentStatus;
-  customerName?: string;
-  pickupCity?: string;
+  receiverName?: string;
+  deliveryAddress?: string;
   deliveryCity?: string;
+  slotStart?: string;
+  slotEnd?: string;
+  slotDate?: string;
+  shipmentStatus?: ShipmentStatus;
 }
 

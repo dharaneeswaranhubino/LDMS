@@ -43,10 +43,10 @@ const DeliveryDetailHeader = ({
               {formatSlot(data?.assignedSlotStart)} – {formatSlot(data?.assignedSlotEnd)}
             </div>
 
-            <button className="flex h-[38px] items-center gap-2 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-600 px-4 text-[12px] font-medium text-white shadow-md transition-all hover:from-sky-500 hover:to-indigo-600">
+            {/* <button className="flex h-[38px] items-center gap-2 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-600 px-4 text-[12px] font-medium text-white shadow-md transition-all hover:from-sky-500 hover:to-indigo-600">
               <i className="fa-brands fa-rocketchat" />
               Chat with customer
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

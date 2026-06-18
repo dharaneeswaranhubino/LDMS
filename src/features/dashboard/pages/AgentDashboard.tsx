@@ -3,17 +3,26 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../shared/hooks/reduxHooks";
-import { toggleAvailability, fetchAgentDashboard } from "../../agentShipment/agentSlice";
+import {
+  toggleAvailability,
+  fetchAgentDashboard,
+} from "../../agentShipment/agentSlice";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import DashboardStats from "../components/agentDashboard/DashboardStats";
 import CustomerMessages from "../components/agentDashboard/CustomerMessages";
 import TodaySchedule from "../components/agentDashboard/TodaySchedule";
-// import CompletedToday from "../components/agentDashboard/CompletedToday";
-// import ActiveShipments from "../components/agentDashboard/ActiveShipments";
-import { getGreeting, today, ALL_SLOTS, STATUS_CONFIG, isActive, isDone } from "../utils/AgentDashboardHelper";
+import {
+  getGreeting,
+  today,
+  ALL_SLOTS,
+  STATUS_CONFIG,
+  isActive,
+  isDone,
+} from "../utils/AgentDashboardHelper";
 
 const AgentDashboard = () => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const {
     availability,
     availabilityLoading,
@@ -37,39 +46,48 @@ const AgentDashboard = () => {
   if (dashboardError || !dashboardData) {
     return (
       <div className="h-[calc(100vh-72px)] flex items-center justify-center">
-        <p className="text-sm text-red-500">{dashboardError || "Failed to load dashboard"}</p>
+        <p className="text-sm text-red-500">
+          {dashboardError || "Failed to load dashboard"}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 px-2 py-4 lg:p-5">
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-600">
-            {getGreeting()}!
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+            {getGreeting()} <span className="text-indigo-400">{user?.name}</span>
           </h1>
-          <p className="text-[13px] text-slate-500 mt-1">{today}</p>
+          <p className="text-[13px] text-slate-500 mt-0.5 font-medium">
+            {today}
+          </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 bg-white/70 backdrop-blur-sm border border-white/80 rounded-2xl px-3 py-2 shadow-sm">
           <span
-            className={`text-sm font-medium ${
-              availability === "AVAILABLE" ? "text-green-700" : "text-red-600"
+            className={`text-[11px] font-bold tracking-wide ${
+              availability === "AVAILABLE" ? "text-emerald-600" : "text-red-500"
             }`}
           >
             {availability}
           </span>
+          {availability === "AVAILABLE" && (
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          )}
           <button
             onClick={() => dispatch(toggleAvailability())}
             disabled={availabilityLoading}
-            className={`relative w-14 h-7 rounded-full transition-all duration-300 ${
-              availability === "AVAILABLE" ? "bg-green-500" : "bg-gray-300"
+            className={`relative w-12 h-6 rounded-full transition-all duration-300 shadow-inner ${
+              availability === "AVAILABLE"
+                ? "bg-gradient-to-r from-emerald-400 to-emerald-500"
+                : "bg-slate-300"
             }`}
           >
             <span
-              className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-all duration-300 ${
-                availability === "AVAILABLE" ? "translate-x-7" : "translate-x-0"
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 ${
+                availability === "AVAILABLE" ? "translate-x-6" : "translate-x-0"
               }`}
             />
           </button>
@@ -77,13 +95,6 @@ const AgentDashboard = () => {
       </div>
 
       <DashboardStats data={dashboardData} />
-
-      <div className="grid lg:grid-cols-2 gap-4 mb-4">
-        {/* Active shipments — no detail from dashboard API, show count */}
-        {/* <ActiveShipments activeShipments={dashboardData.activeShipments} /> */}
-
-        {/* Customer Messages — real data */}
-      </div>
 
       <div className="grid lg:grid-cols-2 gap-4">
         <TodaySchedule
@@ -94,12 +105,6 @@ const AgentDashboard = () => {
           isActive={isActive}
         />
         <CustomerMessages messages={dashboardData.customerMessages} />
-
-        {/* Completed Today — completedDeliveries count from API */}
-        {/* <CompletedToday
-          completedDeliveries={dashboardData.completedDeliveries}
-          assignedDeliveries={dashboardData.assignedDeliveries}
-        /> */}
       </div>
     </div>
   );
