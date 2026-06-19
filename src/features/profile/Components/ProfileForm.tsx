@@ -3,7 +3,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../shared/hooks/reduxHooks";
-import type { UpdateProfilePayload } from "@/features/auth/authTypes";
+// import type { UpdateProfilePayload } from "@/features/auth/authTypes";
 import { clearProfileMessages, updateProfile } from "@/features/auth/authSlice";
 import { showToast } from "@/shared/components/Toast";
 
@@ -17,7 +17,7 @@ const ProfileForm = ({ onCancel }: Props) => {
     user,
     updateProfileLoading,
     updateProfileError,
-    updateProfileSuccess,
+    // updateProfileSuccess,
   } = useAppSelector((state) => state.auth);
 
   const [name, setName] = useState(user?.name ?? "");
@@ -35,26 +35,15 @@ const ProfileForm = ({ onCancel }: Props) => {
       return;
     }
 
-    const payload: UpdateProfilePayload = {
-      name: name.trim(),
-      phoneNumber: phoneNumber.trim(),
-    };
-
-    const result = await dispatch(updateProfile(payload));
+    const result = await dispatch(
+      updateProfile({ name: name.trim(), phoneNumber: phoneNumber.trim() }),
+    );
     if (updateProfile.fulfilled.match(result)) {
-      setTimeout(() => {
-        dispatch(clearProfileMessages());
-        onCancel();
-      }, 1200);
+      showToast({ type: "success", message: "Profile updated successfully" });
+      dispatch(clearProfileMessages());
+      onCancel();
     }
   };
-
-  if (updateProfileSuccess) {
-    showToast({
-      type: "success",
-      message: "profile updated successfully",
-    });
-  }
 
   const handleCancel = () => {
     dispatch(clearProfileMessages());
