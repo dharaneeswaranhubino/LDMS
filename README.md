@@ -1,886 +1,570 @@
-LDMS Frontend - Logistics & Delivery Management System
+LDMS Frontend - Logistics and Delivery Management System
 
-A modern, full-featured React + TypeScript SaaS platform for comprehensive logistics and delivery management. The application provides role-based experiences for customers, administrators, and delivery agents with real-time shipment tracking, payment processing, and multi-channel communication.
+A comprehensive React and TypeScript platform for end-to-end logistics and delivery management. The system provides role-based interfaces for customers, administrators, and delivery agents with real-time shipment tracking, payment processing, and operational management capabilities.
 
----
+OVERVIEW
 
-Table of Contents
+LDMS is built for modern e-commerce and logistics businesses requiring sophisticated shipment management, real-time tracking, and multi-role operational support. The platform enables complete lifecycle management from order creation through delivery completion.
 
-Project Overview
-Key Features
-Tech Stack
-Project Architecture
-Authentication & Security
-API Endpoints
-Project Structure
-Setup Instructions
-Development Workflow
-Routing Overview
-State Management
-Third-Party Integrations
-Contributing Guidelines
-Troubleshooting
+Core capabilities include:
 
----
+- Shipment Management: Create, monitor, and track shipments through the entire delivery lifecycle
+- Live Delivery Tracking: Real-time location tracking with comprehensive timeline visualization
+- Multi-Role Platform: Separate operational dashboards and workflows for each user role
+- Payment Integration: Razorpay payment gateway for secure transaction processing
+- Notification System: Real-time alerts and in-app notification management
+- Agent Management: Complete delivery agent lifecycle and performance tracking
+- Complaint Management: Structured complaint filing and resolution workflows
 
-Project Overview
-
-LDMS is a comprehensive Logistics and Delivery Management System built for modern e-commerce and logistics businesses. The platform enables:
-
-Shipment Management: Create, monitor, and track shipments end-to-end
-Live Delivery Tracking: Real-time location tracking with timeline visualization
-Multi-Role Platform: Separate dashboards and workflows for customers, admins, and agents
-Payment Integration: Razorpay payment gateway for seamless transactions
-Notifications System: Real-time alerts and in-app notifications
-Agent Management: Complete lifecycle management for delivery agents
-Complaint Management: Structured complaint filing and resolution workflows
-
-Use Cases
-
-Customers create shipments, track deliveries, manage payments, and file complaints
-Admins manage delivery agents, monitor all shipments, handle disputes, and view analytics
-Delivery Agents manage assigned deliveries, update statuses, and track performance
-
----
-
-Key Features
+FEATURES
 
 Customer Features
 
-- Create Shipments: Multi-step form with validation for creating new shipments
-- Track Shipments: Real-time tracking by shipment ID with timeline and status updates
-- Shipment History: Paginated list view with search and filtering capabilities
-- Online Payments: Razorpay integration for secure payment processing
-- Notifications: In-app notification center with read/unread status management
-- File Complaints: Submit complaints against shipments and track resolution status
-- View Profile: Personal profile management and information display
+The customer role provides complete shipment management and tracking capabilities:
 
-Admin Features
+- Create Shipments: Multi-step shipment creation with validation and carrier selection
+- Track Shipments: Real-time tracking by shipment ID with status timeline
+- Shipment History: Paginated shipment list with search and filtering capabilities
+- Online Payments: Razorpay integration for payment processing
+- Notifications: Notification center with read/unread status management
+- Complaint Filing: Submit and track complaints against shipments
+- Profile Management: Personal profile and account information management
 
-- Register Agents: Form-based agent registration with validation
-- Agent Management: List, view, and update delivery agent accounts
-- View All Shipments: Paginated dashboard of all shipments in the system
-- Live Tracking: Real-time tracking of specific shipments
-- Complaint Management: View and update status of customer complaints
-- Dashboard Analytics: Revenue metrics, shipment counts, agent performance
-- Performance Metrics: Monitor system health and KPIs
+Administrator Features
+
+The administrator role provides operational oversight and system management:
+
+- Agent Registration: Delivery agent registration and account setup
+- Agent Management: Delivery agent account management and performance monitoring
+- Shipment Oversight: Dashboard view of all system shipments
+- Live Tracking: Real-time shipment tracking and location monitoring
+- Complaint Management: Complaint review and status updates
+- Dashboard Analytics: System metrics including revenue, shipments, and agent performance
+- Performance Metrics: System health and key performance indicators
 
 Delivery Agent Features
 
-- Delivery Dashboard: Overview of assigned deliveries and pending tasks
-- Manage Deliveries: Accept, manage, and complete assigned deliveries
-- Update Status: Mark deliveries as picked up, out for delivery, or delivered
-- Track Deliveries: View detailed information for each assigned shipment
+The delivery agent role manages assigned shipments and delivery operations:
+
+- Delivery Dashboard: Overview of assigned deliveries and pending operations
+- Delivery Management: Accept, manage, and complete delivery assignments
+- Status Updates: Mark deliveries as picked up, out for delivery, or completed
+- Delivery Details: Access comprehensive information for assigned shipments
 - Delivery History: Historical record of completed deliveries
-- Availability Toggle: Set online/offline status for availability
-- Live Tracking: Track shipments assigned to agent
+- Availability Management: Set online and offline status
+- Live Tracking: Track assigned shipments in real time
 
----
+TECHNOLOGY STACK
 
-Tech Stack
+TECHNOLOGY STACK
 
 Core Framework
 
-- React (19.2.5): UI library
-- React DOM (19.2.5): DOM rendering
-- TypeScript (6.0): Type-safe development
-- Vite (8.0): Build tool & dev server
+- React 19.2.5: User interface library
+- React DOM 19.2.5: DOM rendering
+- TypeScript 6.0: Type-safe development with strict mode
+- Vite 8.0: Build tool and development server
 
-State Management & Routing
+State Management and Routing
 
-- Redux Toolkit (2.11.2): Centralized state management
-- React Redux (9.2.0): React bindings for Redux
-- Redux Persist (6.0.0): State persistence layer
-- React Router DOM (7.15.0): Client-side routing with new features
+- Redux Toolkit 2.11.2: Centralized state management
+- React Redux 9.2.0: React bindings for Redux
+- Redux Persist 6.0.0: State persistence to local storage
+- React Router DOM 7.15.0: Client-side routing
 
-HTTP & API
+HTTP and API Communication
 
-- Axios (1.16.0): HTTP client with interceptors
-- Socket.io Client (4.8.3): Real-time communication
-- JWT Decode (4.0.0): JWT token parsing
+- Axios 1.16.0: HTTP client with request and response interceptors
+- Socket.io Client 4.8.3: Real-time bidirectional communication
+- JWT Decode 4.0.0: JWT token parsing and validation
 
-UI & Styling
+User Interface and Styling
 
-- Tailwind CSS (4.2.4): Utility-first CSS framework
-- Lucide React (1.14.0): Modern icon library
-- React Icons (5.6.0): Icon collection
-- FontAwesome (7.2.0): Enterprise icons
-- Framer Motion (12.38.0): Animation library
+- Tailwind CSS 4.2.4: Utility-first CSS framework
+- Lucide React 1.14.0: Modern icon library
+- React Icons 5.6.0: Icon collections
+- FontAwesome 7.2.0: Enterprise icon set
+- Framer Motion 12.38.0: Animation and motion library
 
-Data Visualization & Utilities
+Data Visualization and Utilities
 
-- Recharts (3.8.1): Chart components (line, donut)
-- Chart.js (4.5.1): Alternative charting library
-- React Toastify (11.1.0): Toast notifications
-- React Select (5.10.2): Custom dropdown components
-- HTML2Canvas (1.4.1): Screenshot generation
-- jsPDF (4.2.1): PDF generation
-- React PDF Renderer (4.5.1): PDF rendering
-- Canvas Confetti (1.9.4): Celebration animations
-- Use Sound (5.0.0): Audio playback
+- Recharts 3.8.1: Composable charting library
+- Chart.js 4.5.1: JavaScript charting library
+- React Toastify 11.1.0: Toast notification system
+- React Select 5.10.2: Accessible dropdown component
+- HTML2Canvas 1.4.1: Screenshot generation
+- jsPDF 4.2.1: PDF generation library
+- React PDF Renderer 4.5.1: PDF rendering
+- Canvas Confetti 1.9.4: Animation effects
+- Use Sound 5.0.0: Audio playback
 
 Development Tools
 
-- ESLint (10.2.1): Code linting
-- Vite React Plugin (6.0.1): React integration for Vite
+- ESLint 10.2.1: Code quality linting
+- Vite React Plugin 6.0.1: React plugin for Vite
 
----
+ARCHITECTURE
 
-Project Architecture
+The application follows a feature-based modular architecture with clear separation of concerns. The system consists of multiple layers handling routing, state management, HTTP communication, and business logic.
 
-Architecture Diagram
+Architectural Layers
 
-LDMS Frontend App consists of the following layers:
+React Router manages application routing with public and protected route separation. All protected routes require authentication verification before access.
 
-React Router (v7)
-- Public Routes: /, /login, /register
-- Protected Routes: */Dashboard, /profile, etc.
+Redux Store provides centralized state management across four primary slices: auth for user authentication, shipment for customer shipment operations, admin for administrative functions, and agent for delivery agent operations.
 
-Redux Store (Centralized State)
-- auth: User, tokens, auth status
-- shipment: Customer shipments, notifications
-- admin: Agents, all shipments, complaints
-- agent: Deliveries, availability
+Axios HTTP client handles all backend communication with automatic request and response interceptors for token injection and refresh token management.
 
-Axios (HTTP Client with Interceptors)
-- Auth header injection (Bearer token)
-- Automatic token refresh on 401
-- Cookie-based refresh token handling
+Backend API integration connects to the cloud-deployed REST API at https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/ providing endpoints for authentication, shipment management, payments, notifications, complaints, and agent operations.
 
-Backend API (Render.com Cloud Deployment)
-- https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/
-- /auth/* (Login, Register, Token Refresh)
-- /shipments/* (CRUD, tracking, status)
-- /payments/* (Razorpay integration)
-- /notifications/* (Real-time alerts)
-- /complaints/* (Issue management)
-- /deliveryAgents/* (Agent lifecycle)
-
-External Services Integration
-- Razorpay (Payment processing)
-- Socket.io (Real-time updates)
-- File Storage (Images, documents)
+External Services include Razorpay for payment processing, Socket.io for real-time updates, and cloud file storage for document management.
 
 Component Hierarchy
-```
-App (Root)
-├── ToastContainer (Notifications)
-├── Router
-│   ├── Public Routes
-│   │   ├── Landing Page
-│   │   ├── Login
-│   │   └── Register
-│   └── Protected Routes (Auth Required)
-│       ├── ProtectedRoute (Auth Check)
-│       ├── DashboardLayout (Sidebar + Topbar)
-│       │   ├── Customer Dashboard
-│       │   ├── Admin Dashboard
-│       │   └── Agent Dashboard
-│       ├── Feature Routes
-│       │   ├── Shipment Management
-│       │   ├── Payment Processing
-│       │   ├── Complaint Management
-│       │   ├── Agent Management
-│       │   └── Live Tracking
-│       └── Profile Page
-```
 
----
+The application root initializes Redux store and authentication state. The Router component manages public routes including landing page, login, and registration. Protected routes require authentication and utilize route guards. The DashboardLayout component provides the main application interface with sidebar navigation and top bar. Feature-specific routes include shipment management, payment processing, complaint handling, agent management, and live tracking. All protected routes render through the ProtectedRoute guard component.
 
-Authentication & Security
+AUTHENTICATION AND SECURITY
 
 Authentication Flow
 
-```
-┌─ App Start ─────────────────────────┐
-│ initializeAuth() called in main.tsx │
-└──────────────┬──────────────────────┘
-               ↓
-        ┌─ POST /auth/refreshToken ──┐
-        │ (with httpOnly cookies)     │
-        └──────┬───────────┬──────────┘
-               ↓           ↓
-            Success     Failure
-               ↓           ↓
-        Update Token  Redirect to /login
-        Load User
-        Set Flag
-```
+Application initialization calls initializeAuth() to restore user session from stored refresh token. The system attempts to refresh the access token using the refresh token stored in HTTP-only cookies. On successful refresh, the user object and access token are loaded into Redux state. On failure, the user is redirected to the login page for re-authentication.
 
 Token Management
 
-Access Token: Short-lived JWT, stored in Redux state, injected in request headers
-Refresh Token: Long-lived token, stored in httpOnly cookies (secure, auto-sent)
-Token Refresh: Automatic retry queue on 401 responses
-Local Storage: NOT used (all state in Redux for security)
+Access tokens are short-lived JWT tokens stored in Redux state and injected into request Authorization headers. Refresh tokens are long-lived tokens stored exclusively in HTTP-only cookies, preventing XSS attacks. Token refresh occurs automatically on 401 responses with request queuing during refresh. Redux persists state to local storage excluding sensitive token data.
 
-Auth State Structure
+Security Implementation
 
-```typescript
-{
-  user: {
-    id: string
-    name: string
-    email: string
-    role: 'customer' | 'admin' | 'deliveryAgent'
-    profilePicture?: string
-  }
-  accessToken: string | null
-  loading: boolean
-  error: string | null
-  isInitialized: boolean
-}
-```
+HTTPS is enforced in production environments. HTTP-only cookies prevent token access via JavaScript. Bearer token authentication uses proper Authorization header formatting. CORS policies are properly configured for cross-origin requests. Failed refresh triggers automatic logout and redirect to login. All private routes are protected with authentication guards.
 
-Security Features
+API ENDPOINTS
 
-HTTPS Only: Production uses HTTPS
-httpOnly Cookies: Refresh tokens immune to XSS
-Bearer Tokens: Access tokens in Authorization header
-CORS Enabled: Proper cross-origin handling
-Automatic Logout: On refresh failure
-Protected Routes: Auth guard on all private routes  
+Base URL: https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/
 
----
+Authentication
 
-API Endpoints
+- POST /auth/login: User login with credentials
+- POST /auth/register: New user account creation
+- POST /auth/logout: Logout and token invalidation
+- POST /auth/refreshToken: Access token refresh using HTTP-only refresh token
 
-Base URL
-```
-https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/
-```
-
-Authentication Endpoints
-
-- POST /auth/login: User login with email & password
-- POST /auth/register: New user registration
-- POST /auth/logout: Logout and invalidate tokens
-- POST /auth/refreshToken: Refresh access token using cookie
-
-Shipment Endpoints
+Shipments
 
 - POST /shipments: Create new shipment
-- GET /shipments: Fetch all shipments (admin only)
-- GET /shipments/myShipments: Fetch user's shipments
-- GET /shipments/:id: Get single shipment details
-- GET /shipments/:id/timeline: Get shipment timeline/status history
-- PATCH /shipments/:id: Update shipment details
-- PATCH /shipments/status/:id: Update shipment status (agent)
-- GET /shipments/myDeliveries: Get agent's assigned deliveries
+- GET /shipments: List all shipments (admin only)
+- GET /shipments/myShipments: List user's shipments
+- GET /shipments/:id: Retrieve shipment details
+- GET /shipments/:id/timeline: Retrieve shipment status timeline
+- PATCH /shipments/:id: Update shipment information
+- PATCH /shipments/status/:id: Update shipment status
+- GET /shipments/myDeliveries: List agent's assigned deliveries
 
-Payment Endpoints
+Payments
 
-- POST /payments/initiate/:shipmentId: Create Razorpay order
-- POST /payments/verify/:shipmentId: Verify payment signature
-- GET /payments/:shipmentId: Get payment details
+- POST /payments/initiate/:shipmentId: Create payment order
+- POST /payments/verify/:shipmentId: Verify payment completion
+- GET /payments/:shipmentId: Retrieve payment details
 
-Notification Endpoints
+Notifications
 
-- GET /notifications/me: Fetch user notifications
+- GET /notifications/me: Retrieve user notifications
 - PATCH /notifications/readAll: Mark all notifications as read
-- PATCH /notifications/read/:id: Mark single notification as read
+- PATCH /notifications/read/:id: Mark specific notification as read
 
-Complaint Endpoints
+Complaints
 
-- POST /complaints/:shipmentId: File complaint on shipment
-- GET /complaints/me: Fetch user's complaints
-- GET /complaints: Fetch all complaints (admin)
-- PATCH /complaints/:id: Update complaint status (admin)
+- POST /complaints/:shipmentId: File complaint
+- GET /complaints/me: List user's complaints
+- GET /complaints: List all complaints (admin only)
+- PATCH /complaints/:id: Update complaint status
 
-Delivery Agent Endpoints
+Delivery Agents
 
-- POST /deliveryAgents: Register new delivery agent (admin)
-- GET /deliveryAgents: List all delivery agents (admin)
-- PATCH /deliveryAgents/myAvailability: Toggle agent availability
+- POST /deliveryAgents: Register delivery agent
+- GET /deliveryAgents: List all agents (admin only)
+- PATCH /deliveryAgents/myAvailability: Update agent availability status
 
-Dashboard Endpoints
+Dashboard
 
-- GET /dashboard/admin: Get admin dashboard analytics
+- GET /dashboard/admin: Retrieve admin dashboard analytics
 
----
+PROJECT STRUCTURE
 
-Project Structure
+The project organization follows a feature-based modular pattern with clear separation between configuration, shared utilities, and feature-specific code.
 
-```
-LDMS/
-├── package.json              # Dependencies, scripts, metadata
-├── vite.config.ts            # Vite configuration
-├── tsconfig.json             # TypeScript root config
-├── tsconfig.app.json         # App-specific TypeScript config
-├── tsconfig.node.json        # Node TypeScript config
-├── eslint.config.js          # ESLint rules
-├── index.html                # HTML entry point
-├── public/                   # Static assets
-├── src/
-│   ├── main.tsx              # Entry point, Redux init, auth bootstrap
-│   ├── App.tsx               # Root component with Router & ToastContainer
-│   ├── index.css             # Global styles
-│   ├── App.css               # App-specific styles
-│   │
-│   ├── app/
-│   │   ├── AppRoutes.tsx        # Route definitions (public & protected)
-│   │   ├── ProtectedRoute.tsx   # Route guard for auth
-│   │   └── store.ts             # Redux store configuration
-│   │
-│   ├── lib/
-│   │   └── axios.ts             # Axios instance with interceptors
-│   │
-│   ├── features/             # Feature modules
-│   │   ├── auth/
-│   │   │   ├── authSlice.ts     # Redux auth logic
-│   │   │   ├── authTypes.ts     # TypeScript types
-│   │   │   └── pages/
-│   │   │       ├── Login.tsx
-│   │   │       └── Register.tsx
-│   │   │
-│   │   ├── customerShipment/
-│   │   │   ├── shipmentSlice.ts # Redux shipment logic
-│   │   │   ├── shipmentTypes.ts # Types
-│   │   │   ├── pages/           # Pages and routes
-│   │   │   ├── components/      # Feature components
-│   │   │   │   ├── createShipmentComponents/
-│   │   │   │   ├── myShipmentComponents/
-│   │   │   │   ├── trackShipments/
-│   │   │   │   ├── myComplaints/
-│   │   │   │   ├── notificationComponents/
-│   │   │   │   └── tailgrids/
-│   │   │   └── utils/
-│   │   │
-│   │   ├── adminShipment/
-│   │   │   ├── adminSlice.ts    # Redux admin logic
-│   │   │   ├── adminTypes.ts    # Types
-│   │   │   ├── pages/           # Admin pages
-│   │   │   ├── components/      # Feature components
-│   │   │   │   ├── adminComplaints/
-│   │   │   │   ├── agentManagement/
-│   │   │   │   ├── agentRegisteration/
-│   │   │   │   └── allShipments/
-│   │   │   └── utils/
-│   │   │
-│   │   ├── agentShipment/
-│   │   │   ├── agentSlice.ts    # Redux agent logic
-│   │   │   ├── agentTypes.ts    # Types
-│   │   │   ├── pages/           # Agent pages
-│   │   │   ├── components/      # Feature components
-│   │   │   │   ├── MyDeliveries/
-│   │   │   │   └── deliveryDetails/
-│   │   │   └── utils/
-│   │   │
-│   │   ├── dashboard/
-│   │   │   ├── pages/
-│   │   │   ├── components/      # Dashboard-specific components
-│   │   │   ├── utils/
-│   │   │   └── DashobardTypes/  # Dashboard types
-│   │   │
-│   │   ├── profile/
-│   │   │   ├── profileTypes.ts  # Types
-│   │   │   └── pages/
-│   │   │
-│   │   └── landingPage/
-│   │       ├── pages/
-│   │       └── components/
-│   │
-│   ├── staticComponents/     # Shared layout components
-│   │   ├── DashboardLayout.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── Topbar.tsx
-│   │   └── ProfileDropdown.tsx
-│   │
-│   ├── shared/               # Shared utilities, components, hooks
-│   │   ├── components/       # Reusable UI components
-│   │   │   ├── Button.tsx
-│   │   │   ├── Input.tsx
-│   │   │   ├── ChatWindow.tsx
-│   │   │   ├── DateRangePicker.tsx
-│   │   │   ├── Pagination.tsx
-│   │   │   ├── LoadingSpinner.tsx
-│   │   │   ├── LineChart.tsx
-│   │   │   ├── DonutChart.tsx
-│   │   │   └── Toast.ts
-│   │   ├── hooks/            # Custom React hooks
-│   │   │   ├── reduxHooks.ts
-│   │   │   └── useRole.ts
-│   │   ├── types/            # Global TypeScript types
-│   │   │   └── razorpay.d.ts
-│   │   ├── types.ts             # Global types
-│   │   └── utils.ts             # Utility functions
-│   │
-│   └── assets/               # Images, logos, static files
-│       ├── airFreight_img.jfif
-│       ├── airFreight.jfif
-│       ├── bg4.avif
-│       ├── Countries_image.jfif
-│       ├── delivery_box.jfif
-│       ├── delivery_proof.jfif
-│       ├── liveTracking.jfif
-│       ├── oceanFreight.jfif
-│       ├── successRate.jfif
-│       ├── supplyChain.jfif
-│       ├── Support_bell.jfif
-│       ├── support_img.jfif
-│       ├── truckDelivery.jfif
-│       └── warehousing.jfif
-│
-├── dist/                     # Production build output
-└── node_modules/             # Dependencies
-```
+Configuration and Entry Points
 
----
+- package.json: Project metadata, dependencies, and scripts
+- vite.config.ts: Vite build configuration
+- tsconfig.json: TypeScript root configuration
+- tsconfig.app.json: Application-specific TypeScript settings
+- tsconfig.node.json: Node-specific TypeScript settings
+- eslint.config.js: Linting rules and configuration
+- index.html: HTML entry point
+- public/: Static assets served by the server
 
-Setup Instructions
+Source Code Organization
+
+- src/main.tsx: Application entry point with Redux store initialization and authentication bootstrap
+- src/App.tsx: Root component with router and notification container
+- src/index.css: Global styles
+- src/App.css: Application-level styles
+
+Application Configuration
+
+- src/app/AppRoutes.tsx: Complete route definitions for public and protected routes
+- src/app/ProtectedRoute.tsx: Route guard component for authentication verification
+- src/app/store.ts: Redux store configuration and middleware setup
+
+Libraries and Utilities
+
+- src/lib/axios.ts: Axios instance with request/response interceptors, token injection, and automatic refresh logic
+
+Feature Modules
+
+The features directory contains business logic organized by user role and functionality:
+
+- src/features/auth/: User authentication including login, registration, password change
+- src/features/customerShipment/: Customer shipment operations, tracking, payments, and complaints
+- src/features/adminShipment/: Administrative operations including agent management and system oversight
+- src/features/agentShipment/: Delivery agent operations including delivery management and tracking
+- src/features/dashboard/: Role-specific dashboard implementations
+- src/features/profile/: User profile management
+- src/features/landingPage/: Public landing page
+
+Shared Components and Utilities
+
+- src/staticComponents/: Layout components including DashboardLayout, Sidebar, Topbar, ProfileDropdown
+- src/shared/components/: Reusable UI components
+- src/shared/hooks/: Custom React hooks for Redux integration and role-based access
+- src/shared/types/: Global TypeScript type definitions
+- src/shared/utils.ts: Utility functions
+
+Assets
+
+- src/assets/: Images and static resources in JFIF and AVIF formats
+
+SETUP AND INSTALLATION
 
 Requirements
 
-Node.js: v20+ recommended
-npm: v10+ (comes with Node.js)
-Backend API: Running instance accessible at configured base URL
+- Node.js v20 or later
+- npm v10 or later (included with Node.js)
+- Backend API running and accessible
 
-Installation
+Installation Steps
 
 1. Clone the repository
-   ```bash
    git clone <repository-url>
    cd LDMS
-   ```
 
 2. Install dependencies
-   ```bash
    npm install
-   ```
 
-3. Configure environment (Optional - backend URL hardcoded)
+3. Configure environment settings
+
+   Edit src/lib/axios.ts to update the backend API URL if needed:
    
-   Edit src/lib/axios.ts to change the backend URL:
-   ```typescript
    const API_BASE_URL = 'https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/';
-   ```
 
-### Development
+Development Server
 
-```bash
-# Start development server with hot reload
+Start the development server with hot module reload:
+
 npm run dev
-```
 
-The app will be available at `http://localhost:5173`
+The application will be available at http://localhost:5173
 
 Production Build
 
-```bash
-# Compile TypeScript and bundle for production
+Build the application for production deployment:
+
 npm run build
 
-# Preview production build locally
+Preview the production build locally:
+
 npm run preview
-```
 
-Linting
+Code Quality
 
-```bash
-# Run ESLint to check code quality
+Run ESLint to verify code quality:
+
 npm run lint
-```
 
----
+DEVELOPMENT WORKFLOW
 
-Development Workflow
+Code Quality Standards
 
-Code Quality Practices
+All code uses TypeScript with strict mode enabled for type safety. Components are lazy-loaded in routes for optimal code splitting. Redux DevTools are integrated for state debugging. Error handling uses try-catch blocks and error boundaries. Loading states display spinners during asynchronous operations.
 
-1. Type Safety: All code uses TypeScript with strict mode enabled
-2. Component Testing: Components lazy-loaded in routes for code splitting
-3. State Debugging: Redux DevTools integration available
-4. Error Handling: Try-catch blocks and error boundaries
-5. Loading States: Loading spinners during async operations
+Development Process
 
-Development Checklist
+1. Install dependencies: npm install
+2. Start development server: npm run dev
+3. Verify browser access at http://localhost:5173
+4. Create Redux slices for new features
+5. Add TypeScript type definitions to appropriate type files
+6. Implement feature components in features/[feature]/components/
+7. Add routes to app/AppRoutes.tsx
+8. Use custom hooks useAppDispatch, useAppSelector, and useRole
+9. Test implementation with all three user roles
 
-Install dependencies: npm install
-Start dev server: npm run dev
-Open browser: http://localhost:5173
-Create Redux slice for new features
-Add type definitions to shipmentTypes, authTypes, etc.
-Create feature components in features/[feature]/components/
-Add routes to app/AppRoutes.tsx
-Use custom hooks: useAppDispatch, useAppSelector, useRole
-Test with all three roles (customer, admin, agent)
+Useful Commands
 
-Useful Development Commands
+npm run dev        Start development server with hot reload
+npm run build      Build for production
+npm run preview    Preview production build
+npm run lint       Run ESLint checks
 
-```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run ESLint checks
-```
+ROUTING CONFIGURATION
 
----
+Public Routes
 
-Routing Overview
+- /: Landing page with marketing content
+- /login: User login interface
+- /register: New user registration form
 
-Public Routes (No Authentication Required)
+Protected Customer Routes
 
-- / (LandingPage): Marketing landing page
-- /login (Login): User login form
-- /register (Register): New user registration form
+- /customerDashboard: Customer dashboard and overview
+- /sendShipment: Shipment creation form
+- /myShipments: User's shipment history
+- /trackShipments: Shipment search and tracking
+- /trackShipments/:shipmentId: Shipment detail view
+- /customerNotifications: Notification center
+- /paymentSuccess: Payment confirmation page
+- /myComplaints: Complaint filing and tracking
+- /profile: User profile management
 
-Protected Routes (Authentication Required)
+Protected Administrator Routes
 
-Customer Routes
+- /adminDashboard: Administrator dashboard and analytics
+- /agentRegisteration: Agent registration form
+- /agentManagement: Agent account management
+- /allShipment: System-wide shipment view
+- /liveTracking: Live shipment tracking
+- /liveTracking/:shipmentId: Specific shipment tracking detail
+- /adminComplaints: Complaint management
+- /profile: User profile management
 
-- /customerDashboard (CustomerDashboard): Customer home dashboard
-- /sendShipment (CreateShipment): Create new shipment form
-- /myShipments (MyShipments): View shipment history
-- /trackShipments (TrackShipments): Search & track shipments
-- /trackShipments/:shipmentId (ShipmentDetail): Shipment detail view
-- /customerNotifications (Notifications): In-app notifications
-- /paymentSuccess (PaymentSuccess): Payment confirmation page
-- /myComplaints (MyComplaints): File & view complaints
+Protected Delivery Agent Routes
 
-Admin Routes
+- /agentDashboard: Agent dashboard and assigned deliveries
+- /deliveryDetail: Delivery operation details
+- /deliveryHistory: Historical delivery records
+- /agentTracking: Assigned shipment tracking
+- /agentTracking/:shipmentId: Specific shipment tracking detail
+- /profile: User profile management
 
-- /adminDashboard (AdminDashboard): Admin home dashboard
-- /agentRegisteration (CreateAgent): Register new agent
-- /agentManagement (AgentManagement): Manage agent accounts
-- /allShipment (AllShipments): View all shipments
-- /liveTracking (AdminLiveTracking): Live track shipments
-- /liveTracking/:shipmentId (ShipmentTracking): Specific shipment tracking
-- /adminComplaints (AdminComplaints): Manage complaints
+STATE MANAGEMENT
 
-Delivery Agent Routes
+Redux Store Structure
 
-- /agentDashboard (AgentDashboard): Agent home dashboard
-- /deliveryDetail (DeliveryDetail): Delivery detail view
-- /deliveryHistory (DeliveryHistory): Historical deliveries
-- /agentTracking (AgentTracking): Track assigned shipments
-- /agentTracking/:shipmentId (ShipmentDetail): Specific shipment tracking
+The Redux store maintains application state across four primary slices:
 
-Shared Protected Routes
+auth: User authentication state including user object, access token, loading state, errors, and initialization flag
 
-- /profile (Profile): User profile management
+shipment: Customer shipment operations including shipments array, current shipment, notifications, complaints, pagination, and dashboard data
 
----
+admin: Administrative state including agents list, all shipments, complaints, dashboard analytics, and pagination
 
-State Management
+agent: Delivery agent state including assigned deliveries, availability status, timeline events, and tracking data
 
-Redux Store Overview
+Redux Integration
 
-```typescript
-// Store structure
-{
-  auth: {
-    user: User | null
-    accessToken: string | null
-    loading: boolean
-    error: string | null
-    isInitialized: boolean
-  }
-  shipment: {
-    shipments: Shipment[]
-    currentShipment: Shipment | null
-    notifications: Notification[]
-    complaints: Complaint[]
-    pagination: { page, limit, total }
-    ...
-  }
-  admin: {
-    agents: DeliveryAgent[]
-    allShipments: Shipment[]
-    complaints: Complaint[]
-    dashboardData: DashboardMetrics
-    ...
-  }
-  agent: {
-    deliveries: Delivery[]
-    availability: boolean
-    timeline: TimelineEvent[]
-    ...
-  }
-}
-```
+auth slice (features/auth/authSlice.ts): Handles user authentication, token management, profile updates, and password changes
 
-Redux Slices
+shipment slice (features/customerShipment/shipmentSlice.ts): Manages customer shipments, tracking, payment processing, complaints, and notifications
 
-- auth (features/auth/authSlice.ts): User authentication, tokens, initialization
-- shipment (features/customerShipment/shipmentSlice.ts): Customer shipments, tracking, payments, complaints
-- admin (features/adminShipment/adminSlice.ts): Agent management, system shipments, analytics
-- agent (features/agentShipment/agentSlice.ts): Agent deliveries, availability, status
+admin slice (features/adminShipment/adminSlice.ts): Manages agent lifecycle, system shipments, complaint resolution, and analytics
 
-Custom Redux Hooks
+agent slice (features/agentShipment/agentSlice.ts): Manages agent deliveries, availability, and shipment tracking
 
-```typescript
-// Use these instead of useDispatch/useSelector
+Custom Hooks
+
+Use the provided custom hooks instead of standard Redux hooks:
+
 import { useAppDispatch, useAppSelector } from shared/hooks/reduxHooks;
 import { useRole } from shared/hooks/useRole;
 
-// Examples:
 const dispatch = useAppDispatch();
 const user = useAppSelector(state => state.auth.user);
 const { role, isCustomer, isAdmin, isAgent } = useRole();
-```
 
----
+THIRD-PARTY INTEGRATIONS
 
-Third-Party Integrations
+Razorpay Payment Processing
 
-Razorpay Payment Gateway
+Razorpay processes all customer payments with integration managed through the payment slice.
 
-Purpose: Process shipment payments
-Status: Integrated and functional
+Payment Flow: Customer initiates payment, frontend creates order via /payments/initiate/:shipmentId, Razorpay SDK loads and displays payment modal, customer completes payment, frontend verifies payment via /payments/verify/:shipmentId, backend confirms signature and updates shipment status.
 
-Payment Flow:
-1. Customer clicks "Pay" button on shipment
-2. Frontend calls `/payments/initiate/:shipmentId` to create order
-3. Razorpay SDK loads dynamically
-4. Customer enters payment details in Razorpay modal
-5. On success, frontend verifies payment: `/payments/verify/:shipmentId`
-6. Backend verifies signature and updates shipment
-7. Cleanup: Script and iframes removed
+Implementation: Razorpay SDK loads dynamically for security, TypeScript types located in shared/types/razorpay.d.ts, payment logic in features/customerShipment/utils/shipmentHelpers.ts
 
-Implementation Details:
-Script loaded dynamically (not in HTML for security)
-TypeScript types: shared/types/razorpay.d.ts
-Handled in: features/customerShipment/utils/shipmentHelpers.ts
+Real-Time Communication
 
-Socket.io Real-Time Communication
+Socket.io Client version 4.8.3 is installed for real-time shipment updates and notifications. Current usage patterns are managed by backend implementation.
 
-Status: Installed (v4.8.3)
-Purpose: Real-time shipment updates and notifications
-Note: Usage pattern to be verified in backend implementation
-
-External Assets & CDNs
-
-Font Awesome Icons (via npm)
-Lucide React Icons (via npm)
-Google Fonts (via Tailwind)
-
----
-
-Contributing Guidelines
+CONTRIBUTING GUIDELINES
 
 Before Contributing
 
-1. Ensure you have the latest code: git pull origin main
-2. Install dependencies: npm install
-3. Start dev server: npm run dev
-4. Test with all three roles
+- Pull latest code: git pull origin main
+- Install dependencies: npm install
+- Start development server: npm run dev
+- Test functionality with all three user roles
 
 Development Standards
 
-Code Style
-Use TypeScript for all new code (strict mode)
-Follow existing naming conventions
-Use camelCase for variables/functions
-Use PascalCase for React components
-Add JSDoc comments for complex logic
+Code Style: Use TypeScript for all new code with strict mode enabled. Follow existing naming conventions using camelCase for variables and functions, PascalCase for React components. Add JSDoc comments for complex logic.
 
-Component Structure
-```typescript
-// Standard component template
-interface ComponentProps {
-  // Props with JSDoc
-  title: string;
-  onAction: () => void;
-}
+Component Structure: Define component props interfaces with JSDoc documentation. Export components as named exports with React.FC type annotation.
 
-/**
- * Brief component description
- * @param props Component properties
- * @returns React component
- */
-export const MyComponent: React.FC<ComponentProps> = ({ title, onAction }) => {
-  // Implementation
-};
-```
+Redux Integration: Create async thunks for backend operations. Use extraReducers for handling async actions. Type all state and actions. Implement loading and error states.
 
-Redux Integration
-Create thunks for async operations
-Use extraReducers for async actions
-Type all state and actions
-Handle loading and error states
-
-Testing Checklist
-Component renders without errors
-All three roles can access appropriate features
-Forms validate input correctly
-API calls handle errors gracefully
-Loading states display properly
-Mobile responsive on common breakpoints
+Testing Requirements: Verify components render without errors. Test with all three user roles. Validate form inputs. Verify API error handling. Test loading state display. Confirm mobile responsiveness.
 
 Pull Request Process
 
 1. Create feature branch: git checkout -b feature/feature-name
 2. Make changes and commit: git commit -m "feat: description"
 3. Push to remote: git push origin feature/feature-name
-4. Open pull request with description
+4. Open pull request with detailed description
 5. Address code review comments
 6. Merge after approval
 
 Commit Message Format
 
-```
+Commits should follow conventional commit format:
+
 type(scope): subject
 
 body
 
 footer
-```
 
-Types: feat, fix, docs, style, refactor, perf, test, chore
+Types: feat for features, fix for bug fixes, docs for documentation, style for formatting, refactor for code restructuring, perf for performance improvements, test for tests, chore for maintenance
 
 Example: feat(auth): add two-factor authentication
 
----
+TROUBLESHOOTING
 
-Troubleshooting
+Issue: Blank Page or App Won't Load
 
-Common Issues & Solutions
+Diagnosis: Browser displays blank page or infinite loading spinner
 
-1. Blank Page / App Won't Load
+Resolution Steps:
 
-Symptoms: Browser shows blank page or infinite loading
-
-Solutions:
-```bash
-# Clear npm cache and reinstall
 npm cache clean --force
 rm -rf node_modules package-lock.json
 npm install
 npm run dev
-```
 
-Check:
-- Browser console for errors (F12 → Console tab)
+Verification:
+- Check browser console for errors (F12 → Console)
 - Verify backend API URL in src/lib/axios.ts
-- Ensure backend is running
+- Confirm backend API is running
+- Review network tab for failed requests
 
-2. 401 Unauthorized Errors
+Issue: 401 Unauthorized Errors
 
-Symptoms: Unauthorized errors in network tab
+Diagnosis: Network requests fail with 401 status
 
-Solutions:
-- Clear cookies: F12 → Application → Cookies → Delete all
+Resolution Steps:
+- Clear cookies (F12 → Application → Cookies → Delete all)
 - Logout and login again
-- Verify backend token endpoints are working
-- Check src/lib/axios.ts interceptor logic
+- Verify backend token endpoints are functional
+- Review src/lib/axios.ts interceptor implementation
 
-3. CORS Errors
+Issue: CORS Errors
 
-Symptoms: Access to XMLHttpRequest blocked by CORS policy
+Diagnosis: XMLHttpRequest blocked by CORS policy
 
-Solutions:
-- Verify backend has CORS enabled
-- Check withCredentials: true in axios config
-- Ensure API URL in src/lib/axios.ts matches backend
+Resolution Steps:
+- Verify backend CORS configuration
+- Confirm withCredentials setting in axios configuration
+- Verify API URL matches backend configuration
 
-4. Payment Integration Fails
+Issue: Payment Integration Failures
 
-Symptoms: Razorpay modal won't open or payment verification fails
+Diagnosis: Razorpay modal fails to open or payment verification fails
 
-Solutions:
-```typescript
-// Verify Razorpay config in shipmentHelpers.ts
-const options = {
-  key: 'your-razorpay-key', // Check backend returns this
-  amount: amount,
-  currency: 'INR',
-  // ... other options
-};
-```
+Resolution Steps:
+- Check browser console for SDK errors
+- Verify order creation endpoint /payments/initiate/:id works
+- Verify payment verification endpoint /payments/verify/:id works
+- Review Razorpay configuration in shipmentHelpers.ts
 
-- Check browser console for Razorpay SDK errors
-- Verify order creation endpoint: POST /payments/initiate/:id
-- Ensure verification endpoint works: POST /payments/verify/:id
+Issue: Redux State Not Persisting
 
-5. Redux State Not Persisting
+Diagnosis: User authentication lost after page refresh
 
-Symptoms: Auth state lost after page refresh
+Resolution Steps:
+- Verify redux-persist configuration in app/store.ts
+- Confirm initializeAuth() is called on app startup
+- Verify browser cookies are enabled
+- Test refresh token endpoint functionality
 
-Solutions:
-- Verify redux-persist config in app/store.ts
-- Check that initializeAuth() is called on app start
-- Ensure cookies are enabled in browser
-- Verify refresh token endpoint works
+Issue: TypeScript Compilation Errors
 
-6. TypeScript Errors
+Diagnosis: Type errors appear in IDE or build process
 
-Symptoms: Type errors in IDE or build
+Resolution Steps:
 
-Solutions:
-```bash
-# Rebuild TypeScript
 npm run build
 
-# Check specific file
 npx tsc --noEmit src/path/to/file.ts
-```
 
-- Ensure all imports have correct types
-- Check tsconfig.json is configured correctly
-- Use proper typing for Redux state
+Verification:
+- Ensure imports include proper type definitions
+- Review tsconfig.json settings
+- Verify Redux state typing
 
 Debug Commands
 
-```bash
-# Check all dependencies
-npm list
+npm list                                      Check all dependencies
+npm run build                                 Verify TypeScript compilation
+npm run lint                                  Check for linting issues
+npm cache clean --force && rm -rf node_modules && npm install    Full reset
+npm run dev -- --debug                        Run dev with verbose logging
 
-# Verify TypeScript compilation
-npm run build
+Support Resources
 
-# Check for lint issues
-npm run lint
+Review existing GitHub issues for similar problems
+Examine error stack traces carefully
+Review browser DevTools console and network tabs
+Check Redux DevTools for state inspection
+Consult backend API documentation
 
-# Clear everything and reinstall
-npm cache clean --force && rm -rf node_modules && npm install
+PERFORMANCE OPTIMIZATION
 
-# Run dev with verbose logging
-npm run dev -- --debug
-```
+Code Splitting: Routes use React.lazy() for code splitting and lazy loading
 
-Getting Help
+Build Optimization: Vite build produces optimized production bundles with tree shaking
 
-1. Check existing GitHub issues
-2. Review error stack trace carefully
-3. Check browser DevTools (F12)
-4. Review Redux DevTools state
-5. Check network tab in DevTools
-6. Consult backend API documentation
+State Management: Redux DevTools integration for efficient debugging
 
----
+Image Optimization: Assets use JFIF and AVIF formats
 
-Performance Optimizations
+Responsive Design: Mobile-first Tailwind CSS approach
 
-Code Splitting: Lazy loading routes with React.lazy()
-Bundle Size: Optimized Vite build output
-State Management: Redux DevTools for debugging
-Image Optimization: JFIF and AVIF formats
-Responsive Design: Mobile-first Tailwind CSS
-Caching: Browser caching and service workers
+Browser Caching: Leverages browser caching and service worker support
 
----
+PROJECT INFORMATION
 
-License & Maintainers
-
-Project: LDMS Frontend - Logistics & Delivery Management System
+Title: LDMS Frontend - Logistics and Delivery Management System
 Version: 1.0.0
 Status: Active Development
+Last Updated: June 19, 2026
+Development Team: Active Development
 
-For questions or contributions, please contact the development team.
+ADDITIONAL RESOURCES
 
----
-
-Quick Links
-
-TypeScript Documentation (https://www.typescriptlang.org/docs/)
-React Documentation (https://react.dev/)
-React Router Documentation (https://reactrouter.com/)
-Tailwind CSS Documentation (https://tailwindcss.com/docs)
-Redux Toolkit Documentation (https://redux-toolkit.js.org/)
-Vite Documentation (https://vitejs.dev/)
-
----
-
-Last Updated: June 18, 2026
-Maintained By: Development Team
+- TypeScript Documentation: https://www.typescriptlang.org/docs/
+- React Documentation: https://react.dev/
+- React Router Documentation: https://reactrouter.com/
+- Tailwind CSS Documentation: https://tailwindcss.com/docs
+- Redux Toolkit Documentation: https://redux-toolkit.js.org/
+- Vite Documentation: https://vitejs.dev/
+- Axios Documentation: https://axios-http.com/docs/intro
 

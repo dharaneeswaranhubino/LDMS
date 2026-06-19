@@ -55,6 +55,8 @@ const CustomerChat = () => {
   const activeShipment = chattableShipments.find(
     (s) => s.shipmentId === activeShipmentId,
   );
+  console.log("activeShipment :",activeShipment);
+  
 
   return (
     <div className="flex h-[calc(100vh-72px)] rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
@@ -114,6 +116,7 @@ const CustomerChat = () => {
                 Tracking ID: {activeShipment?.trackingId}
               </p>
               <p className="text-xs text-gray-400">
+                <span className="text-[12px] font-medium text-blue-600">{activeShipment?.assignedAgent?.agentName} - </span>
                 Chat with your delivery agent
               </p>
             </div>
