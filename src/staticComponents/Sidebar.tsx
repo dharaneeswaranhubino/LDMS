@@ -82,6 +82,13 @@ const getMenu = (
     allowedRole: "admin",
     icon: <TbMessageExclamation size={18} />,
   },
+  {
+    name: "My profile",
+    path: "/profile",
+    section: "ACCOUNT",
+    allowedRole: "admin",
+    icon: <i className="fa-regular fa-user text-[13px]"></i>,
+  },
 
   // delivery agent
   {
