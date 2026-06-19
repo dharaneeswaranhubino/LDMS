@@ -11,7 +11,6 @@ import { registerUser } from "../authSlice";
 import logistic_img from "../../../assets/register_banner.png";
 import type { FormErrors } from "../authTypes";
 
-
 const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -23,6 +22,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -64,6 +64,12 @@ const Register = () => {
       newErrors.confirmPassword = "Password do not match";
     }
 
+    if (!form.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!/^\d{10}$/.test(form.phoneNumber.trim())) {
+      newErrors.phoneNumber = "Enter a valid 10-digit phone number";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -77,6 +83,7 @@ const Register = () => {
         name: form.name,
         email: form.email,
         password: form.password,
+        phoneNumber: form.phoneNumber,
       }),
     );
 
@@ -192,6 +199,17 @@ const Register = () => {
               value={form.confirmPassword}
               error={errors.confirmPassword}
               onchange={handleChange}
+            />
+
+            <Input
+              label="Phone number"
+              name="phoneNumber"
+              type="tel"
+              placeholder="10-digit mobile number"
+              value={form.phoneNumber}
+              error={errors.phoneNumber}
+              onchange={handleChange}
+              maxLength={10}
             />
 
             {error && <p className="text-red-400 text-xs">{error}</p>}

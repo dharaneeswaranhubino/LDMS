@@ -8,6 +8,7 @@ type InputProp = {
   value: string;
   error?: string | null;
   onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  maxLength?:number;
 };
 
 const Input = ({
@@ -18,6 +19,7 @@ const Input = ({
   value,
   error,
   onchange,
+  maxLength,
 }: InputProp) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,6 +50,7 @@ const Input = ({
                 : "border border-slate-300 focus:border-indigo-500 focus:bg-white"
             }
           `}
+          maxLength={maxLength}
         />
 
         {type === "password" && (
