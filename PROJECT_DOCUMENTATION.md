@@ -1,4 +1,8 @@
-# LDMS Frontend Documentation
+# LDMS Frontend - Comprehensive Project Documentation
+
+## Executive Summary
+
+LDMS Frontend is a sophisticated React and TypeScript web application for comprehensive logistics and delivery management. The platform serves three distinct user roles (customer, administrator, and delivery agent) through a unified codebase with role-based routing, state management, and UI. The application integrates with a backend REST API for shipment management, payment processing, agent operations, and system administration.
 
 ## Project Overview
 
@@ -52,257 +56,522 @@ LDMS is a React + TypeScript + Vite frontend for a logistics delivery management
 
 ### Public Routes
 
-- `/` — Landing page
-- `/login` — Login page
-- `/register` — Registration page
+Routes accessible without authentication:
+- `/`: Landing page with marketing content and service showcase
+- `/login`: User login form with email/password authentication
+- `/register`: User registration form with account creation
 
 ### Protected Routes
 
-These routes are rendered beneath `DashboardLayout` and require a valid access token:
+All protected routes are wrapped with ProtectedRoute guard component and rendered under DashboardLayout with Sidebar and Topbar. Routes require valid authentication state and access token.
 
-- `/adminDashboard`
-- `/customerDashboard`
-- `/agentDashboard`
-- `/profile`
-- `/sendShipment`
-- `/myShipments`
-- `/trackShipments`
-- `/trackShipments/:shipmentId`
-- `/customerNotifications`
-- `/paymentSuccess`
-- `/myComplaints`
-- `/agentRegisteration`
-- `/agentManagement`
-- `/allShipment`
-- `/liveTracking`
-- `/liveTracking/:shipmentId`
-- `/adminComplaints`
-- `/deliveryDetail`
-- `/deliveryHistory`
-- `/payments`
-- `/agentTracking`
-- `/agentTracking/:shipmentId`
+Customer Routes:
+- `/customerDashboard`: Customer home dashboard with recent shipments and analytics
+- `/sendShipment`: Multi-step shipment creation form
+- `/myShipments`: Paginated list of user's shipments with filters
+- `/trackShipments`: Shipment search and tracking interface
+- `/trackShipments/:shipmentId`: Detailed shipment tracking with timeline
+- `/customerNotifications`: Notification center with read/unread management
+- `/paymentSuccess`: Payment confirmation and receipt page
+- `/myComplaints`: Complaint history and status tracking
+- `/customerChat`: Customer chat interface for support communication
+- `/profile`: User profile management and account settings
 
-## Authentication Flow
+Administrator Routes:
+- `/adminDashboard`: Admin dashboard with system metrics and analytics
+- `/agentManagement`: Delivery agent management interface
+- `/agentManagement/agentRegisteration`: Agent registration form
+- `/allShipment`: System-wide shipment list with management options
+- `/allShipment/reassign/:shipmentId`: Reassign shipment to different agent
+- `/liveTracking`: Live shipment tracking with location visualization
+- `/liveTracking/:shipmentId`: Specific shipment tracking detail
+- `/adminComplaints`: Complaint management and resolution interface
+- `/profile`: User profile management
 
-- `src/main.tsx` calls `store.dispatch(initializeAuth())` at startup.
-- `src/features/auth/authSlice.ts` defines async thunks:
-  - `initializeAuth` — refreshes auth state on app launch via `/auth/refreshToken`.
-  - `loginUser` — signs in via `/auth/login`.
-  - `registerUser` — creates new user via `/auth/register`.
-  - `logoutUser` — ends session via `/auth/logout`.
-- Auth state is stored in Redux only; access tokens are not persisted to local storage.
-- `src/app/ProtectedRoute.tsx` waits for `isInitialized` before rendering protected routes. If no access token exists, it redirects to `/login`.
+Delivery Agent Routes:
+- `/agentDashboard`: Agent dashboard with assigned deliveries and metrics
+- `/deliveryDetail`: Delivery operations interface
+- `/deliveryDetail/:shipmentId`: Specific delivery detail view
+- `/deliveryHistory`: Historical record of completed deliveries
+- `/payments`: Payment details and verification
+- `/agentTracking`: Agent's assigned shipment tracking
+- `/agentTracking/:shipmentId`: Specific shipment tracking detail
+- `/agentChat`: Agent chat interface for customer communication
+- `/profile`: User profile management
 
-## Axios and API Integration
+## Feature Implementations
 
-- `src/lib/axios.ts` creates a shared Axios client using `import.meta.env.VITE_API_BASE_URL`.
-- Requests send cookies automatically via `withCredentials: true`.
-- The request interceptor adds `Authorization: Bearer <token>` when the Redux auth token exists.
-- The response interceptor handles `401` failures by retrying using `/auth/refreshToken` and updates Redux state with the new token.
-- If refresh fails, the user is logged out and redirected to `/login`.
+### Authentication Feature
 
-## Redux Store and State Slices
+Location: `src/features/auth/`
 
-### Auth Slice
+Components:
+- `Login.tsx`: Login page with email/password form, local validation, role-based redirect
+- `Register.tsx`: Registration form with validation, password confirmation, success page
 
-- Stored in `src/features/auth/authSlice.ts`.
-- State: `user`, `accessToken`, `loading`, `error`, `isInitialized`.
-- Reducers: `setAccessToken`, `setUser`, `logout`.
+Redux Slice: `authSlice.ts`
+- Thunk initializeAuth handles app startup authentication restoration
+- Thunk loginUser handles user login with email/password
+- Thunk registerUser handles new account creation with validation
+- Thunk logoutUser handles session termination
+- Thunk updateProfile handles profile information updates
+- Thunk changePassword handles password changes with verification
 
-### Customer Shipment Slice
+Types: `authTypes.ts`
+- User interface defining user object structure with role and profile data
+- AuthState interface defining Redux state shape
+- Request/response payload interfaces for all auth operations
 
-- Stored in `src/features/customerShipment/shipmentSlice.ts`.
-- Features:
-  - create/update shipments
-  - payment initiation and verification
-  - fetching user shipments
-  - shipment timeline retrieval
-  - notifications fetch/read actions
-  - complaint creation and user complaints listing
-  - mock customer dashboard data for UI charts
-- State includes pagination, notifications, timeline, complaints, and dashboard range filters.
-- Contains helper payload mapping logic in `components/createShipmentComponents/shipmentMapper.ts`.
+### Customer Shipment Feature
 
-### Admin Slice
+Location: `src/features/customerShipment/`
 
-- Stored in `src/features/adminShipment/adminSlice.ts`.
-- Features:
-  - creating delivery agent records
-  - listing delivery agents
-  - fetching admin dashboard analytics
-  - paginated all shipments list
-  - fetching and updating complaint statuses
-- Includes mock dashboard generation for admin statistics when backend data is unavailable.
+Pages:
+- `CreateShipment.tsx`: Multi-step shipment creation with form validation and price calculation
+- `MyShipment.tsx`: Shipment list with filtering, search, sorting, and pagination
+- `TrackShipment.tsx`: Shipment tracking with timeline visualization and status display
+- `CustomerNotifications.tsx`: Notification center with read/unread management
+- `PaymentDetails.tsx`: Payment information display and verification
+- `MyComplaints.tsx`: Complaint history with status filtering and details
+- `CustomerChat.tsx`: Chat interface for customer support communication
 
-### Agent Slice
+Components:
+- `createShipmentComponents/`: Multi-step form components including address entry, package details, price breakdown
+- `myShipmentComponents/`: Reusable components for shipment list display and filtering
+- `notificationComponents/`: Notification list and notification item components
+- `trackShipments/`: Timeline and tracking visualization components
+- `myComplaints/`: Complaint list and complaint detail components
+- `tailgrids/`: Reusable grid-based layout components
 
-- Stored in `src/features/agentShipment/agentSlice.ts`.
-- Features:
-  - fetching the logged-in agent's deliveries
-  - updating shipment status
-  - toggling agent availability
-  - search/filter state and timeline clearing
-- State contains deliveries, availability, loading flags, and timeline state.
+Redux Slice: `shipmentSlice.ts`
+- Thunk createShipment submits new shipment with validation
+- Thunk updateShipment modifies existing shipment details
+- Thunk fetchMyShipments retrieves user's shipment list with pagination
+- Thunk fetchShipmentById retrieves specific shipment details
+- Thunk fetchShipmentTimeline retrieves shipment status history
+- Thunk initiatePayment creates payment order with Razorpay
+- Thunk verifyPayment validates payment completion
+- Thunk fetchPaymentDetails retrieves payment information
+- Thunk fetchNotifications retrieves user notifications
+- Thunk markNotificationRead marks single notification as read
+- Thunk markAllNotificationsRead marks all notifications as read
+- Thunk raiseComplaint creates new complaint
+- Thunk fetchMyComplaints retrieves user's complaints with pagination
 
-## Feature Summaries
+Utilities:
+- `shipmentHelpers.ts`: Status configuration, price calculation logic, carrier selection
+- `socketService.ts`: Socket.io integration for real-time updates
+- `shipmentMapper.ts`: Data mapping from form data to backend payload format
 
-### Landing Page
+Types: `shipmentTypes.ts`
+- ShipmentResponse, ShipmentState interfaces for state shape
+- Address, PackageDetails interfaces for form data
+- CreateShipmentPayload interface for API request structure
+- Payment, Notification, Complaint interfaces for related features
 
-- `src/features/landingPage/pages/LandingPage.tsx`
-- Uses page sections: Navbar, Hero, Stats, Services, CTA, Footer.
-- Includes responsive mobile menu and scroll tracking.
+### Admin Shipment Feature
 
-### Authentication Pages
+Location: `src/features/adminShipment/`
 
-- `src/features/auth/pages/Login.tsx`
-  - validates credentials locally
-  - dispatches `loginUser`
-  - redirects based on `user.role` after login
-- `src/features/auth/pages/Register.tsx`
-  - validates registration fields and password confirmation
-  - dispatches `registerUser`
-  - displays a success page before redirecting to `/login`
+Pages:
+- `AdminDashboard.tsx`: Dashboard with analytics, revenue charts, agent performance, complaint summary
+- `CreateAgent.tsx`: Delivery agent registration form for admin
+- `AgentManagement.tsx`: Agent list with management options and performance view
+- `Adminallshipments.tsx`: System-wide shipment list with pagination and filtering
+- `AdminLiveTracking.tsx`: Real-time shipment tracking with location visualization
+- `AdminComplaints.tsx`: Complaint management interface with status updates
+- `AdminShipmentReassign.tsx`: Interface to reassign shipment to different agent
 
-### Profile
+Components:
+- `allShipments/`: Shipment table, detail modals, and management components
+- `agentManagement/`: Agent list, performance metrics, and detail views
+- `agentRegisteration/`: Agent registration form components
+- `adminComplaints/`: Complaint table and management interface
 
-- `src/features/profile/pages/ProfilePage.tsx`
-- Displays current user details and role
-- Uses `ProfileView` component for presentation
-- Has placeholders for future profile editing
+Redux Slice: `adminSlice.ts`
+- Thunk createAgentDetails registers new delivery agent
+- Thunk getAllAgents fetches all delivery agents list
+- Thunk fetchAllShipments retrieves paginated shipments for all users
+- Thunk fetchAdminDashboard retrieves dashboard analytics and metrics
+- Thunk fetchComplaints retrieves all system complaints with pagination
+- Thunk updateComplaintStatus updates complaint resolution status
+- Thunk reassignShipment reassigns shipment to different agent
+- Thunk completeShipment marks shipment as completed
+- Thunk fetchShipmentTimeline retrieves detailed shipment timeline
 
-### Customer Experience
+Utilities:
+- `adminShipmentHelper.ts`: Dashboard data generation, metrics calculation
 
-- `CreateShipment` — multi-step shipment creation flow with animated transitions and price breakdown
-- `MyShipments` — shipment list with filters, search, sort, pagination, flight detail modal, and payment view modal
-- `TrackShipment` — shipment lookup with timeline presentation
-- `CustomerNotifications` — notification list with read/unread handling
-- `PaymentDetails` — payment detail retrieval and display
-- `MyComplaints` — complaint history and status filtering
+Types: `adminTypes.ts`
+- AdminState interface defining Redux state shape
+- DeliveryAgent interface for agent data structure
+- AdminComplaint interface for complaint management
+- AdminDashboardData interface for dashboard metrics
 
-### Admin Experience
+### Delivery Agent Feature
 
-- `AdminDashboard` — dashboard analytics, revenue charts, payment summary, agent performance, recent shipments, complaint summary
-- `CreateAgent` — agent registration form for admin users
-- `AgentManagement` — list and manage delivery agents
-- `Adminallshipments` — paginated all shipments list
-- `AdminLiveTracking` — live shipment search, active shipment list, and timeline panel for admin tracking
-- `AdminComplaints` — complaint table and detail management
+Location: `src/features/agentShipment/`
 
-### Agent Experience
+Pages:
+- `AgentDashboard.tsx`: Agent home dashboard with assigned deliveries and metrics
+- `DeliveryDetail.tsx`: Delivery operation interface with status updates
+- `DeliveryHistory.tsx`: Historical record of completed deliveries
+- `AgentTracking.tsx`: Real-time tracking of assigned shipments
+- `ShipmentDetailView.tsx`: Detailed view of specific shipment assignment
+- `AgentChat.tsx`: Chat interface for customer communication
 
-- `AgentDashboard` — availability toggle, active deliveries, schedule, customer messages, and completed deliveries summary
-- `DeliveryDetail` — delivery detail screen for a selected shipment
-- `DeliveryHistory` — agent delivery history listing
-- `AgentTracking` — agent-specific shipment tracking and timeline display
+Components:
+- `MyDeliveries/`: Delivery card display, status indicators, and action buttons
+- `deliveryDetails/`: Delivery detail components including proof of delivery, OTP verification
 
-## Shared UI and Utilities
+Redux Slice: `agentSlice.ts`
+- Thunk getMyDeliveries fetches agent's assigned deliveries
+- Thunk updateTrackStatus updates delivery status with proof and details
+- Thunk toggleAvailability toggles agent online/offline status
+- Thunk fetchAgentDashboard retrieves agent dashboard data
 
-- `src/staticComponents/Sidebar.tsx` — left navigation menu with role-aware route filtering and badge counts.
-- `src/staticComponents/Topbar.tsx` — application header with notification dropdown and profile menu.
-- `src/staticComponents/DashboardLayout.tsx` — common dashboard wrapper containing `Topbar`, `Sidebar`, and `Outlet`.
-- `src/shared/components/` — reusable UI controls including:
-  - `Button`
-  - `Input`
-  - `Pagination`
-  - `LoadingSpinner`
-  - `Toast`
-  - `DonutChart`
-  - `LineChart`
-  - `DateRangePicker`
-- `src/shared/hooks/reduxHooks.ts` — typed `useAppDispatch` and `useAppSelector`.
-- `src/shared/hooks/useRole.ts` — role helper for access control.
+Utilities:
+- `mockDelivery.ts`: Mock delivery data for development and testing
+- `statusHelpers.ts`: Status formatting and status-related utility functions
 
-## API Endpoint Usage
+Types: `agentTypes.ts`
+- AgentState interface defining Redux state shape
+- DeliveryItem interface for delivery data structure
+- UpdateTrackStatus interface for status update payload
 
-The frontend communicates with the backend through these routes, driven by `src/lib/axios.ts`:
+### Dashboard Feature
 
-- `POST /auth/login`
-- `POST /auth/register`
-- `POST /auth/logout`
-- `POST /auth/refreshToken`
-- `POST /shipments`
-- `PATCH /shipments/:shipmentId`
-- `GET /shipments/myShipments`
-- `GET /shipments/:id`
-- `GET /shipments/:shipmentId/timeline`
-- `POST /payments/initiate/:shipmentId`
-- `POST /payments/verify/:shipmentId`
-- `GET /payments/:shipmentId`
-- `GET /notifications/me`
-- `PATCH /notifications/readAll`
-- `PATCH /notifications/read/:notificationId`
-- `POST /complaints/:shipmentId`
-- `GET /complaints/me`
-- `POST /deliveryAgents`
-- `GET /deliveryAgents`
-- `GET /dashboard/admin`
-- `GET /shipments`
-- `GET /complaints`
-- `PATCH /complaints/:complaintId`
-- `GET /shipments/myDeliveries`
-- `PATCH /shipments/status/:id`
-- `PATCH /deliveryAgents/myAvailability`
+Location: `src/features/dashboard/`
 
-## Setup
+Pages:
+- `CustomerDashboard.tsx`: Customer home dashboard with recent shipments and analytics
+- `AdminDashboard.tsx`: Admin dashboard with system metrics and revenue charts
+- `AgentDashboard.tsx`: Delivery agent dashboard with assigned deliveries
 
-### Requirements
+Components:
+- Role-specific dashboard UI components
+- Analytics cards, charts, and summary widgets
+- Performance metrics and KPI displays
 
-- Node.js 20+ recommended
-- npm
+Utilities:
+- `CustomerDashboardHelper.ts`: Customer dashboard data generation
+- `AdminDashboardHelper.ts`: Admin dashboard mock data generation
+- `AgentDashboardHelper.ts`: Agent dashboard data utilities
 
-### Install dependencies
+### Landing Page Feature
 
-```bash
+Location: `src/features/landingPage/`
+
+Pages:
+- `LandingPage.tsx`: Public marketing landing page
+
+Components:
+- `Navbar.tsx`: Navigation bar with links and mobile menu trigger
+- `HeroSection.tsx`: Hero banner with call-to-action
+- `StatsSection.tsx`: Key statistics and metrics display
+- `ServicesSection.tsx`: Service descriptions and feature showcase
+- `CTASection.tsx`: Call-to-action section for user engagement
+- `Footer.tsx`: Footer with links and contact information
+- `MobileMenu.tsx`: Responsive mobile navigation menu
+
+### Profile Feature
+
+Location: `src/features/profile/`
+
+Pages:
+- `ProfilePage.tsx`: User profile management and account settings
+
+Components:
+- `ProfileView.tsx`: Profile information display
+- `ProfileForm.tsx`: Profile information editing form
+- `ChangePasswordForm.tsx`: Password change interface
+
+## Shared Components and Utilities
+
+### Static Components (src/staticComponents/)
+
+DashboardLayout:
+- Wrapper component for all protected routes
+- Combines Sidebar, Topbar, and Outlet for main content
+- Provides consistent layout for authenticated users
+
+Sidebar:
+- Left navigation menu with role-aware route filtering
+- Dynamic badge counts for notifications and tasks
+- Collapsible menu for responsive design
+
+Topbar:
+- Application header with user profile access
+- Notification dropdown with unread count
+- Search bar and action buttons
+
+ProfileDropdown:
+- User profile menu with logout option
+- Display user name and role
+- Quick access to profile page
+
+### Shared Components (src/shared/components/)
+
+Button:
+- Reusable button component with variants and sizes
+- Loading state support for async operations
+- Accessibility features
+
+Input:
+- Reusable input field component
+- Validation feedback display
+- Multiple input types supported
+
+Pagination:
+- Reusable pagination component for lists
+- Configurable items per page
+- Page navigation with previous/next
+
+LoadingSpinner:
+- Centered loading animation
+- Customizable size and color
+- Used across the application for loading states
+
+Toast:
+- Toast notification utility
+- Success, error, warning, and info types
+- Auto-dismiss functionality
+
+LineChart:
+- Recharts-based line chart component
+- Responsive design
+- Used in dashboards for time-series data
+
+DonutChart:
+- Recharts-based donut/pie chart component
+- Legend and tooltip support
+- Used for distribution visualization
+
+DateRangePicker:
+- Date range selection component
+- Calendar interface
+- Used for filtering and reporting
+
+ChatWindow:
+- Chat interface component
+- Message display and input
+- Used for customer support communication
+
+### Shared Hooks (src/shared/hooks/)
+
+reduxHooks.ts:
+- useAppDispatch: Typed dispatch hook for Redux actions
+- useAppSelector: Typed selector hook for Redux state
+
+useRole.ts:
+- useRole: Returns current user role and role-checking utilities
+- isCustomer, isAdmin, isAgent boolean flags
+- Enables role-based conditional rendering
+
+### Shared Utilities (src/shared/)
+
+utils.ts:
+- Date formatting utilities for display
+- Time zone handling functions
+- Common string manipulation utilities
+
+cn.ts:
+- Tailwind CSS class merging utility
+- Prevents duplicate or conflicting classes
+- Improves component styling flexibility
+
+## Development Workflow
+
+### Setup and Installation
+
+Prerequisites:
+- Node.js 20 or later
+- npm 10 or later
+- Git for version control
+
+Clone Repository:
+git clone <repository-url>
+cd LDMS
+
+Install Dependencies:
 npm install
-```
 
-### Environment
-
-Create a `.env` or `.env.local` file at the project root with:
-
-```env
+Environment Configuration:
+Create `.env.local` file in project root with:
 VITE_API_BASE_URL=http://localhost:5000/api/v1
-```
 
-Adjust the API base URL to match the backend host.
+Adjust the API base URL to match backend deployment.
 
-### Run locally
+### Running Development Server
 
-```bash
 npm run dev
-```
 
-### Build production bundle
+Starts Vite development server with hot module reload at http://localhost:5173
 
-```bash
+### Building for Production
+
 npm run build
-```
 
-### Preview production build
+Performs TypeScript compilation and creates optimized production bundle in `dist/` directory
 
-```bash
+### Preview Production Build
+
 npm run preview
-```
 
-### Lint
+Serves the production build locally for testing before deployment
 
-```bash
+### Code Quality and Linting
+
 npm run lint
-```
+
+Runs ESLint to check code quality and enforce style rules
+
+## Development Standards and Best Practices
+
+### TypeScript Standards
+
+All code uses TypeScript with strict mode enabled. Type safety is enforced through:
+- Explicit type annotations for function parameters and return types
+- Interface definitions for data structures
+- Type-safe Redux setup with typed dispatch and selector hooks
+- Type-safe Axios responses with response type definitions
+
+### Component Structure
+
+React components follow consistent patterns:
+- Functional components using React hooks
+- Props interfaces with JSDoc comments
+- Consistent naming conventions (PascalCase for components)
+- Separation of concerns between presentation and logic
+
+### Redux Integration
+
+Redux implementation follows Redux Toolkit patterns:
+- Async thunks for API operations with proper typing
+- ExtraReducers for handling async action states
+- Normalized state structure for complex data
+- Selectors for accessing state values
+
+### Error Handling
+
+Comprehensive error handling throughout:
+- Try-catch blocks for async operations
+- Detailed error messages for user feedback
+- Error boundaries for React component errors
+- Network error handling with user notification
+
+### Code Organization
+
+Code is organized by feature with:
+- Pages for route components
+- Components for reusable UI elements
+- Redux slices for state management
+- Types for TypeScript interfaces
+- Utils for helper functions
+
+## Deployment and Production
+
+### Build Optimization
+
+- Code splitting with lazy loading for routes
+- Tree shaking to remove unused code
+- CSS minification with Tailwind CSS
+- JavaScript minification and bundling with Vite
+
+### Performance Considerations
+
+- Lazy loading of route components
+- Component memoization where appropriate
+- Image optimization with JFIF and AVIF formats
+- CSS utility class optimization with Tailwind CSS
+
+### Environment Configuration
+
+Production deployments use environment variables:
+- VITE_API_BASE_URL: Production backend API URL
+- Additional configuration as needed for deployment
+
+## Testing and Quality Assurance
+
+### Manual Testing Procedures
+
+All three user roles should be tested:
+- Customer: Shipment creation, tracking, payment, notifications
+- Administrator: Agent management, shipment oversight, complaints
+- Delivery Agent: Delivery assignment, status updates, tracking
+
+### Key Testing Scenarios
+
+- User authentication flows (login, register, logout)
+- Shipment lifecycle (creation, tracking, completion)
+- Payment processing with Razorpay integration
+- Real-time updates through Socket.io
+- Role-based access control enforcement
+- Error handling and validation
+
+### Browser Compatibility
+
+Application targets modern browsers:
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Troubleshooting and Support
+
+### Common Issues
+
+Blank Page or App Won't Load:
+- Clear browser cache and localStorage
+- Check VITE_API_BASE_URL in .env.local
+- Verify backend API is running and accessible
+- Check browser console for JavaScript errors
+
+Authentication Failures:
+- Clear cookies and localStorage
+- Logout and login again
+- Verify backend token endpoints working
+- Check Axios interceptor configuration
+
+CORS Errors:
+- Verify backend CORS configuration allows frontend origin
+- Check withCredentials in Axios config
+- Ensure API URL matches backend configuration
+
+Payment Processing Issues:
+- Verify Razorpay credentials and environment
+- Check payment endpoints in backend
+- Review browser console for SDK errors
+- Verify order creation and verification flows
+
+### Debug Commands
+
+npm run dev: Start development server
+npm run build: Build for production
+npm run preview: Preview production build
+npm run lint: Check code quality
+npm cache clean --force: Clear npm cache
+
+## Future Enhancements and Roadmap
+
+Potential improvements for future releases:
+- Advanced analytics and reporting
+- Predictive delivery estimations
+- Mobile application (React Native)
+- Real-time GPS tracking enhancement
+- Multi-language support
+- Progressive Web App (PWA) capabilities
+- Integration with additional payment gateways
+- Machine learning for route optimization
+- Enhanced security features (2FA, biometric)
 
 ## Notes and Observations
 
-- Role-based UI and routing are implemented but the backend role enforcement is expected to align with frontend roles.
-- Customer and admin dashboards use mock or generated dashboard data if backend responses are unavailable.
-- Auth refresh uses cookies and does not persist tokens outside Redux state.
-- Some profile update logic is commented out and left for future implementation.
-- Notification dropdown and role-specific menu items are built into the shared layout.
-
-## Recommended Next Steps
-
-- Confirm backend API contract for all listed endpoints.
-- Add backend-driven dashboard data for customer and admin tiles.
-- Implement profile update functionality.
-- Validate role-based route protection server-side in addition to frontend guards.
-- Add tests for Redux slices and route protection.
+- All state management uses Redux exclusively for consistency
+- Access tokens are not persisted to localStorage for security
+- HTTP-only cookies handle refresh token storage on backend
+- Role enforcement occurs at both routing and component levels
+- Mock data generators used for dashboards when backend data unavailable
+- Socket.io integrated for real-time updates, usage patterns per backend
+- Some profile features marked for future implementation
+- Application tested across all three user roles and workflows

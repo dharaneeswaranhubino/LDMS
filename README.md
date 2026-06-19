@@ -56,8 +56,6 @@ The delivery agent role manages assigned shipments and delivery operations:
 
 TECHNOLOGY STACK
 
-TECHNOLOGY STACK
-
 Core Framework
 
 - React 19.2.5: User interface library
