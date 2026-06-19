@@ -28,7 +28,7 @@ const PaymentDetails = () => {
   const [showPreview, setShowPreview] = useState(false);
 
   const trackingId = currentShipment?.trackingId;
-  const prices = currentShipment?.priceBreakdown;
+  const prices = paymentDetails?.priceBreakdown;
   console.log("prices :", prices);
 
   const priority = currentShipment?.shipmentPriority;

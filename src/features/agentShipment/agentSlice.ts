@@ -9,6 +9,9 @@ import type {
   DeliveryItem,
   AgentState,
   AgentDashboardData,
+  SendOtpResponse,
+  VerifyOtpResponse,
+  VerifyOtpPayload,
 } from "./agentTypes";
 import type { AxiosError } from "axios";
 
@@ -76,6 +79,38 @@ export const fetchAgentDashboard = createAsyncThunk<
     const error = err as AxiosError<{ message: string }>;
     return rejectWithValue(
       error.response?.data?.message || "Failed to fetch agent dashboard",
+    );
+  }
+});
+
+export const sendDeliveryOtp = createAsyncThunk<
+  SendOtpResponse,
+  number,
+  { rejectValue: string }
+>("agent/sendDeliveryOtp", async (shipmentId, { rejectWithValue }) => {
+  try {
+    const res = await api.post(`shipments/${shipmentId}/sendOtp`);
+    return res.data.data;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to send OTP"
+    );
+  }
+});
+
+export const verifyDeliveryOtp = createAsyncThunk<
+  VerifyOtpResponse,
+  VerifyOtpPayload,
+  { rejectValue: string }
+>("agent/verifyDeliveryOtp", async ({ shipmentId, otp }, { rejectWithValue }) => {
+  try {
+    const res = await api.post(`shipments/${shipmentId}/verifyOtp`, { otp });
+    return res.data.data;
+  } catch (err: unknown) {
+    const error = err as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to verify OTP"
     );
   }
 });

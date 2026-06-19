@@ -249,3 +249,19 @@ export interface AgentScheduleSlot {
   shipmentStatus?: ShipmentStatus;
 }
 
+// OTP
+export interface SendOtpResponse {
+  shipmentId: number;
+  otpExpiresAt: string;
+}
+
+export interface VerifyOtpPayload {
+  shipmentId: number;
+  otp: string;
+}
+
+export interface VerifyOtpResponse {
+  shipmentId: number;
+  shipmentStatus: ShipmentStatus;
+  deliveredAt: string;
+}

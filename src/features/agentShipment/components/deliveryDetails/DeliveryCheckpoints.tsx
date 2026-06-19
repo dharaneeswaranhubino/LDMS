@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { deliveryMock } from "../../utils/mockDelivery";
-import { formatSlot, getStatusState, isWithinDeliverySlot, statusOrder } from "../../utils/statusHelpers";
+import {
+  formatSlot,
+  getStatusState,
+  isWithinDeliverySlot,
+  statusOrder,
+} from "../../utils/statusHelpers";
 import UpdateStatusModal from "./UpdateStatusModal";
 import OtpVerificationModal from "./OtpVerificationModal";
 import { useAppDispatch } from "../../../../shared/hooks/reduxHooks";
@@ -26,14 +31,17 @@ const DeliveryCheckpoints = ({
   const [currentStatus, setCurrentStatus] = useState<ShipmentStatus>(
     data.shipmentStatus,
   );
+  const [prevShipmentId, setPrevShipmentId] = useState(data.shipmentId);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openOtpModal, setOpenOtpModal] = useState(false);
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
   const [truckProgress, setTruckProgress] = useState(0);
 
-  useEffect(() => {
+  // Adjust state during render — avoids setState-in-effect ESLint warning
+  if (data.shipmentId !== prevShipmentId) {
+    setPrevShipmentId(data.shipmentId);
     setCurrentStatus(data.shipmentStatus);
-  }, [data.shipmentId, data.shipmentStatus]);
+  }
 
   const displayStatus =
     animatingIndex !== null ? currentStatus : data.shipmentStatus;
@@ -146,30 +154,38 @@ const DeliveryCheckpoints = ({
             const dotBase =
               "w-[30px] h-[30px] rounded-full flex items-center justify-center text-[13px] flex-shrink-0 transition-colors duration-700";
 
-            let dotStyle = "";
             let dotIcon = "fa-solid fa-circle text-[10px]";
 
-            if (isAnimatingFromHere) {
-              dotStyle = "bg-green-100 border border-green-300 text-green-700";
+            const dotStyle = isAnimatingFromHere
+              ? "bg-green-100 border border-green-300 text-green-700"
+              : isAnimatingToHere
+                ? ""
+                : state.done
+                  ? "bg-green-100 border border-green-300 text-green-700"
+                  : state.active
+                    ? "bg-blue-100 border border-blue-300 text-blue-700"
+                    : "bg-slate-100 border border-slate-200 text-slate-400";
+
+            if (isAnimatingFromHere || state.done)
               dotIcon = "fa-solid fa-check";
-            } else if (isAnimatingToHere) {
-              dotStyle = "";
-            } else if (state.done) {
-              dotStyle = "bg-green-100 border border-green-300 text-green-700";
-              dotIcon = "fa-solid fa-check";
-            } else if (state.active) {
-              dotStyle = "bg-blue-100 border border-blue-300 text-blue-700";
-              dotIcon = "fa-solid fa-truck";
-            } else {
-              dotStyle = "bg-slate-100 border border-slate-200 text-slate-400";
-            }
+            else if (state.active) dotIcon = "fa-solid fa-truck";
 
             const lineColor =
               state.done && !isAnimatingFromHere ? "#86efac" : "#e2e8f0";
 
+            // const showUpdateBtn =
+            //   state.active &&
+            //   item.key !== "DELIVERED" &&
+            //   animatingIndex === null;
             const showUpdateBtn =
               state.active &&
               item.key !== "DELIVERED" &&
+              item.key !== "OUT_FOR_DELIVERY" &&
+              animatingIndex === null;
+
+            const showOutForDeliveryUpdateBtn =
+              state.active &&
+              item.key === "OUT_FOR_DELIVERY" &&
               animatingIndex === null;
 
             const showDeliveredBtn =
@@ -295,12 +311,51 @@ const DeliveryCheckpoints = ({
                         </span>
                       )}
 
+                      {/* {showUpdateBtn && (
+                        <button
+                          onClick={handleUpdateClick}
+                          className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                        >
+                          Update
+                        </button>
+                      )} */}
                       {showUpdateBtn && (
                         <button
                           onClick={handleUpdateClick}
                           className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-medium text-blue-700 hover:bg-blue-100 transition-colors"
                         >
                           Update
+                        </button>
+                      )}
+
+                      {showOutForDeliveryUpdateBtn && (
+                        <button
+                          onClick={() => {
+                            if (!canMarkDelivered) {
+                              showToast({
+                                type: "warning",
+                                message: `Update allowed only between ${formatSlot(data.assignedSlotStart)} – ${formatSlot(data.assignedSlotEnd)}`,
+                              });
+                              return;
+                            }
+                            handleUpdateClick();
+                          }}
+                          className={`rounded-lg border px-3 py-1 text-[11px] font-medium transition-colors
+      ${
+        canMarkDelivered
+          ? "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+          : "border-amber-200 bg-amber-50 text-amber-600 cursor-not-allowed"
+      }`}
+                        >
+                          {canMarkDelivered ? (
+                            "Update"
+                          ) : (
+                            <span className="flex items-center gap-1">
+                              <i className="fa-solid fa-lock text-[9px]" />
+                              {formatSlot(data.assignedSlotStart)} –{" "}
+                              {formatSlot(data.assignedSlotEnd)}
+                            </span>
+                          )}
                         </button>
                       )}
 
@@ -355,17 +410,13 @@ const DeliveryCheckpoints = ({
       {openOtpModal && (
         <OtpVerificationModal
           onClose={() => setOpenOtpModal(false)}
+          shipmentId={data.shipmentId}
           onVerified={() => {
             onOtpVerified(true);
             setOpenOtpModal(false);
-            if (!canMarkDelivered) {
-              showToast({
-                type: "warning",
-                message: `OTP verified! Delivery can be marked between ${formatSlot(data.assignedSlotStart)} – ${formatSlot(data.assignedSlotEnd)}`,
-              });
-              return;
-            }
-            setOpenUpdateModal(true);
+            // backend already set DELIVERED via verify-otp — skip updateTrackStatus
+            setCurrentStatus("DELIVERED");
+            onDelivered();
           }}
         />
       )}

@@ -230,6 +230,7 @@ export interface PaymentDetailsResponse {
   paidAt: string;
   razorpayOrderId: string;
   razorpayPaymentId: string;
+  priceBreakdown:PriceBreakdown;
   createdAt: string;
   updatedAt: string;
 }
