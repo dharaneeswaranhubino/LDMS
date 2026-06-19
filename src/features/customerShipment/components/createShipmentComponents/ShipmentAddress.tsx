@@ -111,7 +111,8 @@ const ShipmentAddress = ({
             </label>
 
             <input
-              type="text"
+              type="tel"
+              pattern="[0-9]{10}"
               placeholder="Your Phone No"
               value={pickUpAddress.phone}
               name="phone"
@@ -227,7 +228,8 @@ const ShipmentAddress = ({
             </label>
 
             <input
-              type="text"
+              type="tel"
+              pattern="[0-9]{10}"
               placeholder="Receiver Phone No"
               value={deliveryAddress.phone}
               name="phone"

@@ -138,7 +138,7 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
           </button>
 
           {/* Chat not for CANCELLED, PENDING, CONFIRMED, DELIVERED */}
-          {!["CANCELLED", "PENDING", "CONFIRMED", "DELIVERED"].includes(
+          {/* {!["CANCELLED", "PENDING", "CONFIRMED", "DELIVERED"].includes(
             status,
           ) && (
             <button
@@ -148,7 +148,7 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
               <i className="fa-brands fa-rocketchat mr-1" />
               Chat
             </button>
-          )}
+          )} */}
 
           {/* Complaint all except PENDING */}
           {canRaiseComplaint && (
