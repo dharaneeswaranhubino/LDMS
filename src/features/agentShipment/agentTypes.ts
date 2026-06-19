@@ -228,6 +228,7 @@ export interface CustomerMessage {
 
 export interface AgentDashboardData {
   isActive: boolean;
+  availabilityStatus:AgentAvailability;
   assignedDeliveries: number;
   activeShipments: number;
   completedDeliveries: number;

@@ -197,10 +197,7 @@ const agentSlice = createSlice({
       .addCase(fetchAgentDashboard.fulfilled, (state, action) => {
         state.dashboardLoading = false;
         state.dashboardData = action.payload;
-        // Sync isActive → availability
-        state.availability = action.payload.isActive
-          ? "AVAILABLE"
-          : "UNAVAILABLE";
+        state.availability = action.payload.availabilityStatus;
       })
       .addCase(fetchAgentDashboard.rejected, (state, action) => {
         state.dashboardLoading = false;
