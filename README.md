@@ -1,5 +1,7 @@
 LDMS Frontend - Logistics and Delivery Management System
 
+Vercel Deployed LDMS Url:https://ldms-lac.vercel.app/
+
 A comprehensive React and TypeScript platform for end-to-end logistics and delivery management. The system provides role-based interfaces for customers, administrators, and delivery agents with real-time shipment tracking, payment processing, and operational management capabilities.
 
 OVERVIEW
