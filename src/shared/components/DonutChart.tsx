@@ -103,7 +103,7 @@ if (total === 0) {
         {/* Center */}
         <div className="relative z-10 flex flex-col items-center gap-1">
           <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shadow-sm">
-            <i className="fa-regular fa-chart-pie text-indigo-400 text-[16px]" />
+            <i className="fa-solid fa-chart-pie text-indigo-400 text-[26px]" />
           </div>
           <span className="text-[12px] text-slate-400 font-medium animate-pulse">No data</span>
         </div>

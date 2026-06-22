@@ -29,6 +29,7 @@ const CreateShipment = () => {
 
   const [pickUpAddress, setPickUpAddress] = useState<Address>({
     name: "",
+    email:"",
     phone: "",
     fullAddress: "",
     city: "",
@@ -37,6 +38,7 @@ const CreateShipment = () => {
 
   const [deliveryAddress, setDeliveryAddress] = useState<Address>({
     name: "",
+    email:"",
     phone: "",
     fullAddress: "",
     city: "",
@@ -113,6 +115,7 @@ const CreateShipment = () => {
     setCreatedMeta(null);
     setPickUpAddress({
       name: "",
+      email:"",
       phone: "",
       fullAddress: "",
       city: "",
@@ -120,6 +123,7 @@ const CreateShipment = () => {
     });
     setDeliveryAddress({
       name: "",
+      email:"",
       phone: "",
       fullAddress: "",
       city: "",

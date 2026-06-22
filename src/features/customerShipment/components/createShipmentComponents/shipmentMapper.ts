@@ -17,6 +17,7 @@ export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
     // Sender
     senderName: data.pickUpAddress.name,
     senderPhone: data.pickUpAddress.phone,
+    senderEmail:data.pickUpAddress.email,
     pickupAddress: data.pickUpAddress.fullAddress,
     pickupCity: data.pickUpAddress.city,
     pickupPincode: data.pickUpAddress.pinCode,
@@ -24,6 +25,7 @@ export const mapToBackendPayload = (data: CreateShipmentPayload) => ({
     // Receiver
     receiverName: data.deliveryAddress.name,
     receiverPhone: data.deliveryAddress.phone,
+    receiverEmail:data.deliveryAddress.email,
     deliveryAddress: data.deliveryAddress.fullAddress,
     deliveryCity: data.deliveryAddress.city,
     deliveryPincode: data.deliveryAddress.pinCode,

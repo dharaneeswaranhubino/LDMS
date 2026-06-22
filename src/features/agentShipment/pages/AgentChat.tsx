@@ -63,7 +63,8 @@ const AgentChat = () => {
   const isCompleted = activeDelivery?.shipmentStatus === "COMPLETED";
 
   return (
-    <div className="flex h-[calc(100vh-72px)] md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5">
+    <div className="flex h-[calc(100vh-72px)] rounded-2xl md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5 overflow-hidden">
+    {/* <div className="flex h-[calc(100vh-72px)] md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5"> */}
       {/* Left sidebar — hidden on mobile once a chat is open */}
       <div
         className={`w-full md:w-72 md:border-r border-gray-200 bg-slate-50 flex-col md:rounded-l-2xl ${

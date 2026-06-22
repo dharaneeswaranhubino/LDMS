@@ -4,6 +4,7 @@ import type { DeliveryItem } from "../agentShipment/agentTypes";
 
 export interface Address {
   name: string;
+  email: string;
   phone: string;
   fullAddress: string;
   city: string;

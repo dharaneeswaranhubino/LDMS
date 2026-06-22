@@ -41,7 +41,6 @@ const ShipmentAddress = ({
     const sanitizedValue =
       name === "phone" || name === "pinCode" ? value.replace(/\D/g, "") : value;
 
-
     setDeliveryAddress({
       ...deliveryAddress,
       [name]: sanitizedValue,
@@ -110,6 +109,30 @@ const ShipmentAddress = ({
 
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
+              Sender Email
+              <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
+            </label>
+
+            <input
+              type="email"
+              // inputMode="numeric"
+              // pattern="[0-9]{10}"
+              placeholder="Your email"
+              value={pickUpAddress.email}
+              name="email"
+              // maxLength={10}
+              onChange={handlePickUpAddressChange}
+              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            />
+            {errors.pickUpPhone && (
+              <p className="text-red-500 text-xs">{errors.pickUpPhone}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-medium text-slate-700">
               Sender Phone
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
@@ -129,25 +152,24 @@ const ShipmentAddress = ({
               <p className="text-red-500 text-xs">{errors.pickUpPhone}</p>
             )}
           </div>
-        </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-medium text-slate-700">
+              Full address
+              <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
+            </label>
 
-        <div className="flex flex-col gap-2 mt-5">
-          <label className="text-[13px] font-medium text-slate-700">
-            Full address
-            <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
-          </label>
-
-          <input
-            type="text"
-            placeholder="No.12, xyz road, City - xxxxpin"
-            value={pickUpAddress.fullAddress}
-            name="fullAddress"
-            onChange={handlePickUpAddressChange}
-            className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
-          />
-          {errors.pickUpFullAddress && (
-            <p className="text-red-500 text-xs">{errors.pickUpFullAddress}</p>
-          )}
+            <input
+              type="text"
+              placeholder="No.12, xyz road, City - xxxxpin"
+              value={pickUpAddress.fullAddress}
+              name="fullAddress"
+              onChange={handlePickUpAddressChange}
+              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            />
+            {errors.pickUpFullAddress && (
+              <p className="text-red-500 text-xs">{errors.pickUpFullAddress}</p>
+            )}
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-4 mt-4">
@@ -228,6 +250,27 @@ const ShipmentAddress = ({
 
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
+              Receiver Email
+              <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
+            </label>
+
+            <input
+              type="email"
+              placeholder="Receiver email"
+              value={deliveryAddress.email}
+              name="email"
+              onChange={handleDeliveryAddressChange}
+              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            />
+            {errors.deliveryPhone && (
+              <p className="text-red-500 text-xs">{errors.deliveryPhone}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-4 mt-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-medium text-slate-700">
               Receiver Phone
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
@@ -247,25 +290,26 @@ const ShipmentAddress = ({
               <p className="text-red-500 text-xs">{errors.deliveryPhone}</p>
             )}
           </div>
-        </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-medium text-slate-700">
+              Full address
+              <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
+            </label>
 
-        <div className="flex flex-col gap-2 mt-5">
-          <label className="text-[13px] font-medium text-slate-700">
-            Full address
-            <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
-          </label>
-
-          <input
-            type="text"
-            placeholder="No.12, xyz road, City - xxxxpin"
-            value={deliveryAddress.fullAddress}
-            name="fullAddress"
-            onChange={handleDeliveryAddressChange}
-            className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
-          />
-          {errors.deliveryFullAddress && (
-            <p className="text-red-500 text-xs">{errors.deliveryFullAddress}</p>
-          )}
+            <input
+              type="text"
+              placeholder="No.12, xyz road, City - xxxxpin"
+              value={deliveryAddress.fullAddress}
+              name="fullAddress"
+              onChange={handleDeliveryAddressChange}
+              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            />
+            {errors.deliveryFullAddress && (
+              <p className="text-red-500 text-xs">
+                {errors.deliveryFullAddress}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-4 mt-4">
