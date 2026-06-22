@@ -1,8 +1,8 @@
-import { useEffect, useCallback } from "react";
+import { useEffect} from "react";
 import { Package, Receipt, MessageCircle, AlertCircle } from "lucide-react";
-import { fetchCustomerDashboard, setDateRange } from "../../customerShipment/shipmentSlice";
+import { fetchCustomerDashboard } from "../../customerShipment/shipmentSlice";
 import { useAppDispatch, useAppSelector } from "../../../shared/hooks/reduxHooks";
-import DateRangePicker from "../../../shared/components/DateRangePicker";
+// import DateRangePicker from "../../../shared/components/DateRangePicker";
 import StatCard from "../components/customerDashboard/StatCard";
 import RecentShipmentsTable from "../components/customerDashboard/RecentShipmentsTable";
 import PaymentHistoryList from "../components/customerDashboard/PaymentHistoryList";
@@ -22,12 +22,12 @@ export default function CustomerDashboard() {
     dispatch(fetchCustomerDashboard({ from: dateRange.from, to: dateRange.to }));
   }, [dispatch, dateRange.from, dateRange.to]);
 
-  const handleDateApply = useCallback(
-    (from: string, to: string) => {
-      dispatch(setDateRange({ from, to }));
-    },
-    [dispatch],
-  );
+  // const handleDateApply = useCallback(
+  //   (from: string, to: string) => {
+  //     dispatch(setDateRange({ from, to }));
+  //   },
+  //   [dispatch],
+  // );
 
   if (loading) {
     return (
