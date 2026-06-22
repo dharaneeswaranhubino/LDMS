@@ -55,7 +55,7 @@ const AgentDashboard = () => {
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-cyan-50 via-indigo-200 to-sky-50 px-2 py-4 lg:p-5">
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
             {getGreeting()} <span className="text-indigo-400">{user?.name}</span>
@@ -65,7 +65,7 @@ const AgentDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 bg-white/70 backdrop-blur-sm border border-white/80 rounded-2xl px-3 py-2 shadow-sm">
+        <div className="flex items-center gap-2.5 bg-white/70 backdrop-blur-sm border border-white/80 rounded-2xl px-3 py-2 shadow-sm w-full justify-evenly md:w-auto">
           <span
             className={`text-[11px] font-bold tracking-wide ${
               availability === "AVAILABLE" ? "text-emerald-600" : "text-red-500"

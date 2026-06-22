@@ -16,7 +16,7 @@ const ComplaintFilters = ({
           <button
             key={tab.value}
             onClick={() => onTabChange(tab.value)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-sm font-medium border transition-all ${
               isActive
                 ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
                 : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"

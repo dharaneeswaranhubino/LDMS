@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { statusOrder } from "../../utils/statusHelpers";
 import { deliveryMock } from "../../utils/mockDelivery";
 import { showToast } from "../../../../shared/components/Toast";
-import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
+// import { useAppSelector } from "../../../../shared/hooks/reduxHooks";
 import type { ShipmentStatus, UpdateStatusModalProps } from "../../agentTypes";
 
 interface UpdatedUpdateStatusModalProps extends UpdateStatusModalProps {
@@ -43,7 +43,7 @@ const UpdateStatusModal = ({
   assignedSlotStart,
   assignedSlotEnd,
 }: UpdatedUpdateStatusModalProps) => {
-  const { availability } = useAppSelector((state) => state.agent);
+  // const { availability } = useAppSelector((state) => state.agent);
   const [remarks, setRemarks] = useState("");
 
   const currentIndex = statusOrder.indexOf(currentStatus);
@@ -62,19 +62,19 @@ const UpdateStatusModal = ({
     ? isWithinDeliverySlot(assignedSlotStart, assignedSlotEnd)
     : true;
 
-  const isConfirmDisabled =
-    availability !== "AVAILABLE" || (isMarkingDelivered && !deliveryAllowed);
+  // const isConfirmDisabled =
+  //   availability !== "AVAILABLE" || (isMarkingDelivered && !deliveryAllowed);
 
   const handleConfirm = async () => {
     if (!nextStatus) return;
 
-    if (availability !== "AVAILABLE") {
-      showToast({
-        type: "error",
-        message: "Turn on your availability before updating shipment status",
-      });
-      return;
-    }
+    // if (availability !== "AVAILABLE") {
+    //   showToast({
+    //     type: "error",
+    //     message: "Turn on your availability before updating shipment status",
+    //   });
+    //   return;
+    // }
 
     if (isMarkingDelivered && !deliveryAllowed) {
       showToast({
@@ -220,7 +220,7 @@ const UpdateStatusModal = ({
                 />
               </div>
 
-              {availability !== "AVAILABLE" && (
+              {/* {availability !== "AVAILABLE" && (
                 <div className="mt-3 rounded-xl border border-red-100 bg-red-50 px-4 py-2.5 flex items-center gap-2">
                   <i className="fa-solid fa-circle-exclamation text-red-400 text-sm flex-shrink-0" />
                   <p className="text-[11px] text-red-600">
@@ -228,24 +228,20 @@ const UpdateStatusModal = ({
                     update shipment status.
                   </p>
                 </div>
-              )}
+              )} */}
 
               <motion.button
-                whileHover={!isConfirmDisabled ? { scale: 1.01 } : {}}
-                whileTap={!isConfirmDisabled ? { scale: 0.98 } : {}}
+                // whileHover={!isConfirmDisabled ? { scale: 1.01 } : {}}
+                // whileTap={!isConfirmDisabled ? { scale: 0.98 } : {}}
                 onClick={handleConfirm}
-                disabled={isConfirmDisabled}
+                // disabled={isConfirmDisabled}
                 className={`mt-5 w-full rounded-2xl py-3 font-semibold text-white shadow-lg transition-all ${
-                  isConfirmDisabled
-                    ? "bg-slate-300 cursor-not-allowed"
-                    : isMarkingDelivered
+                  isMarkingDelivered
                       ? "bg-gradient-to-r from-emerald-500 to-green-500"
                       : "bg-gradient-to-r from-indigo-500 to-blue-500"
                 }`}
               >
-                {availability !== "AVAILABLE"
-                  ? "Set yourself as Available first"
-                  : isMarkingDelivered && !deliveryAllowed
+                {isMarkingDelivered && !deliveryAllowed
                     ? `Available at ${formatSlot(assignedSlotStart)}`
                     : isMarkingDelivered
                       ? "Confirm Delivery ✓"

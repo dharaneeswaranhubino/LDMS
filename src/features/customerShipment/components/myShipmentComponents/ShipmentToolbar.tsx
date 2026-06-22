@@ -22,7 +22,7 @@ const ShipmentToolbar = ({
   setSortKey,
 }: Props) => {
   return (
-    <div className="flex gap-2 mt-3 mb-4">
+    <div className="sm:flex gap-2 mt-3 mb-4">
       {/* Search */}
       <div
         className="flex items-center gap-2 border border-slate-300 focus-within:border-violet-400 bg-white rounded-lg h-10 px-3 shadow-sm
@@ -69,7 +69,7 @@ const ShipmentToolbar = ({
         onChange={(e) => setSortKey(e.target.value as SortKey)}
         className="border border-slate-200 bg-white rounded-lg h-10 px-3 text-[13px]
         text-slate-600 outline-none focus:border-violet-400 shadow-sm cursor-pointer
-        transition-all duration-300 w-48 flex-shrink-0"
+        transition-all duration-300 w-full sm:w-48 flex-shrink-0 mt-3 sm:mt-0"
       >
         {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>

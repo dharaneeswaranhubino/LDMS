@@ -15,12 +15,24 @@ export function getInitials(name: string) {
     .toUpperCase();
 }
 
+// export function timeAgo(iso: string) {
+//   const diff = Date.now() - new Date(iso).getTime();
+//   const h = Math.floor(diff / 3600000);
+//   if (h < 1) return "Just now";
+//   if (h < 24) return `${h} hrs ago`;
+//   return "Yesterday";
+// }
 export function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
   const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+
   if (h < 1) return "Just now";
   if (h < 24) return `${h} hrs ago`;
-  return "Yesterday";
+  if (d === 1) return "Yesterday";
+  if (d < 7) return `${d} days ago`;
+  if (d < 30) return `${Math.floor(d / 7)} weeks ago`;
+  return `${Math.floor(d / 30)} months ago`;
 }
 
 

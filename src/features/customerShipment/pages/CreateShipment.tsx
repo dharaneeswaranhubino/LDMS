@@ -165,9 +165,9 @@ const CreateShipment = () => {
               onClick={() => setIsInstruc(true)}
               className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"
             >
-              {/* <PiReadCvLogoLight size={18} />
-              Instructions */}
+              {/* <PiReadCvLogoLight size={18} /> */}
               <i className="fa-solid fa-circle-info"></i>
+              Instructions
             </div>
           </div>
         </div>

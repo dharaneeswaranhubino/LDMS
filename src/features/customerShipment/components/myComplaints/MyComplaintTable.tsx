@@ -36,28 +36,37 @@ const MyComplaintTable = ({ complaints, loading }: Props) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 overflow-x-auto">
-      <table className="w-full text-sm table-fixed">
-        <thead>
-          <tr className="bg-slate-50 border-b border-slate-100">
+  <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+    <div className="overflow-x-auto">
+      <div className="overflow-y-auto h-90 scrollbar-none">
+        <table className="w-full text-sm table-fixed min-w-[810px]">
+          <colgroup>
             {HEADS.map((h) => (
-              <th
-                key={h.label}
-                className={`${h.width} px-4 py-3 text-left text-xs font-semibold text-slate-500 tracking-wide`}
-              >
-                {h.label}
-              </th>
+              <col key={h.label} className={h.width} />
             ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-50">
-          {complaints.map((c) => (
-            <MyComplaintTableRow key={c.complaintId} complaint={c} />
-          ))}
-        </tbody>
-      </table>
+          </colgroup>
+          <thead className="sticky top-0 z-10">
+            <tr className="bg-slate-50 border-b border-slate-100">
+              {HEADS.map((h) => (
+                <th
+                  key={h.label}
+                  className={`${h.width} px-4 py-3 text-left text-xs font-semibold text-slate-500 tracking-wide`}
+                >
+                  {h.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50">
+            {complaints.map((c) => (
+              <MyComplaintTableRow key={c.complaintId} complaint={c} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default MyComplaintTable;

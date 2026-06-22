@@ -127,7 +127,7 @@ const MyShipments = () => {
   return (
     <>
       <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
-        <div className="flex items-start justify-between mb-4">
+        <div className="sm:flex items-start justify-between mb-4">
           <div>
             <h1 className="text-2xl font-semibold text-slate-800">
               My shipments
@@ -139,7 +139,7 @@ const MyShipments = () => {
 
           <button
             onClick={() => navigate("/sendShipment")}
-            className="h-[42px] px-5 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-md"
+            className="h-[42px] w-full mt-3 sm:mt-0 sm:w-48 px-5 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-md"
           >
             <i className="fa-solid fa-plus text-[11px]" />
             Send new shipment
