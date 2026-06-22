@@ -191,7 +191,7 @@ export const fetchNotifications = createAsyncThunk<
     { rejectValue: string }
 >(
     "notification/fetchNotifications",
-    async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
+    async ({ page = 1, limit = 6 }, { rejectWithValue }) => {
         try {
             const res = await api.get(`/notifications/me?page=${page}&limit=${limit}`);
             return res.data.data as FetchNotificationsResponse;

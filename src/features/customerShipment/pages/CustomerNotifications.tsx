@@ -28,7 +28,7 @@ const CustomerNotifications = () => {
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("ALL");
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
     dispatch(fetchNotifications({ page: currentPage, limit }));
