@@ -119,7 +119,6 @@ const AgentChat = () => {
         </div>
       </div>
 
-      {/* Right: Chat window — only shown on mobile when a delivery is selected */}
       <div
         className={`flex-1 bg-gray-50 flex-col md:rounded-r-2xl ${
           activeShipmentId ? "flex" : "hidden md:flex"

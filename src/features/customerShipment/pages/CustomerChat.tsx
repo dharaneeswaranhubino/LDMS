@@ -113,9 +113,8 @@ const CustomerChat = () => {
         </div>
       </div>
 
-      {/* Chat panel — full width on mobile, only shown when a shipment is selected */}
       <div
-        className={`flex-1 bg-gray-50 flex-col min-h-0 md:rounded-r-2xl ${
+        className={`flex-1 bg-gray-50 flex-col md:rounded-r-2xl ${
           activeShipmentId ? "flex" : "hidden md:flex"
         }`}
       >
@@ -130,7 +129,7 @@ const CustomerChat = () => {
                 <ArrowLeft size={20} />
               </button>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-800 truncate">
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 truncate">
                   Tracking ID: {activeShipment?.trackingId}
                 </p>
                 <p className="text-xs text-gray-400 truncate">
