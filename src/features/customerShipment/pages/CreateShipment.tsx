@@ -17,7 +17,6 @@ import ShipmentPricingModal from "../components/createShipmentComponents/Shipmen
 
 const CreateShipment = () => {
   const dispatch = useAppDispatch();
-
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [showPricingModal, setShowPricingModal] = useState(false);
@@ -141,7 +140,7 @@ const CreateShipment = () => {
   return (
     <>
       <div className="rounded-2xl min-h-screen bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-3 overflow-hidden">
-        <div className="flex items-center justify-between">
+        <div className="sm:flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-slate-800">
               Send new shipment
@@ -150,7 +149,7 @@ const CreateShipment = () => {
               Fill in details below to create your shipment
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 justify-evenly mt-3 sm:mt-0">
             <div
               onClick={() => setShowPricingModal(true)}
               className="cursor-pointer flex text-sky-900 items-center gap-1 p-2 bg-gradient-to-br from-slate-100 to-sky-100 rounded-lg border border-sky-200 hover:from-sky-100 hover:to-slate-100"

@@ -72,7 +72,7 @@ const PackageDetails = ({
           </label>
 
           <input
-            type="text"
+            type="number"
             placeholder="Quantity"
             value={packageDetails.quantity}
             name="quantity"

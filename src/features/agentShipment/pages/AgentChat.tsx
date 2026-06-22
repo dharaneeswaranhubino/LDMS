@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Package, MessageCircle } from "lucide-react";
+import { Package, MessageCircle, ArrowLeft } from "lucide-react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -42,18 +42,10 @@ const AgentChat = () => {
 
     socket.off("new_message");
     socket.on("new_message", (msg: ChatMessage) => {
-      // console.log("Socket msg received:", msg);
       dispatch(appendMessage(msg));
     });
 
-    // Catch ALL events including new_message
-    socket.offAny();
-    socket.onAny((eventName, ...args) => {
-      console.log("ANY event on agent socket:", eventName, args);
-    });
-
     return () => {
-      socket.offAny();
       activeDeliveries.forEach((delivery) => {
         socket.emit("leave_chat", delivery.shipmentId);
       });
@@ -61,20 +53,24 @@ const AgentChat = () => {
     };
   }, [token, activeDeliveries.length]);
 
-  console.log("deliveries from store:", deliveries);
-  console.log("activeDeliveries:", activeDeliveries);
-  console.log("token:", token);
+  const handleBack = () => {
+    dispatch(setActiveShipment(null));
+  };
 
   const activeDelivery = activeDeliveries.find(
     (d) => d.shipmentId === activeShipmentId,
   );
+  const isCompleted = activeDelivery?.shipmentStatus === "COMPLETED";
 
   return (
-    <div className="flex h-[calc(100vh-72px)] rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
-      {/* Left sidebar - WhatsApp style */}
-      {/* <div className="rounded-l-2xl w-80 border-r border-gray-200 bg-white flex flex-col"> */}
-      <div className="rounded-l-2xl w-72 border-r border-gray-200 bg-slate-50 flex flex-col">
-        <div className="rounded-tl-2xl px-4 py-3 border-b border-gray-200 bg-blue-600">
+    <div className="flex h-[calc(100vh-72px)] md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5">
+      {/* Left sidebar — hidden on mobile once a chat is open */}
+      <div
+        className={`w-full md:w-72 md:border-r border-gray-200 bg-slate-50 flex-col md:rounded-l-2xl ${
+          activeShipmentId ? "hidden md:flex" : "flex"
+        }`}
+      >
+        <div className="px-4 py-3 border-b border-gray-200 bg-blue-600 md:rounded-tl-2xl">
           <h2 className="font-semibold text-white">Customer Chats</h2>
           <p className="text-xs text-blue-200 mt-1">
             {activeDeliveries.length} active deliveries
@@ -98,7 +94,6 @@ const AgentChat = () => {
                     : ""
                 }`}
               >
-                {/* Avatar */}
                 <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-sm flex-shrink-0">
                   {delivery.receiverName?.[0]?.toUpperCase() ?? "C"}
                 </div>
@@ -125,20 +120,30 @@ const AgentChat = () => {
         </div>
       </div>
 
-      {/* Right: Chat window */}
-      <div className="flex-1 bg-gray-50 flex flex-col rounded-r-2xl">
+      {/* Right: Chat window — only shown on mobile when a delivery is selected */}
+      <div
+        className={`flex-1 bg-gray-50 flex-col md:rounded-r-2xl ${
+          activeShipmentId ? "flex" : "hidden md:flex"
+        }`}
+      >
         {activeShipmentId && currentUserId ? (
           <>
-            {/* Header */}
-            <div className="rounded-tr-2xl px-6 py-4 border-b border-gray-200 bg-white flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-sm">
+            <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 bg-white md:rounded-tr-2xl flex items-center gap-3">
+              <button
+                onClick={handleBack}
+                className="md:hidden text-gray-500 hover:text-gray-700 -ml-1 p-1"
+                aria-label="Back to deliveries"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-sm flex-shrink-0">
                 {activeDelivery?.receiverName?.[0]?.toUpperCase() ?? "C"}
               </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-800">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800 truncate">
                   {activeDelivery?.receiverName}
                 </p>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 truncate">
                   {activeDelivery?.trackingId}
                 </p>
               </div>
@@ -146,6 +151,7 @@ const AgentChat = () => {
             <ChatWindow
               shipmentId={activeShipmentId}
               currentUserId={currentUserId}
+              isCompleted={isCompleted}
             />
           </>
         ) : (

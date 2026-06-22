@@ -65,7 +65,7 @@ export default function CustomerDashboard() {
             My dashboard
           </h1>
           <p className="mt-1 text-sm font-normal text-slate-500">
-            Welcome back — here's your shipment summary
+            Welcome back here's your shipment summary
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -77,11 +77,11 @@ export default function CustomerDashboard() {
               </span>
             )}
           </button> */}
-          <DateRangePicker
+          {/* <DateRangePicker
             fromDate={dateRange.from}
             toDate={dateRange.to}
             onApply={handleDateApply}
-          />
+          /> */}
         </div>
       </div>
 

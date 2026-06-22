@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Lock } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import {
   appendMessage,
@@ -10,9 +10,10 @@ import {
 interface Props {
   shipmentId: number;
   currentUserId: number;
+  isCompleted?: boolean;
 }
 
-const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
+const ChatWindow = ({ shipmentId, currentUserId, isCompleted }: Props) => {
   const dispatch = useAppDispatch();
   const { messages, loadingHistory, sendingMessage } = useAppSelector(
     (s) => s.shipment,
@@ -30,7 +31,7 @@ const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
 
   const handleSend = async () => {
     const trimmed = input.trim();
-    if (!trimmed || sendingMessage) return;
+    if (!trimmed || sendingMessage || isCompleted) return;
     setInput('');
     const result = await dispatch(sendMessage({ shipmentId, message: trimmed }));
     if (sendMessage.fulfilled.match(result)) {
@@ -70,7 +71,7 @@ const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
               className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[70%] rounded-2xl px-4 py-2 shadow-sm ${
+                className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-2 shadow-sm ${
                   isMe
                     ? 'bg-blue-600 text-white rounded-br-sm'
                     : 'bg-white text-gray-800 rounded-bl-sm border border-gray-100'
@@ -99,19 +100,26 @@ const ChatWindow = ({ shipmentId, currentUserId }: Props) => {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t border-gray-200 bg-white rounded-br-2xl">
+      <div className="p-3 md:p-4 border-t border-gray-200 bg-white rounded-br-2xl">
+        {isCompleted && (
+          <div className="flex items-center justify-center gap-1.5 mb-2 text-gray-400">
+            <Lock size={12} />
+            <p className="text-xs">Read only after completed</p>
+          </div>
+        )}
         <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2">
           <input
             type="text"
-            className="flex-1 bg-transparent text-sm outline-none placeholder-gray-400"
-            placeholder="Type a message..."
+            className="flex-1 bg-transparent text-sm outline-none placeholder-gray-400 disabled:cursor-not-allowed disabled:text-gray-400"
+            placeholder={isCompleted ? 'Chat is closed' : 'Type a message...'}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
+            disabled={isCompleted}
           />
           <button
             onClick={handleSend}
-            disabled={!input.trim() || sendingMessage}
+            disabled={!input.trim() || sendingMessage || isCompleted}
             className="text-blue-600 hover:text-blue-700 disabled:text-gray-300 transition-colors"
           >
             {sendingMessage ? (

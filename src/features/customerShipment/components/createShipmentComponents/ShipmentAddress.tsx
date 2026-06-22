@@ -1,7 +1,4 @@
-import {
-  useState,
-  type ChangeEvent,
-} from "react";
+import { useState, type ChangeEvent } from "react";
 import { validateShipmentAddress } from "./shipmentValidation";
 import type { ShipmentAddressProps } from "../../shipmentTypes";
 
@@ -17,9 +14,12 @@ const ShipmentAddress = ({
   const handlePickUpAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
+    const sanitizedValue =
+      name === "phone" || name === "pinCode" ? value.replace(/\D/g, "") : value;
+
     setPickUpAddress({
       ...pickUpAddress,
-      [name]: value,
+      [name]: sanitizedValue,
     });
 
     const errorKeyMap: Record<string, string> = {
@@ -38,9 +38,13 @@ const ShipmentAddress = ({
   const handleDeliveryAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
+    const sanitizedValue =
+      name === "phone" || name === "pinCode" ? value.replace(/\D/g, "") : value;
+
+
     setDeliveryAddress({
       ...deliveryAddress,
-      [name]: value,
+      [name]: sanitizedValue,
     });
 
     const errorKeyMap: Record<string, string> = {
@@ -112,6 +116,7 @@ const ShipmentAddress = ({
 
             <input
               type="tel"
+              inputMode="numeric"
               pattern="[0-9]{10}"
               placeholder="Your Phone No"
               value={pickUpAddress.phone}
@@ -229,6 +234,7 @@ const ShipmentAddress = ({
 
             <input
               type="tel"
+              inputMode="numeric"
               pattern="[0-9]{10}"
               placeholder="Receiver Phone No"
               value={deliveryAddress.phone}

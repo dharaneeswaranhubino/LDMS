@@ -58,7 +58,7 @@ const TimeLineVerticalStepper = ({
   }
 
   return (
-    <div className="px-4 py-4 flex-1 overflow-y-auto">
+    <div className="px-4 py-4 overflow-y-auto h-[50%]">
       {ORDERED_STATUSES.map((status, idx) => {
         const dotStyle = getDotStyle(idx);
         const isLast = idx === ORDERED_STATUSES.length - 1;

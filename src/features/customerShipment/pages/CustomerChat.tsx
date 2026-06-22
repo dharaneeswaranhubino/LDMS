@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Package, MessageCircle } from "lucide-react";
+import { Package, MessageCircle, ArrowLeft } from "lucide-react";
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,7 +17,6 @@ const CustomerChat = () => {
 
   const shipments = useAppSelector((s) => s.shipment.shipments);
 
-  // Only show shipments with assigned agent that are active
   const chattableShipments = shipments.filter(
     (s) =>
       s.assignedAgent !== null &&
@@ -30,7 +29,6 @@ const CustomerChat = () => {
 
     const socket = getSocket(token);
 
-    //Join rooms only after connected
     chattableShipments.forEach((shipment) => {
       emitWhenConnected(socket, "join_chat", shipment.shipmentId);
     });
@@ -52,16 +50,24 @@ const CustomerChat = () => {
     dispatch(setActiveShipment(shipmentId));
   };
 
+  const handleBack = () => {
+    dispatch(setActiveShipment(null));
+  };
+
   const activeShipment = chattableShipments.find(
     (s) => s.shipmentId === activeShipmentId,
   );
-  console.log("activeShipment :",activeShipment);
-  
 
+  const isCompleted = activeShipment?.shipmentStatus === "COMPLETED";
   return (
-    <div className="flex h-[calc(100vh-72px)] rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 p-5">
-      <div className="rounded-l-2xl w-72 border-r border-gray-200 bg-slate-50 flex flex-col">
-        <div className="rounded-tl-2xl px-4 py-3 border-b border-gray-200 bg-blue-600">
+    <div className="flex h-[calc(100vh-72px)] md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5">
+      {/* Sidebar — full width on mobile, hidden once a chat is open */}
+      <div
+        className={`w-full md:w-72 md:border-r border-gray-200 bg-slate-50 flex-col md:rounded-l-2xl ${
+          activeShipmentId ? "hidden md:flex" : "flex"
+        }`}
+      >
+        <div className="px-4 py-3 border-b border-gray-200 bg-blue-600 md:rounded-tl-2xl">
           <h2 className="font-semibold text-white">Your Shipments</h2>
           <p className="text-xs text-blue-200 mt-1">
             Select a shipment to chat with your agent
@@ -108,21 +114,38 @@ const CustomerChat = () => {
         </div>
       </div>
 
-      <div className="rounded-r-2xl flex-1 bg-gray-50 flex flex-col min-h-0">
+      {/* Chat panel — full width on mobile, only shown when a shipment is selected */}
+      <div
+        className={`flex-1 bg-gray-50 flex-col min-h-0 md:rounded-r-2xl ${
+          activeShipmentId ? "flex" : "hidden md:flex"
+        }`}
+      >
         {activeShipmentId && currentUserId ? (
           <>
-            <div className="px-6 py-4 border-b border-gray-200 bg-white rounded-tr-2xl">
-              <p className="text-sm font-semibold text-gray-800">
-                Tracking ID: {activeShipment?.trackingId}
-              </p>
-              <p className="text-xs text-gray-400">
-                <span className="text-[12px] font-medium text-blue-600">{activeShipment?.assignedAgent?.agentName} - </span>
-                Chat with your delivery agent
-              </p>
+            <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 bg-white md:rounded-tr-2xl flex items-center gap-3">
+              <button
+                onClick={handleBack}
+                className="md:hidden text-gray-500 hover:text-gray-700 -ml-1 p-1"
+                aria-label="Back to shipments"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-800 truncate">
+                  Tracking ID: {activeShipment?.trackingId}
+                </p>
+                <p className="text-xs text-gray-400 truncate">
+                  <span className="text-[12px] font-medium text-blue-600">
+                    {activeShipment?.assignedAgent?.agentName} -{" "}
+                  </span>
+                  Chat with your delivery agent
+                </p>
+              </div>
             </div>
             <ChatWindow
               shipmentId={activeShipmentId}
               currentUserId={currentUserId}
+              isCompleted={isCompleted}
             />
           </>
         ) : (

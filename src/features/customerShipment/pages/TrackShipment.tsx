@@ -175,7 +175,7 @@ const TrackShipmentPage = () => {
           </div>
 
           <div
-            className={`flex flex-col bg-white min-h-0
+            className={`flex flex-col bg-white min-h-0 
               md:rounded-r-2xl flex-1
               ${shipmentId ? "flex w-full rounded-2xl md:w-auto md:rounded-l-none" : "hidden md:flex"}
             `}
