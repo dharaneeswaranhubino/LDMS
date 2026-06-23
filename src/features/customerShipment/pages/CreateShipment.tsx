@@ -29,7 +29,7 @@ const CreateShipment = () => {
 
   const [pickUpAddress, setPickUpAddress] = useState<Address>({
     name: "",
-    email:"",
+    email: "",
     phone: "",
     fullAddress: "",
     city: "",
@@ -38,7 +38,7 @@ const CreateShipment = () => {
 
   const [deliveryAddress, setDeliveryAddress] = useState<Address>({
     name: "",
-    email:"",
+    email: "",
     phone: "",
     fullAddress: "",
     city: "",
@@ -115,7 +115,7 @@ const CreateShipment = () => {
     setCreatedMeta(null);
     setPickUpAddress({
       name: "",
-      email:"",
+      email: "",
       phone: "",
       fullAddress: "",
       city: "",
@@ -123,7 +123,7 @@ const CreateShipment = () => {
     });
     setDeliveryAddress({
       name: "",
-      email:"",
+      email: "",
       phone: "",
       fullAddress: "",
       city: "",
@@ -214,9 +214,30 @@ const CreateShipment = () => {
             </motion.div>
           )}
 
-          {step === 3 && createdMeta && (
+          {/* {step === 3 && createdMeta && (
             <motion.div
               key="price"
+              custom={direction}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.4 }}
+            >
+              <PriceBreakdown
+                prevStep={goPrev}
+                shipmentId={createdMeta.shipmentId}
+                trackingId={createdMeta.trackingId}
+                priceBreakdown={createdMeta.priceBreakdown}
+                packageWeight={createdMeta.packageWeight}
+                priority={createdMeta.priority}
+                onReset={onReset}
+              />
+            </motion.div>
+          )} */}
+          {step === 3 && createdMeta && (
+            <motion.div
+              key={`price-${createdMeta.shipmentId}-${createdMeta.priceBreakdown.total}`} // 👈 change this
               custom={direction}
               variants={pageVariants}
               initial="initial"

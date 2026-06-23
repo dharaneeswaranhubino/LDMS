@@ -4,7 +4,7 @@ interface Props {
   data: AgentDashboardData;
 }
 const DashboardStats = ({ data }: Props) => {
-  const { assignedDeliveries, activeShipments, completedDeliveries, pendingAssignments } = data;
+  const { assignedDeliveries, activeShipments, completedDeliveries, delayedDeliveries } = data;
 
   const stats = [
     {
@@ -35,8 +35,8 @@ const DashboardStats = ({ data }: Props) => {
       border: "border-t-emerald-400",
     },
     {
-      value: pendingAssignments,
-      label: "Pending",
+      value: delayedDeliveries,
+      label: "Delayed",
       icon: "fa-hourglass-half",
       accent: "from-amber-400 to-orange-500",
       iconBg: "bg-amber-50",
@@ -96,7 +96,7 @@ const DashboardStats = ({ data }: Props) => {
           </span>
           <span className="text-[10px] text-slate-400">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block mr-1" />
-            {pendingAssignments} pending pickup
+            {delayedDeliveries} pending pickup
           </span>
         </div>
       </div>

@@ -147,13 +147,13 @@ export const deliveryPriority = [
   },
   {
     label: "Express",
-    multiplier: "1.5 × rate",
+    multiplier: "1.2 × rate",
     days: "Take's maximum within 3 days",
     value: "EXPRESS" as const,
   },
   {
     label: "Same Day",
-    multiplier: "2 × rate",
+    multiplier: "1.5 × rate",
     days: "Take's 1 day",
     value: "SAME_DAY" as const,
   },

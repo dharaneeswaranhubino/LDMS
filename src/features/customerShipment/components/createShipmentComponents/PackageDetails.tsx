@@ -174,7 +174,7 @@ const PackageDetails = ({
           </p>
 
           <div className="flex justify-between items-center bg-slate-100 p-3 rounded-lg">
-            <p className="text-[14px] text-slate-700">+₹50 handling charge</p>
+            <p className="text-[14px] text-slate-700">+₹30 handling charge</p>
 
             <label className="relative inline-flex items-center cursor-pointer">
               <input

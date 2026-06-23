@@ -232,7 +232,7 @@ export interface AgentDashboardData {
   assignedDeliveries: number;
   activeShipments: number;
   completedDeliveries: number;
-  pendingAssignments: number;
+  delayedDeliveries: number;
   todaysSchedule: AgentScheduleSlot[];
   customerMessages: CustomerMessage[];
 }
