@@ -32,7 +32,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">Payment Details</h2>
+            <h2 className="text-2xl font-bold text-white">
+              Payment Details ahdfbdjf
+            </h2>
 
             {paymentDetails && (
               <p className="text-sm text-emerald-100 mt-1">
@@ -86,17 +88,19 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
 
                 <div>
                   <p className="text-xs text-slate-400">Paid Date</p>
-
                   <p className="font-medium text-slate-700 mt-1">
-                    {new Date(paymentDetails.paidAt).toLocaleDateString()}
+                    {paymentDetails.paidAt
+                      ? new Date(paymentDetails.paidAt).toLocaleDateString()
+                      : "N/A"}
                   </p>
                 </div>
 
                 <div>
                   <p className="text-xs text-slate-400">Paid Time</p>
-
                   <p className="font-medium text-slate-700 mt-1">
-                    {new Date(paymentDetails.paidAt).toLocaleTimeString()}
+                    {paymentDetails.paidAt
+                      ? new Date(paymentDetails.paidAt).toLocaleTimeString()
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -107,7 +111,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Transaction ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.transactionId}
+                    {paymentDetails.transactionId ? paymentDetails.transactionId:"N/A"}
                   </p>
                 </div>
 
@@ -115,7 +119,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Razorpay Order ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.razorpayOrderId}
+                    {paymentDetails.razorpayOrderId ? paymentDetails.razorpayOrderId : "N/A"}
                   </p>
                 </div>
 
@@ -123,7 +127,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Razorpay Payment ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.razorpayPaymentId}
+                    {paymentDetails.razorpayPaymentId ? paymentDetails.razorpayPaymentId : "N/A"}
                   </p>
                 </div>
               </div>
