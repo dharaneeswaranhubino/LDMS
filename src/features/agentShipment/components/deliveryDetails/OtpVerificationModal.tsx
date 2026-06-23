@@ -71,7 +71,7 @@ const OtpVerificationModal = ({
       setOtpSent(true);
       setOtp(Array(OTP_LENGTH).fill(""));
       setExpired(false);
-      showToast({ type: "success", message: "OTP sent to customer's phone" });
+      showToast({ type: "success", message: "OTP sent to receiver's phone email" });
       setTimeout(() => document.getElementById("otp-modal-0")?.focus(), 100);
     } catch (err: unknown) {
       showToast({
@@ -219,7 +219,7 @@ const OtpVerificationModal = ({
                     className={`fa-solid ${otpSent && !expired ? "fa-rotate-right" : "fa-paper-plane"} text-[11px]`}
                   />
                 )}
-                {otpSent && !expired ? "Resend" : "Send OTP"}
+                {otpSent && !expired ? "Send OTP" : "Send OTP"}
               </button>
             </div>
 
@@ -241,7 +241,7 @@ const OtpVerificationModal = ({
           {/* OTP Inputs */}
           <div className="mb-5">
             <p className="text-[12px] font-medium text-slate-500 mb-3 text-center">
-              Enter the 6-digit OTP from customer
+              Enter the 4-digit OTP from customer
             </p>
             <div className="flex items-center justify-center gap-2">
               {otp.map((digit, index) => (
