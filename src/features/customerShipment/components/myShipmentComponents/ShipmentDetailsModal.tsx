@@ -20,6 +20,7 @@ interface Props {
 
 const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
   const dispatch = useAppDispatch();
+  
   const { cancelling } = useAppSelector((s) => s.shipment);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -107,6 +108,11 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             {shipment.isFragile && (
               <span className="px-4 py-2 rounded-full text-xs font-semibold border border-yellow-200 bg-yellow-50 text-yellow-700">
                 Fragile
+              </span>
+            )}
+            {shipment.paymentStatus === "REFUNDED" && (
+              <span className="px-4 py-2 rounded-full text-xs font-semibold border border-gray-200 bg-gray-50 text-gray-700">
+                {shipment.paymentStatus}
               </span>
             )}
           </div>

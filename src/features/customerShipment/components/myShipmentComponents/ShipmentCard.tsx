@@ -132,7 +132,7 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
           {/* Payment always */}
           <button
             onClick={() => onPaymentView(item.shipmentId)}
-            className={`py-[7px] px-4 ${item.paymentStatus === "REFUNDED" ? "bg-gray-100 text-gray-700":"border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100"}  transition-all text-[12px]`}
+            className={`py-[7px] px-4 ${item.paymentStatus === "REFUNDED" ? "border border-gray-200 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100":"border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100"}  transition-all text-[12px]`}
           >
             <i className="fa-solid fa-credit-card mr-1" />
             Payment
