@@ -66,7 +66,7 @@ const Login = () => {
       } else if (role === "deliveryAgent") {
         navigate("/agentDashboard");
       } else {
-        console.log("Unknown role:", role);
+        // console.log("Unknown role:", role);
         navigate("/");
       }
     }

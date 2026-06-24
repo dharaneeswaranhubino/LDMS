@@ -33,6 +33,7 @@ export interface AssignedAgent {
   serviceZone: string;
 }
 
+export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 export interface ShipmentResponse {
   shipmentId: number;
   trackingId: string;
@@ -66,7 +67,7 @@ export interface ShipmentResponse {
   | "DELAYED"
   | "COMPLETED";
   amount: number;
-  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paymentStatus: PaymentStatus;
   assignedSlotStart: string | null;
   assignedSlotEnd: string | null;
   assignedDate: string | null;
@@ -147,6 +148,9 @@ export interface ShipmentState {
   chatPagination: ChatData['pagination'] | null;
   loadingHistory: boolean;
   sendingMessage: boolean;
+
+  cancelling: boolean;
+  cancelError: string | null;
 }
 
 export type ShipmentStatus =
@@ -187,7 +191,7 @@ export interface VerifyPaymentResponse {
   shipmentId: number;
   customerId: number;
   amount: number;
-  paymentStatus: "PAID" | "FAILED" | "PENDING";
+  paymentStatus: PaymentStatus;
   transactionId: string;
   razorpayOrderId: string;
   razorpayPaymentId: string;
@@ -227,11 +231,11 @@ export interface PaymentDetailsResponse {
   customerId: number;
   transactionId: string;
   amount: number;
-  paymentStatus: "PAID" | "FAILED" | "PENDING";
+  paymentStatus: PaymentStatus;
   paidAt: string;
   razorpayOrderId: string;
   razorpayPaymentId: string;
-  priceBreakdown:PriceBreakdown;
+  priceBreakdown: PriceBreakdown;
   createdAt: string;
   updatedAt: string;
 }
@@ -283,7 +287,7 @@ export interface DashboardRecentShipment {
   trackingId: string;
   itemName: string;
   shipmentStatus: ShipmentStatus;
-  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paymentStatus: PaymentStatus;
   deliveryAddress: string;
   deliveryCity: string;
   estimatedDelivery: string | null;
@@ -294,7 +298,7 @@ export interface DashboardPaymentRecord {
   paymentId: number;
   shipmentId: number;
   amount: number;
-  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paymentStatus: PaymentStatus;
   paidAt: string | null;
 }
 
@@ -337,7 +341,12 @@ export type NotificationType =
   | "SHIPMENT_DELAYED"
   | "SHIPMENT_DELIVERED"
   | "SHIPMENT_COMPLETED"
-  | "PAYMENT_UPDATE";
+  | "SHIPMENT_CANCELLED"   // new
+  | "PAYMENT_UPDATE"
+  | "PAYMENT_REFUNDED"     // new
+  | "GENERAL"              // new
+  | "DELIVERY_OTP"         // new
+  | "AGENT_REASSIGNED";     // new
 
 export interface Notification {
   notificationId: number;
@@ -515,7 +524,7 @@ export interface Payment {
   shipmentId: number;
   trackingId: string;
   amount: number;
-  paymentStatus: "PAID" | "PENDING" | "FAILED";
+  paymentStatus: PaymentStatus;
   transactionId: string | null;
   paidAt: string | null;
 }
@@ -569,7 +578,7 @@ export interface DashboardRecentShipment {
   trackingId: string;
   itemName: string;
   shipmentStatus: ShipmentStatus;
-  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paymentStatus: PaymentStatus;
   deliveryAddress: string;
   deliveryCity: string;
   createdAt: string;
@@ -579,7 +588,7 @@ export interface DashboardPaymentRecord {
   paymentId: number;
   shipmentId: number;
   amount: number;
-  paymentStatus: "PENDING" | "PAID" | "FAILED";
+  paymentStatus: PaymentStatus;
   paidAt: string | null;
 }
 
@@ -601,4 +610,12 @@ export interface CustomerDashboardData {
   recentShipments: DashboardRecentShipment[];
   paymentHistory: DashboardPaymentRecord[];
   recentSupportChats: DashboardSupportChat[];
+}
+
+//Cancel Shipment Response
+export interface CancelShipmentResponse {
+  shipmentId: number;
+  trackingId: string;
+  shipmentStatus: "CANCELLED";
+  paymentStatus: "PENDING" | "REFUNDED";
 }

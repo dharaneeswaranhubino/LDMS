@@ -25,7 +25,7 @@ const CustomerMessages = ({ messages }: Props) => {
       return acc;
     }, {})
   );
-  console.log(latestPerShipment);
+  // console.log(latestPerShipment);
   
 
   return (

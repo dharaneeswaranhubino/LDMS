@@ -7,6 +7,9 @@ const TimeLineStatusBadge = ({ status }: { status: TimelineStatus }) => {
     status === "IN_TRANSIT" ||
     status === "OUT_FOR_DELIVERY" ||
     status === "OUT_FOR_PICKUP";
+
+  const isCancelled = status === "CANCELLED";
+  const isDelayed = status === "DELAYED";
   return (
     <>
       <span
@@ -14,6 +17,12 @@ const TimeLineStatusBadge = ({ status }: { status: TimelineStatus }) => {
       >
         {isLive && (
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+        )}
+        {isCancelled && (
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+        )}
+        {isDelayed && (
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
         )}
         {meta.label}
       </span>

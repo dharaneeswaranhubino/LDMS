@@ -9,9 +9,9 @@ export const api = axios.create({
     // baseURL: "https://thus-spill-vitality.ngrok-free.dev/api/v1/",
     // baseURL: "https://logisticsanddeliverymanagementsystem.onrender.com/api/v1/",
     withCredentials: true, // Cookie auto-send
-    headers: {
-        'ngrok-skip-browser-warning': 'true',
-    },
+    // headers: {
+    //     'ngrok-skip-browser-warning': 'true',
+    // },
 });
 //inject pattern (circular dependency)
 let storeRef: Store<RootState> | null = null;

@@ -36,10 +36,24 @@ const TimeLineVerticalStepper = ({
         .find((e) => e.toStatus === "DELAYED" && e.fromStatus !== "DELAYED")
     : undefined;
 
+  // const displayStatus: TimelineStatus = isDelayed
+  //   ? getDelayedFromStatus()
+  //   : isCancelled
+  //     ? "PENDING"
+  //     : currentStatus;
+
+  const getCancelledFromStatus = (): TimelineStatus => {
+    if (!timeline) return "PENDING";
+    const cancelEntry = [...timeline]
+      .reverse()
+      .find((e) => e.toStatus === "CANCELLED");
+    return (cancelEntry?.fromStatus as TimelineStatus) ?? "PENDING";
+  };
+
   const displayStatus: TimelineStatus = isDelayed
     ? getDelayedFromStatus()
     : isCancelled
-      ? "PENDING"
+      ? getCancelledFromStatus() // actual fromStatus
       : currentStatus;
 
   const curIdx = ORDERED_STATUSES.indexOf(displayStatus);

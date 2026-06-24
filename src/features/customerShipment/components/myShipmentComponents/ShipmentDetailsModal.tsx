@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/shared/hooks/reduxHooks";
 import type { ShipmentResponse } from "../../shipmentTypes";
 import {
   formatDate,
@@ -7,6 +8,9 @@ import {
   STATUS_LABEL,
   STATUS_STYLES,
 } from "../../utils/shipmentHelpers";
+import { useState } from "react";
+import { cancelShipment } from "../../shipmentSlice";
+import { showToast } from "@/shared/components/Toast";
 
 interface Props {
   shipment: ShipmentResponse | null;
@@ -15,11 +19,51 @@ interface Props {
 }
 
 const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
+  const dispatch = useAppDispatch();
+  const { cancelling } = useAppSelector((s) => s.shipment);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const CANCELABLE_STATUSES = [
+    "PENDING",
+    "CONFIRMED",
+    "ASSIGNED",
+    "OUT_FOR_PICKUP",
+  ];
+  const isCancelable = CANCELABLE_STATUSES.includes(shipment?.shipmentStatus ?? "");
+  const isPaid = shipment?.paymentStatus === "PAID";
   if (!open || !shipment) return null;
   const priority = shipment.shipmentPriority;
   const status = shipment.shipmentStatus;
   const deliveryFrom = formatTime(shipment.assignedSlotStart ?? null);
   const deliveryTo = formatTime(shipment.assignedSlotEnd ?? null);
+
+  const handleCancel = async () => {
+    try {
+      const result = await dispatch(
+        cancelShipment(shipment.shipmentId),
+      ).unwrap();
+      showToast({
+        type: "success",
+        message: "Shipment cancelled successfully",
+      });
+      if (result.paymentStatus === "REFUNDED") {
+        showToast({
+          type: "info",
+          message:
+            "Refunded. Amount will be credited.",
+          playSound: false,
+        });
+      }
+      setShowConfirm(false);
+      onClose();
+    } catch (err) {
+      showToast({
+        type: "error",
+        message: typeof err === "string" ? err : "Cancellation failed",
+      });
+      setShowConfirm(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm p-4">
@@ -231,7 +275,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-2">
+          {/* <div className="flex items-center justify-between pt-2">
             <p className="text-xs text-slate-500">
               Created on {formatDate(shipment.createdAt ?? "")}
             </p>
@@ -242,6 +286,61 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
             >
               Close
             </button>
+          </div> */}
+          <div className="flex items-center justify-between pt-2">
+            <p className="text-xs text-slate-500">
+              Created on {formatDate(shipment.createdAt ?? "")}
+            </p>
+
+            <div className="flex items-center gap-3">
+              {isCancelable && !showConfirm && (
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="h-11 px-5 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 text-sm font-medium transition-all flex items-center gap-2"
+                >
+                  <i className="fa-solid fa-ban text-xs" />
+                  Cancel Shipment
+                </button>
+              )}
+
+              {/* Inline confirm — replaces cancel button */}
+              {isCancelable && showConfirm && (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-2">
+                  <p className="text-xs text-red-600 font-medium">
+                    {isPaid
+                      ? "Paid amount will be refunded. Sure?"
+                      : "Cancel this shipment?"}
+                  </p>
+                  <button
+                    onClick={handleCancel}
+                    disabled={cancelling}
+                    className="h-8 px-3 rounded-lg bg-red-500 hover:bg-red-600 disabled:opacity-60 text-white text-xs font-medium transition-all flex items-center gap-1"
+                  >
+                    {cancelling ? (
+                      <>
+                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />{" "}
+                        Cancelling...
+                      </>
+                    ) : (
+                      "Yes, Cancel"
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setShowConfirm(false)}
+                    className="h-8 px-3 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-600 text-xs font-medium transition-all"
+                  >
+                    No
+                  </button>
+                </div>
+              )}
+
+              <button
+                onClick={onClose}
+                className="h-11 px-6 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white text-sm font-medium transition-all"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>

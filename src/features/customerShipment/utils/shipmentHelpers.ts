@@ -250,6 +250,36 @@ export const typeConfig: Record<
     textColor: "text-emerald-700",
     label: "Payment",
   },
+  SHIPMENT_CANCELLED: {
+    icon: "fa-ban",
+    bgColor: "bg-red-100",
+    textColor: "text-red-700",
+    label: "Cancelled",
+  },
+  PAYMENT_REFUNDED: {
+    icon: "fa-rotate-left",
+    bgColor: "bg-teal-100",
+    textColor: "text-teal-700",
+    label: "Refunded",
+  },
+  GENERAL: {
+    icon: "fa-bell",
+    bgColor: "bg-slate-100",
+    textColor: "text-slate-700",
+    label: "General",
+  },
+  DELIVERY_OTP: {
+    icon: "fa-key",
+    bgColor: "bg-amber-100",
+    textColor: "text-amber-700",
+    label: "Delivery OTP",
+  },
+  AGENT_REASSIGNED: {
+    icon: "fa-user-gear",
+    bgColor: "bg-blue-100",
+    textColor: "text-blue-700",
+    label: "Agent Reassigned",
+  },
 };
 
 export const formatNotificationTime = (dateStr: string): string => {
@@ -528,6 +558,15 @@ export const pdfStyles = StyleSheet.create({
     borderRadius: 99,
     fontFamily: "Helvetica-Bold",
   },
+  refundedBadge: {
+    backgroundColor: "#f3f4f6",
+    color: "#374151",
+    fontSize: 9,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderRadius: 99,
+    fontFamily: "Helvetica-Bold",
+  },
   dateText: { fontSize: 8, color: "#64748b", marginTop: 4 },
   sectionLabel: {
     fontSize: 8,
@@ -557,8 +596,23 @@ export const pdfStyles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 10,
   },
+  refundedTotalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f3f4f6",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    marginTop: 10,
+  },
   totalLabel: { fontSize: 13, fontFamily: "Helvetica-Bold", color: "#1e293b" },
   totalValue: { fontSize: 13, fontFamily: "Helvetica-Bold", color: "#16a34a" },
+  refundedTotalValue: {
+    fontSize: 13,
+    fontFamily: "Helvetica-Bold",
+    color: "#374151",             
+  },
   spacer: { marginTop: 14 },
   footer: {
     fontSize: 8,
@@ -605,16 +659,16 @@ export const fireConfetti = () => {
 };
 
 export const BUBBLES = [
-  { size: 18, left: "8%",  delay: "0s",    duration: "7s",  opacity: 0.25 },
-  { size: 28, left: "18%", delay: "1.2s",  duration: "9s",  opacity: 0.18 },
-  { size: 12, left: "32%", delay: "0.5s",  duration: "6s",  opacity: 0.30 },
-  { size: 22, left: "48%", delay: "2s",    duration: "8s",  opacity: 0.20 },
-  { size: 16, left: "60%", delay: "0.8s",  duration: "7.5s",opacity: 0.28 },
-  { size: 30, left: "72%", delay: "1.5s",  duration: "10s", opacity: 0.15 },
-  { size: 14, left: "83%", delay: "0.3s",  duration: "6.5s",opacity: 0.32 },
-  { size: 20, left: "92%", delay: "2.5s",  duration: "8.5s",opacity: 0.22 },
-  { size: 10, left: "25%", delay: "3s",    duration: "7s",  opacity: 0.35 },
-  { size: 24, left: "55%", delay: "1.8s",  duration: "9.5s",opacity: 0.18 },
+  { size: 18, left: "8%", delay: "0s", duration: "7s", opacity: 0.25 },
+  { size: 28, left: "18%", delay: "1.2s", duration: "9s", opacity: 0.18 },
+  { size: 12, left: "32%", delay: "0.5s", duration: "6s", opacity: 0.30 },
+  { size: 22, left: "48%", delay: "2s", duration: "8s", opacity: 0.20 },
+  { size: 16, left: "60%", delay: "0.8s", duration: "7.5s", opacity: 0.28 },
+  { size: 30, left: "72%", delay: "1.5s", duration: "10s", opacity: 0.15 },
+  { size: 14, left: "83%", delay: "0.3s", duration: "6.5s", opacity: 0.32 },
+  { size: 20, left: "92%", delay: "2.5s", duration: "8.5s", opacity: 0.22 },
+  { size: 10, left: "25%", delay: "3s", duration: "7s", opacity: 0.35 },
+  { size: 24, left: "55%", delay: "1.8s", duration: "9.5s", opacity: 0.18 },
 ];
 
 
@@ -627,6 +681,8 @@ export const getStatusStyle = (status: string) => {
       return "bg-amber-100 text-amber-700 border border-amber-200";
     case "FAILED":
       return "bg-red-100 text-red-700 border border-red-200";
+    case "REFUNDED":
+      return "bg-slate-100 text-slate-600 border border-slate-200";
     default:
       return "bg-slate-100 text-slate-600 border border-slate-200";
   }

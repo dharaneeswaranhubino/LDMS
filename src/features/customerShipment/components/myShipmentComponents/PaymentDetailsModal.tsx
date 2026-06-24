@@ -32,9 +32,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-500 to-green-500 p-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">
-              Payment Details ahdfbdjf
-            </h2>
+            <h2 className="text-2xl font-bold text-white">Payment Details</h2>
 
             {paymentDetails && (
               <p className="text-sm text-emerald-100 mt-1">
@@ -70,7 +68,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Payment Status</p>
 
                   <div
-                    className={`mt-1 inline-flex px-3 py-1 rounded-full ${status == "PENDING" ? "bg-amber-100 text-amber-700" : " bg-green-100 text-green-700"}  text-sm font-semibold`}
+                    className={`mt-1 inline-flex px-3 py-1 rounded-full ${status == "PENDING" ? "bg-amber-100 text-amber-700" : status == "REFUNDED" ? "bg-gray-100 text-gray-700" : " bg-green-100 text-green-700"}  text-sm font-semibold`}
                   >
                     {paymentDetails.paymentStatus}
                   </div>
@@ -80,7 +78,7 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Amount</p>
 
                   <h2
-                    className={`text-2xl inline-flex font-bold mt-1 ${status == "PENDING" ? "bg-amber-100 text-amber-700 px-2 rounded-full" : " text-slate-800"}`}
+                    className={`text-2xl inline-flex font-bold mt-1 ${status == "PENDING" ? "bg-amber-100 text-amber-700 px-2 rounded-full" : status == "REFUNDED" ? "bg-gray-100 text-gray-700 px-2 rounded-full" : " text-slate-800"}`}
                   >
                     ₹{paymentDetails.amount}
                   </h2>
@@ -111,7 +109,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Transaction ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.transactionId ? paymentDetails.transactionId:"N/A"}
+                    {paymentDetails.transactionId
+                      ? paymentDetails.transactionId
+                      : "N/A"}
                   </p>
                 </div>
 
@@ -119,7 +119,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Razorpay Order ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.razorpayOrderId ? paymentDetails.razorpayOrderId : "N/A"}
+                    {paymentDetails.razorpayOrderId
+                      ? paymentDetails.razorpayOrderId
+                      : "N/A"}
                   </p>
                 </div>
 
@@ -127,7 +129,9 @@ const PaymentDetailsModal = ({ shipmentId, open, onClose }: Props) => {
                   <p className="text-xs text-slate-400">Razorpay Payment ID</p>
 
                   <p className="font-medium text-slate-700 mt-1 break-all">
-                    {paymentDetails.razorpayPaymentId ? paymentDetails.razorpayPaymentId : "N/A"}
+                    {paymentDetails.razorpayPaymentId
+                      ? paymentDetails.razorpayPaymentId
+                      : "N/A"}
                   </p>
                 </div>
               </div>

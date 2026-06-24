@@ -20,6 +20,7 @@ import type {
     MyPaymentsResponse,
     ChatData,
     ChatMessage,
+    CancelShipmentResponse,
 } from "./shipmentTypes";
 import { api } from "../../lib/axios";
 import { mapToBackendPayload, type CreateShipmentPayload } from "./components/createShipmentComponents/shipmentMapper";
@@ -237,7 +238,7 @@ export const markSingleNotificationRead = createAsyncThunk<
 
 export const fetchShipmentTimeline = createAsyncThunk<
     ShipmentTimelineResponse,
-    number,                     
+    number,
     { rejectValue: string }
 >(
     "shipment/fetchShipmentTimeline",
@@ -375,6 +376,25 @@ export const sendMessage = createAsyncThunk(
     }
 );
 
+export const cancelShipment = createAsyncThunk<
+    CancelShipmentResponse,
+    number,
+    { rejectValue: string }
+>(
+    "shipment/cancelShipment",
+    async (shipmentId, { rejectWithValue }) => {
+        try {
+            const res = await api.post(`/shipments/${shipmentId}/cancel`);
+            return res.data.data as CancelShipmentResponse;
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message: string }>;
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to cancel shipment"
+            );
+        }
+    }
+);
+
 
 //initial States
 const today = new Date().toISOString().split("T")[0];
@@ -428,6 +448,9 @@ const initialState: ShipmentState = {
     chatPagination: null,
     loadingHistory: false,
     sendingMessage: false,
+
+    cancelling: false,
+    cancelError: null,
 };
 
 const shipmentSlice = createSlice({
@@ -483,6 +506,10 @@ const shipmentSlice = createSlice({
             state.messages = [];
             state.pagination = null;
             state.error = null;
+        },
+
+        clearCancelError: (state) => {
+            state.cancelError = null;
         },
     },
     extraReducers: (builder) => {
@@ -699,9 +726,37 @@ const shipmentSlice = createSlice({
             .addCase(sendMessage.rejected, (state, action) => {
                 state.sendingMessage = false;
                 state.error = action.payload as string;
-            });
+            })
+
+            // Cancel shipment
+            .addCase(cancelShipment.pending, (state) => {
+                state.cancelling = true;
+                state.cancelError = null;
+            })
+            .addCase(cancelShipment.fulfilled, (state, action) => {
+                state.cancelling = false;
+
+                // Update in shipments list
+                const idx = state.shipments.findIndex(
+                    (s) => s.shipmentId === action.payload.shipmentId
+                );
+                if (idx !== -1) {
+                    state.shipments[idx].shipmentStatus = action.payload.shipmentStatus;
+                    state.shipments[idx].paymentStatus = action.payload.paymentStatus;
+                }
+
+                // Update currentShipment if it's the same one
+                if (state.currentShipment?.shipmentId === action.payload.shipmentId) {
+                    state.currentShipment.shipmentStatus = action.payload.shipmentStatus;
+                    state.currentShipment.paymentStatus = action.payload.paymentStatus;
+                }
+            })
+            .addCase(cancelShipment.rejected, (state, action) => {
+                state.cancelling = false;
+                state.cancelError = action.payload || "Failed to cancel shipment";
+            })
     },
 });
 
-export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint, setActiveMyComplaintTab, setActiveShipment, appendMessage, clearChat } = shipmentSlice.actions;
+export const { clearCurrentShipment, clearError, setDateRange, clearNotificationError, clearTimeline, clearComplaintError, clearLastComplaint, setActiveMyComplaintTab, setActiveShipment, appendMessage, clearChat, clearCancelError } = shipmentSlice.actions;
 export default shipmentSlice.reducer;

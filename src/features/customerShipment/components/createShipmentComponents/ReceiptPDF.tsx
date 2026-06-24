@@ -1,13 +1,9 @@
-import {
-  Document,
-  Page,
-  Text,
-  View,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, View } from "@react-pdf/renderer";
 import { pdfStyles } from "../../utils/shipmentHelpers";
 
 const ReceiptPDF = ({
   razorpayPaymentId,
+  paymentStatus,
   trackingId,
   prices,
   priority,
@@ -15,6 +11,7 @@ const ReceiptPDF = ({
   today,
 }: {
   razorpayPaymentId: string | undefined;
+  paymentStatus: string | undefined;
   trackingId?: string;
   prices?: {
     platformFee: number;
@@ -37,7 +34,15 @@ const ReceiptPDF = ({
           <Text style={pdfStyles.brandSub}>Logistics & Delivery</Text>
         </View>
         <View style={pdfStyles.badgeWrap}>
-          <Text style={pdfStyles.badge}>Paid</Text>
+          <Text
+            style={
+              paymentStatus === "REFUNDED"
+                ? pdfStyles.refundedBadge
+                : pdfStyles.badge
+            }
+          >
+            {paymentStatus === "REFUNDED" ? paymentStatus : "Paid"}
+          </Text>
           <Text style={pdfStyles.dateText}>{today}</Text>
         </View>
       </View>
@@ -82,9 +87,27 @@ const ReceiptPDF = ({
         <Text style={pdfStyles.rowLabel}>GST (18%)</Text>
         <Text style={pdfStyles.rowValue}>Rs. {prices?.gst}</Text>
       </View>
-      <View style={pdfStyles.totalRow}>
+      {/* <View style={pdfStyles.totalRow}>
         <Text style={pdfStyles.totalLabel}>Total</Text>
         <Text style={pdfStyles.totalValue}>Rs. {prices?.total}</Text>
+      </View> */}
+      <View
+        style={
+          paymentStatus === "REFUNDED"
+            ? pdfStyles.refundedTotalRow
+            : pdfStyles.totalRow
+        }
+      >
+        <Text style={pdfStyles.totalLabel}>Total</Text>
+        <Text
+          style={
+            paymentStatus === "REFUNDED"
+              ? pdfStyles.refundedTotalValue
+              : pdfStyles.totalValue
+          }
+        >
+          Rs. {prices?.total}
+        </Text>
       </View>
 
       <Text style={pdfStyles.footer}>

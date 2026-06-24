@@ -19,7 +19,7 @@ const PaymentDetails = () => {
     (state) => state.shipment,
   );
 
-  console.log("paymentDetails.paidAt :", paymentDetails);
+  // console.log("paymentDetails.paidAt :", paymentDetails);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -29,7 +29,7 @@ const PaymentDetails = () => {
 
   const trackingId = currentShipment?.trackingId;
   const prices = paymentDetails?.priceBreakdown;
-  console.log("prices :", prices);
+  // console.log("prices :", prices);
 
   const priority = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
@@ -175,14 +175,14 @@ const PaymentDetails = () => {
                   <td className="px-3 md:px-6 py-2">
                     <button
                       onClick={() => downloadCLick(payment.shipmentId)}
-                      disabled={payment.paymentStatus !== "PAID"}
+                      disabled={payment.paymentStatus !== "PAID" && payment.paymentStatus !== "REFUNDED" }
                       title={
-                        payment.paymentStatus === "PAID"
+                        (payment.paymentStatus === "PAID" || payment.paymentStatus === "REFUNDED")
                           ? "Download receipt"
                           : "Receipt unavailable"
                       }
                       className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
-                        payment.paymentStatus === "PAID"
+                        (payment.paymentStatus === "PAID" || payment.paymentStatus === "REFUNDED")
                           ? "border-sky-200 bg-white text-sky-600 hover:bg-sky-50"
                           : "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed"
                       }`}
@@ -219,6 +219,7 @@ const PaymentDetails = () => {
         <ReceiptPreviewModal
           onClose={() => setShowPreview(false)}
           razorpayPaymentId={paymentDetails?.razorpayPaymentId}
+          paymentStatus={paymentDetails?.paymentStatus}
           trackingId={trackingId}
           prices={prices ?? undefined}
           priority={priority}

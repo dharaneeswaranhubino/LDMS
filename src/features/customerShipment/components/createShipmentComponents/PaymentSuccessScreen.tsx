@@ -19,6 +19,7 @@ const PaymentSuccessScreen = () => {
   const prices = currentShipment?.priceBreakdown;
   const priority = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
+  const paymentStatus = currentShipment?.paymentStatus;
 
   useEffect(() => {
     if (!razorpayPaymentId) {
@@ -77,6 +78,7 @@ const PaymentSuccessScreen = () => {
         <ReceiptPreviewModal
           onClose={() => setShowPreview(false)}
           razorpayPaymentId={razorpayPaymentId}
+          paymentStatus={paymentStatus}
           trackingId={trackingId}
           prices={prices}
           priority={priority}
@@ -164,6 +166,7 @@ const PaymentSuccessScreen = () => {
               document={
                 <ReceiptPDF
                   razorpayPaymentId={razorpayPaymentId}
+                  paymentStatus={paymentStatus}
                   trackingId={trackingId}
                   prices={prices}
                   priority={priority}

@@ -38,9 +38,9 @@ export const updateTrackStatus = createAsyncThunk(
   "agent/updateTrackStatus",
   async ({ id, data }: UpdateTrackStatus, { rejectWithValue }) => {
     try {
-      console.log("{ id, data } :", { id, data });
+      // console.log("{ id, data } :", { id, data });
       const res = await api.patch(`shipments/status/${id}`, data);
-      console.log("Patch res :", res.data);
+      // console.log("Patch res :", res.data);
 
       return res.data?.data;
     } catch (err: unknown) {

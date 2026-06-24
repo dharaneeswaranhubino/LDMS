@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../app/store";
 import { fetchShipmentTimeline } from "../../shipmentSlice";
 import type {
+  ShipmentResponse,
   ShipmentTimelinePanelProps,
   TimelineStatus,
 } from "../../shipmentTypes";
@@ -43,6 +44,11 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
   // };
 
   // const displayStatus = getDisplayStatus();
+
+  const isCancelledWithRefund =
+    currentStatus === "CANCELLED" &&
+    "paymentStatus" in shipment &&
+    (shipment as ShipmentResponse).paymentStatus === "REFUNDED";
 
   const reversedTimeline = timelineData
     ? [...timelineData.timeline].reverse()
@@ -186,6 +192,12 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
                 />
               ))}
             </div>
+          </div>
+        )}
+        {isCancelledWithRefund && (
+          <div className="mx-4 mb-3 flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-200 rounded-lg text-xs text-teal-700">
+            <i className="fa-solid fa-rotate-left text-teal-500" />
+            Refund initiated — amount will be credited in 5–7 business days
           </div>
         )}
       </div>

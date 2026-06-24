@@ -5,6 +5,7 @@ import ReceiptPDF from "./ReceiptPDF";
 const ReceiptPreviewModal = ({
   onClose,
   razorpayPaymentId,
+  paymentStatus,
   trackingId,
   prices,
   priority,
@@ -14,6 +15,7 @@ const ReceiptPreviewModal = ({
 }: {
   onClose: () => void;
   razorpayPaymentId: string | undefined;
+  paymentStatus:string | undefined;
   trackingId?: string;
   prices?: {
     platformFee: number;
@@ -54,8 +56,8 @@ const ReceiptPreviewModal = ({
               <p className="text-xs text-slate-500">Logistics & Delivery</p>
             </div>
             <div className="text-right">
-              <span className="flex gap-1 items-center bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full font-medium">
-                <GiCheckMark /> Paid
+              <span className={`flex gap-1 items-center ${paymentStatus === "REFUNDED" ? "bg-gray-100 text-gray-700":"bg-green-100 text-green-700"} text-xs px-3 py-1 rounded-full font-medium`}>
+                <GiCheckMark /> {paymentStatus === "REFUNDED" ? paymentStatus:"Paid"}
               </span>
               <p className="text-xs text-slate-500 mt-2">{today}</p>
             </div>
@@ -136,6 +138,7 @@ const ReceiptPreviewModal = ({
             document={
               <ReceiptPDF
                 razorpayPaymentId={razorpayPaymentId}
+                paymentStatus={paymentStatus}
                 trackingId={trackingId}
                 prices={prices}
                 priority={priority}

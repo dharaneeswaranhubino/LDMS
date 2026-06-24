@@ -26,17 +26,30 @@ const TimeLineHorizontalStepper = ({
     return (delayedEntry?.fromStatus as TimelineStatus) ?? "IN_TRANSIT";
   };
 
+  // const displayStatus: TimelineStatus = isDelayed
+  //   ? getDelayedFromStatus()
+  //   : isCancelled
+  //     ? "PENDING"
+  //     : currentStatus;
+  const getCancelledFromStatus = (): TimelineStatus => {
+    if (!timeline) return "PENDING";
+    const cancelEntry = [...timeline]
+      .reverse()
+      .find((e) => e.toStatus === "CANCELLED");
+    return (cancelEntry?.fromStatus as TimelineStatus) ?? "PENDING";
+  };
+
   const displayStatus: TimelineStatus = isDelayed
     ? getDelayedFromStatus()
     : isCancelled
-      ? "PENDING"
+      ? getCancelledFromStatus() // actual fromStatus
       : currentStatus;
 
-  console.log(
-    "timeline entries:",
-    timeline?.map((e) => `${e.fromStatus} → ${e.toStatus}`),
-  );
-  console.log("delayedFromStatus:", getDelayedFromStatus());
+  // console.log(
+  //   "timeline entries:",
+  //   timeline?.map((e) => `${e.fromStatus} → ${e.toStatus}`),
+  // );
+  // console.log("delayedFromStatus:", getDelayedFromStatus());
 
   const curIdx = ORDERED_STATUSES.indexOf(displayStatus);
   const pct = getProgressPercent(displayStatus);
@@ -45,7 +58,7 @@ const TimeLineHorizontalStepper = ({
     const isDone = idx < curIdx;
     const isCurrent = idx === curIdx;
 
-    if (isCancelled && isCurrent) return "cancelled";
+    if (isCancelled && idx === curIdx) return "cancelled";
     if (isDelayed && isCurrent) return "delayed";
     if (isDone) return "done";
     if (isCurrent) return "current";
@@ -177,14 +190,26 @@ const TimeLineHorizontalStepper = ({
                           style={{ width: "7px", height: "7px" }}
                         />
                       )}
-                      {dotStyle === "cancelled" && (
+                      {/* {dotStyle === "cancelled" && (
                         <span
                           className="text-white font-bold"
                           style={{ fontSize: "8px" }}
                         >
-                          {/* <i className="fa-solid fa-x text-[9px]"></i> */}
                           <i className="fa-solid fa-x text-[9px]"></i>
                         </span>
+                      )} */}
+                      {dotStyle === "cancelled" && (
+                        <>
+                          <span className="absolute -top-6 text-[10px] text-red-500 font-semibold whitespace-nowrap mt-2">
+                            Cancelled
+                          </span>
+                          <span
+                            className="text-white font-bold"
+                            style={{ fontSize: "8px" }}
+                          >
+                            <i className="fa-solid fa-x text-[9px]"></i>
+                          </span>
+                        </>
                       )}
                       {dotStyle === "delayed" && (
                         <>
