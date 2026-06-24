@@ -29,7 +29,7 @@ const SupportChatList = ({ chats }: { chats: DashboardSupportChat[] }) => {
       {chats.map((chat) => (
         <div
           key={chat.shipmentId}
-          className="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-100 bg-white p-3.5 transition-colors hover:border-gray-200 hover:bg-gray-50"
+          className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-3.5 transition-colors hover:border-gray-200 hover:bg-gray-50"
         >
           <div
             className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${AVATAR_STYLE[chat.lastMessageBy] ?? "bg-gray-100 text-gray-600"}`}

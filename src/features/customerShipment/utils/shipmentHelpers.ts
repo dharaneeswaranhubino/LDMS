@@ -347,6 +347,7 @@ export const ACTIVE_STATUSES: string[] = [
   "IN_TRANSIT",
   "OUT_FOR_DELIVERY",
   "DELIVERED",
+  "COMPLETED",
   "DELAYED",
   "CANCELLED",
 ];

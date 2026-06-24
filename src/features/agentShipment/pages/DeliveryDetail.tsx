@@ -109,7 +109,7 @@ const DeliveryDetail = () => {
   const todaysDeliveries = useMemo(() => {
     const today = getTodayIST();
     return deliveries.filter(
-      (d) => d.assignedDate === today && d.shipmentStatus !== "COMPLETED",
+      (d) => d.assignedDate === today && d.shipmentStatus !== "COMPLETED" && d.shipmentStatus !== "CANCELLED",
     );
   }, [deliveries]);
 
