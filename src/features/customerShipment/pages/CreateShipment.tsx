@@ -214,27 +214,6 @@ const CreateShipment = () => {
             </motion.div>
           )}
 
-          {/* {step === 3 && createdMeta && (
-            <motion.div
-              key="price"
-              custom={direction}
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={{ duration: 0.4 }}
-            >
-              <PriceBreakdown
-                prevStep={goPrev}
-                shipmentId={createdMeta.shipmentId}
-                trackingId={createdMeta.trackingId}
-                priceBreakdown={createdMeta.priceBreakdown}
-                packageWeight={createdMeta.packageWeight}
-                priority={createdMeta.priority}
-                onReset={onReset}
-              />
-            </motion.div>
-          )} */}
           {step === 3 && createdMeta && (
             <motion.div
               key={`price-${createdMeta.shipmentId}-${createdMeta.priceBreakdown.total}`} // 👈 change this
