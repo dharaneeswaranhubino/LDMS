@@ -24,7 +24,8 @@ const AgentChat = () => {
   const deliveries = useAppSelector((s) => s.agent.deliveries);
 
   const activeDeliveries = deliveries.filter(
-    (d) => d.shipmentStatus !== "DELIVERED" && d.shipmentStatus !== "CANCELLED",
+    (d) => d.shipmentStatus !== "CANCELLED",
+    // (d) => d.shipmentStatus !== "DELIVERED" && d.shipmentStatus !== "CANCELLED",
   );
 
   useEffect(() => {
@@ -139,7 +140,7 @@ const AgentChat = () => {
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-gray-800 truncate">
-                  {activeDelivery?.receiverName}
+                  {activeDelivery?.senderName}
                 </p>
                 <p className="text-xs text-gray-400 truncate">
                   {activeDelivery?.trackingId}

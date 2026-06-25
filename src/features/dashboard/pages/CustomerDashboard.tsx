@@ -1,7 +1,10 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { Package, Receipt, MessageCircle, AlertCircle } from "lucide-react";
 import { fetchCustomerDashboard } from "../../customerShipment/shipmentSlice";
-import { useAppDispatch, useAppSelector } from "../../../shared/hooks/reduxHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../shared/hooks/reduxHooks";
 // import DateRangePicker from "../../../shared/components/DateRangePicker";
 import StatCard from "../components/customerDashboard/StatCard";
 import RecentShipmentsTable from "../components/customerDashboard/RecentShipmentsTable";
@@ -10,16 +13,20 @@ import SupportChatList from "../components/customerDashboard/SupportChatList";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import { TbTruckDelivery, TbChevronsUpRight } from "react-icons/tb";
 import { CgCheckO } from "react-icons/cg";
-import { GoAlert } from "react-icons/go";
+import { MdOutlinePayments } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerDashboard() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { dashboardData, loading, error, dateRange } = useAppSelector(
     (state) => state.shipment,
   );
 
   useEffect(() => {
-    dispatch(fetchCustomerDashboard({ from: dateRange.from, to: dateRange.to }));
+    dispatch(
+      fetchCustomerDashboard({ from: dateRange.from, to: dateRange.to }),
+    );
   }, [dispatch, dateRange.from, dateRange.to]);
 
   // const handleDateApply = useCallback(
@@ -44,7 +51,14 @@ export default function CustomerDashboard() {
           <AlertCircle size={28} />
           <p className="text-sm">{error}</p>
           <button
-            onClick={() => dispatch(fetchCustomerDashboard({ from: dateRange.from, to: dateRange.to }))}
+            onClick={() =>
+              dispatch(
+                fetchCustomerDashboard({
+                  from: dateRange.from,
+                  to: dateRange.to,
+                }),
+              )
+            }
             className="mt-2 rounded-lg border border-red-200 px-4 py-2 text-xs font-medium text-red-500 hover:bg-red-50"
           >
             Retry
@@ -93,7 +107,9 @@ export default function CustomerDashboard() {
           value={dashboardData.activeShipments}
           sub="Currently in transit"
           iconBg="bg-amber-100"
-          accent={dashboardData.activeShipments > 0 ? "text-amber-600" : undefined}
+          accent={
+            dashboardData.activeShipments > 0 ? "text-amber-600" : undefined
+          }
         />
         <StatCard
           icon={<i className="fa-solid fa-boxes-stacked" />}
@@ -101,7 +117,9 @@ export default function CustomerDashboard() {
           value={dashboardData.totalShipments}
           sub="All time"
           iconBg="bg-blue-100"
-          accent={dashboardData.totalShipments > 0 ? "text-blue-500" : undefined}
+          accent={
+            dashboardData.totalShipments > 0 ? "text-blue-500" : undefined
+          }
         />
         <StatCard
           icon={<CgCheckO />}
@@ -109,15 +127,19 @@ export default function CustomerDashboard() {
           value={dashboardData.deliveredShipments}
           sub="Completed orders"
           iconBg="bg-green-100"
-          accent={dashboardData.deliveredShipments > 0 ? "text-green-600" : undefined}
+          accent={
+            dashboardData.deliveredShipments > 0 ? "text-green-600" : undefined
+          }
         />
         <StatCard
-          icon={<GoAlert />}
+          icon={<MdOutlinePayments />}
           label="Pending payments"
           value={dashboardData.pendingPayments}
           sub="Action required"
           iconBg="bg-gray-100"
-          accent={dashboardData.pendingPayments > 0 ? "text-gray-600" : undefined}
+          accent={
+            dashboardData.pendingPayments > 0 ? "text-gray-600" : undefined
+          }
         />
       </div>
 
@@ -128,7 +150,7 @@ export default function CustomerDashboard() {
             <h2 className="flex items-center gap-2 text-[15px] font-bold text-sky-900">
               <Package size={16} /> Recent shipments
             </h2>
-            <button className="flex items-center gap-1 text-[12px] bg-sky-100 text-sky-600 p-2 rounded-md hover:text-sky-800">
+            <button onClick={()=>navigate("/myShipments")} className="flex items-center gap-1 text-[12px] bg-sky-100 text-sky-600 p-2 rounded-md hover:text-sky-800">
               View all <TbChevronsUpRight size={16} />
             </button>
           </div>

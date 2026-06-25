@@ -20,7 +20,7 @@ const CustomerChat = () => {
   const chattableShipments = shipments.filter(
     (s) =>
       s.assignedAgent !== null &&
-      s.shipmentStatus !== "DELIVERED" &&
+      // s.shipmentStatus !== "DELIVERED" &&
       s.shipmentStatus !== "CANCELLED",
   );
 

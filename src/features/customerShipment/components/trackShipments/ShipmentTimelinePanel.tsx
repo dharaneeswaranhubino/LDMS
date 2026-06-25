@@ -197,7 +197,7 @@ const ShipmentTimelinePanel = ({ shipment }: ShipmentTimelinePanelProps) => {
         {isCancelledWithRefund && (
           <div className="mx-4 mb-3 flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-200 rounded-lg text-xs text-teal-700">
             <i className="fa-solid fa-rotate-left text-teal-500" />
-            Refund initiated — amount will be credited in 5–7 business days
+            Payment Refunded, amount will be credited.
           </div>
         )}
       </div>
