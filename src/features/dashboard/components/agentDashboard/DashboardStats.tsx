@@ -74,7 +74,7 @@ const DashboardStats = ({ data }: Props) => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <i className="fa-solid fa-chart-line text-indigo-500 text-[12px]" />
-            <span className="text-[11px] font-semibold text-slate-600">Today's progress</span>
+            <span className="text-[11px] font-semibold text-slate-600">Delivery progress</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold text-indigo-600">{pct}%</span>
