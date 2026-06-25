@@ -6,23 +6,29 @@ export const validateShipmentAddress = (
 ) => {
   const errors: Record<string, string> = {};
 
-  if(!pickUpAddress.name.trim()){
+  if (!pickUpAddress.name.trim()) {
     errors.pickUpName = "Sender Name is required"
   }
 
-  if(!pickUpAddress.phone){
+  if (!pickUpAddress.email.trim()) {
+    errors.pickUpEmail = "Sender Email is required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pickUpAddress.email)) {
+    errors.pickUpEmail = "Please enter a valid email";
+  }
+
+  if (!pickUpAddress.phone) {
     errors.pickUpPhone = "Sender Phone is required"
   }
 
   if (!pickUpAddress.fullAddress.trim()) {
     errors.pickUpFullAddress = "PickUp full address is required";
-  }else if(pickUpAddress.fullAddress.length <5){
+  } else if (pickUpAddress.fullAddress.length < 5) {
     errors.pickUpFullAddress = "please enter atleast 5 letters"
   }
 
   if (!pickUpAddress.city.trim()) {
     errors.pickUpCity = "PickUp City is required";
-  }else if(pickUpAddress.city.length <2){
+  } else if (pickUpAddress.city.length < 2) {
     errors.pickUpCity = "please enter atleast 2 letters"
   }
 
@@ -35,23 +41,29 @@ export const validateShipmentAddress = (
   }
 
 
-  if(!deliveryAddress.name.trim()){
+  if (!deliveryAddress.name.trim()) {
     errors.deliveryName = "Receiver Name is required"
   }
 
-  if(!deliveryAddress.phone){
+  if (!deliveryAddress.email.trim()) {
+    errors.deliveryEmail = "Receiver Email is required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(deliveryAddress.email)) {
+    errors.deliveryEmail = "Please enter a valid email";
+  }
+
+  if (!deliveryAddress.phone) {
     errors.deliveryPhone = "Receiver Phone is required"
   }
 
   if (!deliveryAddress.fullAddress.trim()) {
     errors.deliveryFullAddress = "Delivery full address is required";
-  }else if(deliveryAddress.fullAddress.length <5){
+  } else if (deliveryAddress.fullAddress.length < 5) {
     errors.deliveryFullAddress = "please enter atleast 5 letters"
   }
 
   if (!deliveryAddress.city.trim()) {
     errors.deliveryCity = "Delivery city is required";
-  }else if(deliveryAddress.city.length <2){
+  } else if (deliveryAddress.city.length < 2) {
     errors.deliveryCity = "please enter atleast 2 letters"
   }
 

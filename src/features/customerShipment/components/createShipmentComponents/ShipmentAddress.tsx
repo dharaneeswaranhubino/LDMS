@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, useRef, type ChangeEvent } from "react";
 import { validateShipmentAddress } from "./shipmentValidation";
 import type { ShipmentAddressProps } from "../../shipmentTypes";
 
@@ -10,53 +10,37 @@ const ShipmentAddress = ({
   setDeliveryAddress,
 }: ShipmentAddressProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+  const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const handlePickUpAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     const sanitizedValue =
       name === "phone" || name === "pinCode" ? value.replace(/\D/g, "") : value;
-
-    setPickUpAddress({
-      ...pickUpAddress,
-      [name]: sanitizedValue,
-    });
-
+    setPickUpAddress({ ...pickUpAddress, [name]: sanitizedValue });
     const errorKeyMap: Record<string, string> = {
       name: "pickUpName",
+      email: "pickUpEmail",
       phone: "pickUpPhone",
       fullAddress: "pickUpFullAddress",
       city: "pickUpCity",
       pinCode: "pickUpPinCode",
     };
-    setErrors((prev) => ({
-      ...prev,
-      [errorKeyMap[name]]: "",
-    }));
+    setErrors((prev) => ({ ...prev, [errorKeyMap[name]]: "" }));
   };
 
   const handleDeliveryAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     const sanitizedValue =
       name === "phone" || name === "pinCode" ? value.replace(/\D/g, "") : value;
-
-    setDeliveryAddress({
-      ...deliveryAddress,
-      [name]: sanitizedValue,
-    });
-
+    setDeliveryAddress({ ...deliveryAddress, [name]: sanitizedValue });
     const errorKeyMap: Record<string, string> = {
       name: "deliveryName",
+      email: "deliveryEmail",
       phone: "deliveryPhone",
       fullAddress: "deliveryFullAddress",
       city: "deliveryCity",
       pinCode: "deliveryPinCode",
     };
-    setErrors((prev) => ({
-      ...prev,
-      [errorKeyMap[name]]: "",
-    }));
+    setErrors((prev) => ({ ...prev, [errorKeyMap[name]]: "" }));
   };
 
   const swapHandleClick = () => {
@@ -64,6 +48,54 @@ const ShipmentAddress = ({
     setDeliveryAddress(pickUpAddress);
   };
 
+  // const handleNext = () => {
+  //   const validationErrors = validateShipmentAddress(
+  //     pickUpAddress,
+  //     deliveryAddress,
+  //   );
+
+  //   if (Object.keys(validationErrors).length > 0) {
+  //     setErrors(validationErrors);
+
+  //     const errorPriority = [
+  //       "pickUpName",
+  //       "pickUpPhone",
+  //       "pickUpEmail",
+  //       "pickUpFullAddress",
+  //       "pickUpCity",
+  //       "pickUpPinCode",
+  //       "deliveryName",
+  //       "deliveryPhone",
+  //       "deliveryEmail",
+  //       "deliveryFullAddress",
+  //       "deliveryCity",
+  //       "deliveryPinCode",
+  //     ];
+
+  //     const firstErrorKey = errorPriority.find((key) => validationErrors[key]);
+
+  //     if (firstErrorKey && fieldRefs.current[firstErrorKey]) {
+  //       const el = fieldRefs.current[firstErrorKey];
+
+  //       const rect = el!.getBoundingClientRect();
+  //       const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  //       const targetY = rect.top + scrollTop - 120;
+
+  //       window.scrollTo({
+  //         top: targetY,
+  //         behavior: "smooth",
+  //       });
+
+  //       setTimeout(() => {
+  //         el!.focus();
+  //       }, 400);
+  //     }
+  //     return;
+  //   }
+
+  //   setErrors({});
+  //   nextStep();
+  // };
   const handleNext = () => {
     const validationErrors = validateShipmentAddress(
       pickUpAddress,
@@ -72,12 +104,44 @@ const ShipmentAddress = ({
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+
+      const errorPriority = [
+        "pickUpName",
+        "pickUpPhone",
+        "pickUpEmail",
+        "pickUpFullAddress",
+        "pickUpCity",
+        "pickUpPinCode",
+        "deliveryName",
+        "deliveryPhone",
+        "deliveryEmail",
+        "deliveryFullAddress",
+        "deliveryCity",
+        "deliveryPinCode",
+      ];
+
+      const firstErrorKey = errorPriority.find((key) => validationErrors[key]);
+
+      if (firstErrorKey && fieldRefs.current[firstErrorKey]) {
+        const el = fieldRefs.current[firstErrorKey]!;
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus();
+      }
+
       return;
     }
 
     setErrors({});
     nextStep();
   };
+
+  const inputClass = (errorKey: string) =>
+    `border rounded-lg h-10 px-3 text-[14px] outline-none transition-colors
+    ${
+      errors[errorKey]
+        ? "border-red-400 focus:border-red-500 bg-red-50"
+        : "border-slate-300 focus:border-blue-500"
+    }`;
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm">
@@ -93,14 +157,16 @@ const ShipmentAddress = ({
               Sender Name
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpName"] = el;
+              }}
               type="text"
               placeholder="Your Name"
               value={pickUpAddress.name}
               name="name"
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpName")}
             />
             {errors.pickUpName && (
               <p className="text-red-500 text-xs">{errors.pickUpName}</p>
@@ -112,20 +178,19 @@ const ShipmentAddress = ({
               Sender Email
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpEmail"] = el;
+              }}
               type="email"
-              // inputMode="numeric"
-              // pattern="[0-9]{10}"
               placeholder="Your email"
               value={pickUpAddress.email}
               name="email"
-              // maxLength={10}
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpEmail")}
             />
-            {errors.pickUpPhone && (
-              <p className="text-red-500 text-xs">{errors.pickUpPhone}</p>
+            {errors.pickUpEmail && (
+              <p className="text-red-500 text-xs">{errors.pickUpEmail}</p>
             )}
           </div>
         </div>
@@ -136,8 +201,10 @@ const ShipmentAddress = ({
               Sender Phone
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpPhone"] = el;
+              }}
               type="tel"
               inputMode="numeric"
               pattern="[0-9]{10}"
@@ -146,25 +213,28 @@ const ShipmentAddress = ({
               name="phone"
               maxLength={10}
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpPhone")}
             />
             {errors.pickUpPhone && (
               <p className="text-red-500 text-xs">{errors.pickUpPhone}</p>
             )}
           </div>
+
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               Full address
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpFullAddress"] = el;
+              }}
               type="text"
               placeholder="No.12, xyz road, City - xxxxpin"
               value={pickUpAddress.fullAddress}
               name="fullAddress"
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpFullAddress")}
             />
             {errors.pickUpFullAddress && (
               <p className="text-red-500 text-xs">{errors.pickUpFullAddress}</p>
@@ -178,14 +248,16 @@ const ShipmentAddress = ({
               City
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpCity"] = el;
+              }}
               type="text"
               placeholder="City"
               value={pickUpAddress.city}
               name="city"
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpCity")}
             />
             {errors.pickUpCity && (
               <p className="text-red-500 text-xs">{errors.pickUpCity}</p>
@@ -197,15 +269,17 @@ const ShipmentAddress = ({
               Pin code
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["pickUpPinCode"] = el;
+              }}
               type="text"
               placeholder="Pin code"
               value={pickUpAddress.pinCode}
               name="pinCode"
               maxLength={6}
               onChange={handlePickUpAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("pickUpPinCode")}
             />
             {errors.pickUpPinCode && (
               <p className="text-red-500 text-xs">{errors.pickUpPinCode}</p>
@@ -234,14 +308,16 @@ const ShipmentAddress = ({
               Receiver Name
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryName"] = el;
+              }}
               type="text"
               placeholder="Receiver Name"
               value={deliveryAddress.name}
               name="name"
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryName")}
             />
             {errors.deliveryName && (
               <p className="text-red-500 text-xs">{errors.deliveryName}</p>
@@ -253,17 +329,19 @@ const ShipmentAddress = ({
               Receiver Email
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryEmail"] = el;
+              }}
               type="email"
               placeholder="Receiver email"
               value={deliveryAddress.email}
               name="email"
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryEmail")}
             />
-            {errors.deliveryPhone && (
-              <p className="text-red-500 text-xs">{errors.deliveryPhone}</p>
+            {errors.deliveryEmail && (
+              <p className="text-red-500 text-xs">{errors.deliveryEmail}</p>
             )}
           </div>
         </div>
@@ -274,8 +352,10 @@ const ShipmentAddress = ({
               Receiver Phone
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryPhone"] = el;
+              }}
               type="tel"
               inputMode="numeric"
               pattern="[0-9]{10}"
@@ -284,25 +364,28 @@ const ShipmentAddress = ({
               name="phone"
               maxLength={10}
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryPhone")}
             />
             {errors.deliveryPhone && (
               <p className="text-red-500 text-xs">{errors.deliveryPhone}</p>
             )}
           </div>
+
           <div className="flex flex-col gap-2">
             <label className="text-[13px] font-medium text-slate-700">
               Full address
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryFullAddress"] = el;
+              }}
               type="text"
               placeholder="No.12, xyz road, City - xxxxpin"
               value={deliveryAddress.fullAddress}
               name="fullAddress"
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryFullAddress")}
             />
             {errors.deliveryFullAddress && (
               <p className="text-red-500 text-xs">
@@ -318,14 +401,16 @@ const ShipmentAddress = ({
               City
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryCity"] = el;
+              }}
               type="text"
               placeholder="City"
               value={deliveryAddress.city}
               name="city"
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryCity")}
             />
             {errors.deliveryCity && (
               <p className="text-red-500 text-xs">{errors.deliveryCity}</p>
@@ -337,15 +422,17 @@ const ShipmentAddress = ({
               Pin code
               <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
             </label>
-
             <input
+              ref={(el) => {
+                fieldRefs.current["deliveryPinCode"] = el;
+              }}
               type="text"
               placeholder="Pin code"
               value={deliveryAddress.pinCode}
               name="pinCode"
               maxLength={6}
               onChange={handleDeliveryAddressChange}
-              className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+              className={inputClass("deliveryPinCode")}
             />
             {errors.deliveryPinCode && (
               <p className="text-red-500 text-xs">{errors.deliveryPinCode}</p>

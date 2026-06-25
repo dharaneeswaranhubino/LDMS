@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { validatePackageDetails } from "./shipmentValidation";
 import type { PackageDetailsProps } from "../../shipmentTypes";
 import { deliveryPriority } from "../../utils/shipmentHelpers";
@@ -13,34 +13,47 @@ const PackageDetails = ({
 }: PackageDetailsProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setPackageDetails({
-      ...packageDetails,
-      [name]: value,
-    });
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
+    setPackageDetails({ ...packageDetails, [name]: value });
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleNext = async () => {
     const validationErrors = validatePackageDetails(packageDetails);
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      const errorPriority = ["itemName", "quantity", "weight"];
+      const firstErrorKey = errorPriority.find((key) => validationErrors[key]);
+
+      if (firstErrorKey && fieldRefs.current[firstErrorKey]) {
+        fieldRefs.current[firstErrorKey]?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        fieldRefs.current[firstErrorKey]?.focus();
+      }
       return;
     }
+
     setErrors({});
     await onNext();
   };
 
+  const inputClass = (errorKey: string) =>
+    `border rounded-lg h-10 px-3 text-[14px] outline-none transition-colors
+    ${
+      errors[errorKey]
+        ? "border-red-400 focus:border-red-500 bg-red-50"
+        : "border-slate-300 focus:border-blue-500"
+    }`;
+
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm">
       <form>
-        {/* TITLE */}
         <p className="text-[18px] font-semibold text-slate-800 flex items-center gap-2">
           <i className="fa-solid fa-cube text-blue-500"></i>
           Package details
@@ -51,60 +64,58 @@ const PackageDetails = ({
             Item Name
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
-
           <input
+            ref={(el) => { fieldRefs.current["itemName"] = el; }}
             type="text"
             placeholder="Item Name"
             value={packageDetails.itemName}
             name="itemName"
             onChange={handleChange}
-            className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            className={inputClass("itemName")}
           />
           {errors.itemName && (
             <p className="text-red-500 text-xs">{errors.itemName}</p>
           )}
         </div>
-        {/* QUANTITY */}
+
         <div className="flex flex-col gap-2 mt-5">
           <label className="text-[13px] font-medium text-slate-700">
             Total Quantity
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
-
           <input
+            ref={(el) => { fieldRefs.current["quantity"] = el; }}
             type="number"
             placeholder="Quantity"
             value={packageDetails.quantity}
             name="quantity"
             onChange={handleChange}
-            className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            className={inputClass("quantity")}
           />
           {errors.quantity && (
             <p className="text-red-500 text-xs">{errors.quantity}</p>
           )}
         </div>
 
-        {/* WEIGHT */}
         <div className="flex flex-col gap-2 mt-4">
           <label className="text-[13px] font-medium text-slate-700">
             Total Weight (KG)
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
-
           <input
+            ref={(el) => { fieldRefs.current["weight"] = el; }}
             type="number"
             placeholder="Weight in kilograms"
             value={packageDetails.weight}
             name="weight"
             onChange={handleChange}
-            className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+            className={inputClass("weight")}
           />
           {errors.weight && (
             <p className="text-red-500 text-xs">{errors.weight}</p>
           )}
         </div>
 
-        {/* DESCRIPTION */}
         <div className="flex flex-col gap-2 mt-4">
           <label className="text-[13px] font-medium text-slate-700">
             Description
@@ -112,7 +123,6 @@ const PackageDetails = ({
               Optional
             </span>
           </label>
-
           <input
             type="text"
             placeholder="Electronics, clothes"
@@ -125,7 +135,6 @@ const PackageDetails = ({
 
         <hr className="mt-6 border-slate-200" />
 
-        {/* PRIORITY */}
         <div className="flex flex-col gap-3 mt-6">
           <p className="text-[15px] font-semibold text-slate-800 flex items-center gap-2">
             <i className="fa-regular fa-flag text-blue-500"></i>
@@ -140,10 +149,7 @@ const PackageDetails = ({
               <div
                 key={value}
                 onClick={() =>
-                  setPackageDetails({
-                    ...packageDetails,
-                    priority: value,
-                  })
+                  setPackageDetails({ ...packageDetails, priority: value })
                 }
                 className={`border rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all
                   ${
@@ -152,10 +158,7 @@ const PackageDetails = ({
                       : "border-slate-200 bg-slate-50 hover:bg-slate-100"
                   }`}
               >
-                <p className="text-[14px] font-semibold text-slate-800">
-                  {label}
-                </p>
-
+                <p className="text-[14px] font-semibold text-slate-800">{label}</p>
                 <p className="text-[12px] text-slate-500 mt-1">{multiplier}</p>
                 <p className="text-[12px] text-slate-500 mt-1">{days}</p>
               </div>
@@ -165,7 +168,6 @@ const PackageDetails = ({
 
         <hr className="mt-6 border-slate-200" />
 
-        {/* FRAGILE */}
         <div className="flex flex-col gap-3 mt-6">
           <p className="text-[15px] font-semibold text-slate-800 flex items-center gap-2">
             <i className="fa-solid fa-triangle-exclamation text-amber-500"></i>
@@ -175,7 +177,6 @@ const PackageDetails = ({
 
           <div className="flex justify-between items-center bg-slate-100 p-3 rounded-lg">
             <p className="text-[14px] text-slate-700">+₹30 handling charge</p>
-
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -192,14 +193,10 @@ const PackageDetails = ({
               <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
             </label>
           </div>
-          {/* {errors.fragile && (
-            <p className="text-red-500 text-xs">{errors.fragile}</p>
-          )} */}
         </div>
 
         <hr className="mt-6 border-slate-200" />
 
-        {/* DELIVERY TIME */}
         <div className="flex flex-col gap-3 mt-6">
           <p className="text-[15px] font-semibold text-slate-800 flex items-center gap-2">
             <i className="fa-regular fa-clock text-blue-500"></i>
@@ -211,48 +208,34 @@ const PackageDetails = ({
 
           <div className="grid lg:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-medium text-slate-700">
-                FROM
-              </label>
-
+              <label className="text-[13px] font-medium text-slate-700">FROM</label>
               <input
                 type="datetime-local"
                 value={packageDetails.deliveryFrom}
                 onChange={(e) =>
-                  setPackageDetails({
-                    ...packageDetails,
-                    deliveryFrom: e.target.value,
-                  })
+                  setPackageDetails({ ...packageDetails, deliveryFrom: e.target.value })
                 }
                 className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-medium text-slate-700">
-                TO
-              </label>
-
+              <label className="text-[13px] font-medium text-slate-700">TO</label>
               <input
                 type="datetime-local"
                 value={packageDetails.deliveryTo}
                 onChange={(e) =>
-                  setPackageDetails({
-                    ...packageDetails,
-                    deliveryTo: e.target.value,
-                  })
+                  setPackageDetails({ ...packageDetails, deliveryTo: e.target.value })
                 }
                 className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
               />
             </div>
           </div>
-
           <p className="text-[12px] text-slate-500">
             Admin will try to match this preference when assigning a slot
           </p>
         </div>
 
-        {/* BUTTONS */}
         <div className="w-full flex justify-between mt-8">
           <button
             type="button"
