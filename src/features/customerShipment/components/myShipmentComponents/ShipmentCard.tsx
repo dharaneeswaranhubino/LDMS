@@ -24,8 +24,8 @@ interface Props {
 
 const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
   const navigate = useNavigate();
-  // console.log("item :", item);
-  
+  console.log("item :", item);
+
   const status = (item.shipmentStatus ?? "PENDING") as ShipmentStatus;
   const priority = (item.shipmentPriority ?? "STANDARD") as PriorityType;
 
@@ -130,13 +130,16 @@ const ShipmentCard = ({ item, onView, onPaymentView }: Props) => {
           )}
 
           {/* Payment always */}
-          <button
-            onClick={() => onPaymentView(item.shipmentId)}
-            className={`py-[7px] px-4 ${item.paymentStatus === "REFUNDED" ? "border border-gray-200 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100": item.paymentStatus === "PENDING" ? "border border-amber-200 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 " :"border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100"}  transition-all text-[12px]`}
-          >
-            <i className="fa-solid fa-credit-card mr-1" />
-            Payment
-          </button>
+          {item.paymentStatus !== "PENDING" && (
+            <button
+              onClick={() => onPaymentView(item.shipmentId)}
+              className={`py-[7px] px-4 ${item.paymentStatus === "REFUNDED" ? "border border-gray-200 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100" : "border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100"}  transition-all text-[12px]`}
+              // className={`py-[7px] px-4 ${item.paymentStatus === "REFUNDED" ? "border border-gray-200 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100" : item.paymentStatus === "PENDING" ? "border border-amber-200 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 " : "border border-emerald-200 bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100"}  transition-all text-[12px]`}
+            >
+              <i className="fa-solid fa-credit-card mr-1" />
+              Payment
+            </button>
+          )}
 
           {/* Chat not for CANCELLED, PENDING, CONFIRMED, DELIVERED */}
           {/* {!["CANCELLED", "PENDING", "CONFIRMED", "DELIVERED"].includes(
