@@ -1,10 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../shared/hooks/reduxHooks";
-import { fetchMyShipments } from "../shipmentSlice";
 import type { FilterTab, ShipmentResponse, SortKey } from "../shipmentTypes";
 import { FILTER_TABS, matchesSearch } from "../utils/shipmentHelpers";
 import ShipmentError from "../components/myShipmentComponents/ShipmentError";
@@ -16,127 +11,125 @@ import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar"
 import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import Pagination from "../../../shared/components/Pagination";
+import { api } from "@/lib/axios";
 
 const MyShipments = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const { shipments, loading, error, pagination } = useAppSelector(
-    (state) => state.shipment,
-  );
 
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [selectedShipment, setSelectedShipment] =
-    useState<ShipmentResponse | null>(null);
-
+  const [selectedShipment, setSelectedShipment] = useState<ShipmentResponse | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
-
-  const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<
-    number | null
-  >(null);
+  const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<number | null>(null);
   const [limit, setLimit] = useState(6);
+  const [clientPage, setClientPage] = useState(1);
+  const [allShipments, setAllShipments] = useState<ShipmentResponse[]>([]);
+  const [tabCounts, setTabCounts] = useState<Record<string, number>>({});
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const searchRef = useRef<HTMLInputElement | null>(null);
+
+  const fetchAllShipments = useCallback(async () => {
+    setInitialLoading(true);
+    setFetchError(null);
+    try {
+      const res = await api.get("/shipments/myShipments", {
+        params: { page: 1, limit: 500 },
+      });
+      const all: ShipmentResponse[] = res.data.data.shipments;
+      setAllShipments(all);
+
+      const counts: Record<string, number> = { ALL: all.length };
+      FILTER_TABS.slice(1).forEach(({ key }) => {
+        counts[key] = all.filter((s) => s.shipmentStatus === key).length;
+      });
+      setTabCounts(counts);
+    } catch {
+      setFetchError("Failed to load shipments");
+    } finally {
+      setInitialLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllShipments();
+  }, [fetchAllShipments]);
+
+  const handleTabChange = useCallback((tab: FilterTab) => {
+    setActiveTab(tab);
+    setClientPage(1);
+  }, []);
 
   const handlePaymentView = (shipmentId: number) => {
     setSelectedPaymentShipmentId(shipmentId);
     setOpenPaymentModal(true);
   };
 
-  const searchRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    dispatch(fetchMyShipments({ page: 1, limit }));
-  }, [dispatch, limit]);
-
-  const tabCounts = useMemo(() => {
-    const counts: Record<string, number> = {
-      ALL: shipments?.length ?? 0,
-    };
-
-    FILTER_TABS.slice(1).forEach(({ key }) => {
-      counts[key] =
-        shipments?.filter((s: ShipmentResponse) => s?.shipmentStatus === key)
-          .length ?? 0;
-    });
-
-    return counts;
-  }, [shipments]);
-
-  const displayed = useMemo(() => {
-    let list = [...(shipments ?? [])];
-    if (activeTab !== "ALL") {
-      list = list.filter(
-        (s: ShipmentResponse) => s.shipmentStatus === activeTab,
-      );
-    }
-    if (searchQuery.trim()) {
-      list = list.filter((s: ShipmentResponse) =>
-        matchesSearch(s, searchQuery),
-      );
-    }
-    list.sort((a: ShipmentResponse, b: ShipmentResponse) => {
-      switch (sortKey) {
-        case "newest":
-          return (
-            new Date(b.createdAt ?? 0).getTime() -
-            new Date(a.createdAt ?? 0).getTime()
-          );
-        case "oldest":
-          return (
-            new Date(a.createdAt ?? 0).getTime() -
-            new Date(b.createdAt ?? 0).getTime()
-          );
-        case "amount_high":
-          return (b.amount ?? 0) - (a.amount ?? 0);
-        case "amount_low":
-          return (a.amount ?? 0) - (b.amount ?? 0);
-        default:
-          return 0;
-      }
-    });
-    return list;
-  }, [shipments, activeTab, searchQuery, sortKey]);
   const handleView = (shipment: ShipmentResponse) => {
     setSelectedShipment(shipment);
     setOpenModal(true);
   };
-  if (loading && (shipments ?? []).length === 0) {
+
+  const displayed = useMemo(() => {
+    let list = [...allShipments];
+    if (activeTab !== "ALL") {
+      list = list.filter((s) => s.shipmentStatus === activeTab);
+    }
+    if (searchQuery.trim()) {
+      list = list.filter((s) => matchesSearch(s, searchQuery));
+    }
+    list.sort((a, b) => {
+      switch (sortKey) {
+        case "newest": return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "oldest": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case "amount_high": return b.amount - a.amount;
+        case "amount_low": return a.amount - b.amount;
+        default: return 0;
+      }
+    });
+    return list;
+  }, [allShipments, activeTab, searchQuery, sortKey]);
+
+  const totalFiltered = displayed.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
+  const safePage = Math.min(clientPage, totalPages);
+
+  const paginatedDisplay = useMemo(() => {
+    const start = (safePage - 1) * limit;
+    return displayed.slice(start, start + limit);
+  }, [displayed, safePage, limit]);
+
+  if (initialLoading) {
     return (
       <div className="h-[calc(100vh-72px)] overflow-y-auto rounded-lg bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 scrollbar-none">
         <LoadingSpinner />
       </div>
     );
   }
-  if (error) {
+
+  if (fetchError) {
     return (
       <ShipmentError
-        error={error}
-        onRetry={() => dispatch(fetchMyShipments({}))}
+        error={fetchError}
+        onRetry={fetchAllShipments}
       />
     );
   }
-
-  const currentPage = pagination?.page ?? 1;
-  const totalPages = pagination?.totalPages ?? 1;
 
   return (
     <>
       <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
         <div className="sm:flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-800">
-              My shipments
-            </h1>
+            <h1 className="text-2xl font-semibold text-slate-800">My shipments</h1>
             <p className="text-[14px] text-slate-500 mt-1">
               Track and manage all your shipments in one place
             </p>
           </div>
-
           <button
             onClick={() => navigate("/sendShipment")}
             className="h-[42px] w-full mt-3 sm:mt-0 sm:w-48 px-5 rounded-xl bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 transition-all text-white text-[13px] font-medium flex items-center gap-2 shadow-md"
@@ -158,71 +151,46 @@ const MyShipments = () => {
 
         <ShipmentTabs
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleTabChange}
           tabCounts={tabCounts}
         />
 
         <p className="text-[12px] text-slate-400 mb-3">
           {searchQuery
-            ? `${displayed.length} result${
-                displayed.length !== 1 ? "s" : ""
-              } for "${searchQuery}"`
-            : `Showing ${displayed.length} shipment${
-                displayed.length !== 1 ? "s" : ""
-              }`}
+            ? `${totalFiltered} result${totalFiltered !== 1 ? "s" : ""} for "${searchQuery}"`
+            : `Showing ${totalFiltered} shipment${totalFiltered !== 1 ? "s" : ""}`}
         </p>
 
-        {displayed.length === 0 ? (
+        {paginatedDisplay.length === 0 ? (
           <ShipmentEmpty
             searchQuery={searchQuery}
             onCreate={() => navigate("/sendShipment")}
           />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 space-y-3 max-h-[600px] overflow-y-hidden overflow-y-scroll scrollbar-none rounded-2xl">
-            {displayed.map((item: ShipmentResponse) => {
-              return (
-                <ShipmentCard
-                  key={item.shipmentId ?? item.trackingId}
-                  item={item}
-                  onView={handleView}
-                  onPaymentView={handlePaymentView}
-                />
-              );
-            })}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 space-y-3 max-h-[600px] overflow-y-scroll scrollbar-none rounded-2xl">
+            {paginatedDisplay.map((item) => (
+              <ShipmentCard
+                key={item.shipmentId ?? item.trackingId}
+                item={item}
+                onView={handleView}
+                onPaymentView={handlePaymentView}
+              />
+            ))}
           </div>
         )}
 
-        {(shipments ?? []).length > 0 && (
+        {allShipments.length > 0 && (
           <Pagination
-            page={currentPage}
+            page={safePage}
             totalPages={totalPages}
-            total={pagination?.total ?? 0}
+            total={totalFiltered}
             limit={limit}
-            onPageChange={(page) =>
-              dispatch(
-                fetchMyShipments({
-                  page,
-                  limit,
-                }),
-              )
-            }
+            onPageChange={setClientPage}
             onLimitChange={(newLimit) => {
               setLimit(newLimit);
-
-              dispatch(
-                fetchMyShipments({
-                  page: 1,
-                  limit: newLimit,
-                }),
-              );
+              setClientPage(1);
             }}
           />
-        )}
-
-        {loading && shipments.length > 0 && (
-          <div className="flex justify-center py-6">
-            <i className="fa-solid fa-spinner fa-spin text-violet-400 text-xl" />
-          </div>
         )}
       </div>
 
@@ -230,6 +198,7 @@ const MyShipments = () => {
         shipment={selectedShipment}
         open={openModal}
         onClose={() => setOpenModal(false)}
+        onCancelSuccess={fetchAllShipments}
       />
 
       <PaymentDetailsModal

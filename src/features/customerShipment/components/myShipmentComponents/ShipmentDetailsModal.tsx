@@ -16,9 +16,10 @@ interface Props {
   shipment: ShipmentResponse | null;
   open: boolean;
   onClose: () => void;
+  onCancelSuccess?: () => void;
 }
 
-const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
+const ShipmentDetailsModal = ({ shipment, open, onClose , onCancelSuccess}: Props) => {
   const dispatch = useAppDispatch();
   
   const { cancelling } = useAppSelector((s) => s.shipment);
@@ -43,6 +44,7 @@ const ShipmentDetailsModal = ({ shipment, open, onClose }: Props) => {
       const result = await dispatch(
         cancelShipment(shipment.shipmentId),
       ).unwrap();
+      onCancelSuccess?.();
       showToast({
         type: "success",
         message: "Shipment cancelled successfully",
