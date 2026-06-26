@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Pagination from "../../../../shared/components/Pagination";
 import type { AllShipments } from "../../adminTypes";
 import AdminShipmentTableRow from "./AdminShipmentTableRow";
@@ -105,4 +106,4 @@ const AdminShipmentTable = ({
   );
 };
 
-export default AdminShipmentTable;
+export default memo(AdminShipmentTable);

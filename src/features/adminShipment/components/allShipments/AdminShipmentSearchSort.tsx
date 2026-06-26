@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import type { SortKey } from "../../adminTypes";
 
 interface Props {
@@ -69,4 +69,4 @@ const AdminShipmentSearchSort = ({
     </div>
   );
 };
-export default AdminShipmentSearchSort;
+export default memo(AdminShipmentSearchSort);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { AllShipments } from "../../adminTypes";
 import { STATUS_LABEL, STATUS_STYLE } from "../../utils/adminShipmentHelper";
@@ -197,4 +197,4 @@ const AdminShipmentCompleteModal = ({
   );
 };
 
-export default AdminShipmentCompleteModal;
+export default memo(AdminShipmentCompleteModal);

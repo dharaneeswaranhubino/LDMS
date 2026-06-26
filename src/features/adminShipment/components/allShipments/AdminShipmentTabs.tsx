@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { AdminShipmentTabsProps } from "../../adminTypes";
 import { TABS } from "../../utils/adminShipmentHelper";
 
@@ -39,4 +40,4 @@ const AdminShipmentTabs = ({ activeTab, tabCounts, onTabChange }: AdminShipmentT
   );
 };
 
-export default AdminShipmentTabs;
+export default memo(AdminShipmentTabs);
