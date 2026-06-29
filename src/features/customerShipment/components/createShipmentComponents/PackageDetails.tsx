@@ -65,7 +65,9 @@ const PackageDetails = ({
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
           <input
-            ref={(el) => { fieldRefs.current["itemName"] = el; }}
+            ref={(el) => {
+              fieldRefs.current["itemName"] = el;
+            }}
             type="text"
             placeholder="Item Name"
             value={packageDetails.itemName}
@@ -84,7 +86,9 @@ const PackageDetails = ({
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
           <input
-            ref={(el) => { fieldRefs.current["quantity"] = el; }}
+            ref={(el) => {
+              fieldRefs.current["quantity"] = el;
+            }}
             type="number"
             placeholder="Quantity"
             value={packageDetails.quantity}
@@ -103,7 +107,9 @@ const PackageDetails = ({
             <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px] font-semibold"></i>
           </label>
           <input
-            ref={(el) => { fieldRefs.current["weight"] = el; }}
+            ref={(el) => {
+              fieldRefs.current["weight"] = el;
+            }}
             type="number"
             placeholder="Weight in kilograms"
             value={packageDetails.weight}
@@ -149,7 +155,15 @@ const PackageDetails = ({
               <div
                 key={value}
                 onClick={() =>
-                  setPackageDetails({ ...packageDetails, priority: value })
+                  // setPackageDetails({ ...packageDetails, priority: value })
+                  setPackageDetails({
+                    ...packageDetails,
+                    priority: value,
+                    ...(value === "SAME_DAY" && {
+                      deliveryFrom: "",
+                      deliveryTo: "",
+                    }),
+                  })
                 }
                 className={`border rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all
                   ${
@@ -158,7 +172,9 @@ const PackageDetails = ({
                       : "border-slate-200 bg-slate-50 hover:bg-slate-100"
                   }`}
               >
-                <p className="text-[14px] font-semibold text-slate-800">{label}</p>
+                <p className="text-[14px] font-semibold text-slate-800">
+                  {label}
+                </p>
                 <p className="text-[12px] text-slate-500 mt-1">{multiplier}</p>
                 <p className="text-[12px] text-slate-500 mt-1">{days}</p>
               </div>
@@ -197,6 +213,7 @@ const PackageDetails = ({
 
         <hr className="mt-6 border-slate-200" />
 
+        {/* Preferred delivery time */}
         <div className="flex flex-col gap-3 mt-6">
           <p className="text-[15px] font-semibold text-slate-800 flex items-center gap-2">
             <i className="fa-regular fa-clock text-blue-500"></i>
@@ -206,34 +223,55 @@ const PackageDetails = ({
             </span>
           </p>
 
-          <div className="grid lg:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-medium text-slate-700">FROM</label>
-              <input
-                type="datetime-local"
-                value={packageDetails.deliveryFrom}
-                onChange={(e) =>
-                  setPackageDetails({ ...packageDetails, deliveryFrom: e.target.value })
-                }
-                className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
-              />
+          {packageDetails.priority === "SAME_DAY" ? (
+            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+              <i className="fa-solid fa-circle-info text-amber-500 text-[13px]"></i>
+              <p className="text-[13px] text-amber-700">
+                Same Day delivery is dispatched within 24 hrs — no time slot
+                needed.
+              </p>
             </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-medium text-slate-700">TO</label>
-              <input
-                type="datetime-local"
-                value={packageDetails.deliveryTo}
-                onChange={(e) =>
-                  setPackageDetails({ ...packageDetails, deliveryTo: e.target.value })
-                }
-                className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-          <p className="text-[12px] text-slate-500">
-            Admin will try to match this preference when assigning a slot
-          </p>
+          ) : (
+            <>
+              <div className="grid lg:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[13px] font-medium text-slate-700">
+                    FROM
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={packageDetails.deliveryFrom}
+                    onChange={(e) =>
+                      setPackageDetails({
+                        ...packageDetails,
+                        deliveryFrom: e.target.value,
+                      })
+                    }
+                    className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-[13px] font-medium text-slate-700">
+                    TO
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={packageDetails.deliveryTo}
+                    onChange={(e) =>
+                      setPackageDetails({
+                        ...packageDetails,
+                        deliveryTo: e.target.value,
+                      })
+                    }
+                    className="border border-slate-300 rounded-lg h-10 px-3 text-[14px] outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              <p className="text-[12px] text-slate-500">
+                Admin will try to match this preference when assigning a slot
+              </p>
+            </>
+          )}
         </div>
 
         <div className="w-full flex justify-between mt-8">
