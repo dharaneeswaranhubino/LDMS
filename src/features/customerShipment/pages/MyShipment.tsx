@@ -11,19 +11,25 @@ import ShipmentToolbar from "../components/myShipmentComponents/ShipmentToolbar"
 import PaymentDetailsModal from "../components/myShipmentComponents/PaymentDetailsModal";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import Pagination from "../../../shared/components/Pagination";
-import { api } from "@/lib/axios";
+// import { api } from "@/lib/axios";
+import { useAppDispatch } from "@/shared/hooks/reduxHooks";
+import { fetchMyShipments } from "../shipmentSlice";
 
 const MyShipments = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedShipment, setSelectedShipment] = useState<ShipmentResponse | null>(null);
+  const [selectedShipment, setSelectedShipment] =
+    useState<ShipmentResponse | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
-  const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<number | null>(null);
+  const [selectedPaymentShipmentId, setSelectedPaymentShipmentId] = useState<
+    number | null
+  >(null);
   const [limit, setLimit] = useState(6);
   const [clientPage, setClientPage] = useState(1);
   const [allShipments, setAllShipments] = useState<ShipmentResponse[]>([]);
@@ -33,14 +39,36 @@ const MyShipments = () => {
 
   const searchRef = useRef<HTMLInputElement | null>(null);
 
+  // const fetchAllShipments = useCallback(async () => {
+  //   setInitialLoading(true);
+  //   setFetchError(null);
+  //   try {
+  //     const res = await api.get("/shipments/myShipments", {
+  //       params: { page: 1, limit: 500 },
+  //     });
+  //     const all: ShipmentResponse[] = res.data.data.shipments;
+  //     setAllShipments(all);
+
+  //     const counts: Record<string, number> = { ALL: all.length };
+  //     FILTER_TABS.slice(1).forEach(({ key }) => {
+  //       counts[key] = all.filter((s) => s.shipmentStatus === key).length;
+  //     });
+  //     setTabCounts(counts);
+  //   } catch {
+  //     setFetchError("Failed to load shipments");
+  //   } finally {
+  //     setInitialLoading(false);
+  //   }
+  // }, []);
   const fetchAllShipments = useCallback(async () => {
     setInitialLoading(true);
     setFetchError(null);
     try {
-      const res = await api.get("/shipments/myShipments", {
-        params: { page: 1, limit: 500 },
-      });
-      const all: ShipmentResponse[] = res.data.data.shipments;
+      const result = await dispatch(
+        fetchMyShipments({ page: 1, limit: 500 }),
+      ).unwrap();
+
+      const all = result.shipments;
       setAllShipments(all);
 
       const counts: Record<string, number> = { ALL: all.length };
@@ -53,7 +81,7 @@ const MyShipments = () => {
     } finally {
       setInitialLoading(false);
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchAllShipments();
@@ -84,11 +112,20 @@ const MyShipments = () => {
     }
     list.sort((a, b) => {
       switch (sortKey) {
-        case "newest": return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case "oldest": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        case "amount_high": return b.amount - a.amount;
-        case "amount_low": return a.amount - b.amount;
-        default: return 0;
+        case "newest":
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        case "oldest":
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+        case "amount_high":
+          return b.amount - a.amount;
+        case "amount_low":
+          return a.amount - b.amount;
+        default:
+          return 0;
       }
     });
     return list;
@@ -112,12 +149,7 @@ const MyShipments = () => {
   }
 
   if (fetchError) {
-    return (
-      <ShipmentError
-        error={fetchError}
-        onRetry={fetchAllShipments}
-      />
-    );
+    return <ShipmentError error={fetchError} onRetry={fetchAllShipments} />;
   }
 
   return (
@@ -125,7 +157,9 @@ const MyShipments = () => {
       <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-5">
         <div className="sm:flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-800">My shipments</h1>
+            <h1 className="text-2xl font-semibold text-slate-800">
+              My shipments
+            </h1>
             <p className="text-[14px] text-slate-500 mt-1">
               Track and manage all your shipments in one place
             </p>
