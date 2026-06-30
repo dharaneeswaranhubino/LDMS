@@ -65,7 +65,7 @@ const PriceBreakdown = ({
         key: payment.keyId,
         amount: payment.amount,
         currency: payment.currency,
-        name: "ShipFast",
+        name: "SmartShip",
         description: "Shipment Payment",
         order_id: payment.orderId,
         handler: async (response: RazorpayResponse) => {

@@ -9,7 +9,7 @@ const Footer = () => {
                 <i className="fa-solid fa-truck-fast text-white text-[18px] relative z-10"></i>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">LDMS</h2>
+                <h2 className="text-xl font-bold text-white">SmartShip</h2>
                 <p className="text-xs text-slate-400">Smart Logistics</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ const Footer = () => {
 
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-wrap gap-4 justify-end text-sm text-slate-500">
-          <p>© 2026 LDMS Supply Link. All rights reserved.</p>
+          <p>© 2026 SmartShip Supply Link. All rights reserved.</p>
           {/* <div className="flex gap-6">
             <a>Privacy</a>
             <a>Terms</a>

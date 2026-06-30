@@ -33,7 +33,7 @@ const PaymentDetails = () => {
 
   const priority = currentShipment?.shipmentPriority;
   const packageWeight = currentShipment?.packageWeight;
-  const fileName = `ShipFast-Receipt-${paymentDetails?.razorpayPaymentId}.pdf`;
+  const fileName = `SmartShip-Receipt-${paymentDetails?.razorpayPaymentId}.pdf`;
 
   useEffect(() => {
     dispatch(fetchMyPayments());

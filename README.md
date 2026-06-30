@@ -1,12 +1,12 @@
-LDMS Frontend - Logistics and Delivery Management System
+SmartShip Frontend - Logistics and Delivery Management System
 
-Vercel Deployed LDMS Url:https://ldms-lac.vercel.app/
+Vercel Deployed SmartShip Url:https://ldms-lac.vercel.app/
 
 A comprehensive React and TypeScript platform for end-to-end logistics and delivery management. The system provides role-based interfaces for customers, administrators, and delivery agents with real-time shipment tracking, payment processing, and operational management capabilities.
 
 OVERVIEW
 
-LDMS is built for modern e-commerce and logistics businesses requiring sophisticated shipment management, real-time tracking, and multi-role operational support. The platform enables complete lifecycle management from order creation through delivery completion.
+SmartShip is built for modern e-commerce and logistics businesses requiring sophisticated shipment management, real-time tracking, and multi-role operational support. The platform enables complete lifecycle management from order creation through delivery completion.
 
 Core capabilities include:
 
@@ -552,7 +552,7 @@ Browser Caching: Leverages browser caching and service worker support
 
 PROJECT INFORMATION
 
-Title: LDMS Frontend - Logistics and Delivery Management System
+Title: SmartShip Frontend - Logistics and Delivery Management System
 Version: 1.0.0
 Status: Active Development
 Last Updated: June 19, 2026

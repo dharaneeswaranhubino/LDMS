@@ -42,7 +42,7 @@ const PaymentSuccessScreen = () => {
     year: "numeric",
   });
 
-  const fileName = `ShipFast-Receipt-${razorpayPaymentId}.pdf`;
+  const fileName = `SmartShip-Receipt-${razorpayPaymentId}.pdf`;
 
   return (
     <>

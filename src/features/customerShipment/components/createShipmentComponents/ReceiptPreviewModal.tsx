@@ -52,7 +52,7 @@ const ReceiptPreviewModal = ({
           {/* Brand */}
           <div className="flex justify-between items-start pb-4 border-b border-slate-200 mb-4">
             <div>
-              <p className="text-lg font-semibold text-slate-800">ShipFast</p>
+              <p className="text-lg font-semibold text-slate-800">SmartShip</p>
               <p className="text-xs text-slate-500">Logistics & Delivery</p>
             </div>
             <div className="text-right">

@@ -30,7 +30,7 @@ const ReceiptPDF = ({
     <Page size="A4" style={pdfStyles.page}>
       <View style={pdfStyles.header}>
         <View>
-          <Text style={pdfStyles.brandName}>ShipFast</Text>
+          <Text style={pdfStyles.brandName}>SmartShip</Text>
           <Text style={pdfStyles.brandSub}>Logistics & Delivery</Text>
         </View>
         <View style={pdfStyles.badgeWrap}>

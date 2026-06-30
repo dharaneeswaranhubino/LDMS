@@ -1,12 +1,12 @@
-# LDMS Frontend - Comprehensive Project Documentation
+# SmartShip Frontend - Comprehensive Project Documentation
 
 ## Executive Summary
 
-LDMS Frontend is a sophisticated React and TypeScript web application for comprehensive logistics and delivery management. The platform serves three distinct user roles (customer, administrator, and delivery agent) through a unified codebase with role-based routing, state management, and UI. The application integrates with a backend REST API for shipment management, payment processing, agent operations, and system administration.
+SmartShip Frontend is a sophisticated React and TypeScript web application for comprehensive logistics and delivery management. The platform serves three distinct user roles (customer, administrator, and delivery agent) through a unified codebase with role-based routing, state management, and UI. The application integrates with a backend REST API for shipment management, payment processing, agent operations, and system administration.
 
 ## Project Overview
 
-LDMS is a React + TypeScript + Vite frontend for a logistics delivery management system. The application supports role-based experiences for customers, administrators, and delivery agents. It provides shipment creation, tracking, live monitoring, notifications, payments, complaints, and user profile management.
+SmartShip is a React + TypeScript + Vite frontend for a logistics delivery management system. The application supports role-based experiences for customers, administrators, and delivery agents. It provides shipment creation, tracking, live monitoring, notifications, payments, complaints, and user profile management.
 
 ## Tech Stack
 

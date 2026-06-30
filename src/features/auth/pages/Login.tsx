@@ -91,7 +91,7 @@ const Login = () => {
             </h1>
 
             <p className="text-slate-500 text-sm">
-              Sign in to continue to LDMS
+              Sign in to continue to SmartShip
             </p>
           </div>
 

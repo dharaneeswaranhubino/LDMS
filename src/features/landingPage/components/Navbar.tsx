@@ -45,7 +45,7 @@ const Navbar = ({ scrollY, menuOpen, setMenuOpen }: NavbarProps) => {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-white">LDMS</h2>
+            <h2 className="text-xl font-bold text-white">SmartShip</h2>
             <p className="text-xs text-slate-400">Smart Logistics</p>
           </div>
         </a>

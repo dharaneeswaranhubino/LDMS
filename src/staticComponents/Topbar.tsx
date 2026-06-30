@@ -74,7 +74,7 @@ const Topbar = () => {
           </div>
           <div>
             <h1 className="text-[21px] font-bold tracking-tight bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 bg-clip-text text-transparent leading-none">
-              LDMS
+              SmartShip
             </h1>
             <p className="text-[11px] font-medium tracking-wide text-slate-500 mt-[4px] uppercase">
               Logistics & Delivery
