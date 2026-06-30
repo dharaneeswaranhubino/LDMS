@@ -489,6 +489,7 @@ const shipmentSlice = createSlice({
 
         //chat
         setActiveShipment(state, action: PayloadAction<number | null>) {
+            if (state.activeShipmentId === action.payload) return;
             state.activeShipmentId = action.payload;
             state.messages = [];
             state.pagination = null;
