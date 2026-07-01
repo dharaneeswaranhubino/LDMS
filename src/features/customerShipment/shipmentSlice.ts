@@ -323,7 +323,7 @@ export const fetchMyPayments = createAsyncThunk<
 >("payment/fetchMyPayments", async (_, { rejectWithValue }) => {
     try {
         const res = await api.get("/payments/myPayments", {
-            params: { page: 1, limit: 6 },
+            params: { page: 1, limit: 500 },
         });
         return res.data.data as MyPaymentsResponse;
     } catch (err: unknown) {

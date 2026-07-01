@@ -24,7 +24,7 @@ const PaymentDetails = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(6);
   const [showPreview, setShowPreview] = useState(false);
 
   const trackingId = currentShipment?.trackingId;
@@ -53,6 +53,10 @@ const PaymentDetails = () => {
   const totalPages = Math.max(1, Math.ceil(totalFiltered / limit));
   const currentPage = Math.min(page, totalPages);
 
+  // const paginatedPayments = useMemo(() => {
+  //   const start = (currentPage - 1) * limit;
+  //   return filteredPayments.slice(start, start + limit);
+  // }, [filteredPayments, currentPage, limit]);
   const paginatedPayments = useMemo(() => {
     const start = (currentPage - 1) * limit;
     return filteredPayments.slice(start, start + limit);
@@ -175,14 +179,19 @@ const PaymentDetails = () => {
                   <td className="px-3 md:px-6 py-2">
                     <button
                       onClick={() => downloadCLick(payment.shipmentId)}
-                      disabled={payment.paymentStatus !== "PAID" && payment.paymentStatus !== "REFUNDED" }
+                      disabled={
+                        payment.paymentStatus !== "PAID" &&
+                        payment.paymentStatus !== "REFUNDED"
+                      }
                       title={
-                        (payment.paymentStatus === "PAID" || payment.paymentStatus === "REFUNDED")
+                        payment.paymentStatus === "PAID" ||
+                        payment.paymentStatus === "REFUNDED"
                           ? "Download receipt"
                           : "Receipt unavailable"
                       }
                       className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
-                        (payment.paymentStatus === "PAID" || payment.paymentStatus === "REFUNDED")
+                        payment.paymentStatus === "PAID" ||
+                        payment.paymentStatus === "REFUNDED"
                           ? "border-sky-200 bg-white text-sky-600 hover:bg-sky-50"
                           : "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed"
                       }`}
