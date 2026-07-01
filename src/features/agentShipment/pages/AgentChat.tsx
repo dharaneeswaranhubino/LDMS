@@ -61,7 +61,7 @@ const AgentChat = () => {
   const activeDelivery = activeDeliveries.find(
     (d) => d.shipmentId === activeShipmentId,
   );
-  const isCompleted = activeDelivery?.shipmentStatus === "COMPLETED";
+  const isCompleted = activeDelivery?.shipmentStatus === "DELIVERED";
 
   return (
     <div className="flex h-[calc(100vh-72px)] rounded-2xl md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5 overflow-hidden">

@@ -58,7 +58,7 @@ const CustomerChat = () => {
     (s) => s.shipmentId === activeShipmentId,
   );
 
-  const isCompleted = activeShipment?.shipmentStatus === "COMPLETED";
+  const isCompleted = activeShipment?.shipmentStatus === "DELIVERED";
   return (
     <div className="flex h-[calc(100vh-72px)] rounded-2xl md:rounded-2xl bg-gradient-to-br from-sky-50 via-cyan-100 to-indigo-50 md:p-5 overflow-hidden">
       <div

@@ -87,11 +87,11 @@ const Login = () => {
         <div className="w-full max-w-md border border-slate-200 rounded-2xl bg-white shadow-lg p-6">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-slate-900 mb-2">
-              Welcome Back
+              Sign in
             </h1>
 
             <p className="text-slate-500 text-sm">
-              Sign in to continue to SmartShip
+              Welcome to SmartShip
             </p>
           </div>
 
