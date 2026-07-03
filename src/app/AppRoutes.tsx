@@ -3,7 +3,6 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../staticComponents/DashboardLayout";
 import LoadingSpinner from "../shared/components/LoadingSpinner";
-import CustomerChat from "../features/customerShipment/pages/CustomerChat";
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const LandingPage = lazy(
@@ -82,6 +81,14 @@ const AgentChat = lazy(
   () => import("../features/agentShipment/pages/AgentChat"),
 );
 
+// import CustomerChat from "../features/customerShipment/pages/CustomerChat";
+const CustomerChat = lazy(
+  () => import("../features/customerShipment/pages/CustomerChat"),
+);
+
+// import NotFound from "@/staticComponents/NotFound";
+const NotFound = lazy(() => import("@/staticComponents/NotFound"));
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -158,6 +165,8 @@ const AppRoutes = () => {
             <Route path="/agentChat" element={<AgentChat />} />
             {/* <Route path="/payments/:shipmentId" element={<PaymentDetails />} /> */}
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

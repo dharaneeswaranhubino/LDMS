@@ -47,6 +47,9 @@ export default function DateRangePicker({
     setOpen(false);
   };
 
+  const isRangeInvalid =
+    !localFrom || !localTo || new Date(localTo) < new Date(localFrom);
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Trigger */}
@@ -70,10 +73,18 @@ export default function DateRangePicker({
                 From
               </label>
               <input
+                // type="date"
+                // value={localFrom}
+                // max={localTo}
+                // onChange={(e) => setLocalFrom(e.target.value)}
                 type="date"
                 value={localFrom}
-                max={localTo}
-                onChange={(e) => setLocalFrom(e.target.value)}
+                max={localTo || today}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (!val) return;
+                  setLocalFrom(val);
+                }}
                 className="box-border w-full rounded-lg border-0 bg-white/20 px-3 py-2 text-sm text-white outline-none [color-scheme:dark] placeholder:text-white/70"
               />
             </div>
@@ -84,11 +95,20 @@ export default function DateRangePicker({
                 To
               </label>
               <input
+                // type="date"
+                // value={localTo}
+                // min={localFrom}
+                // max={today}
+                // onChange={(e) => setLocalTo(e.target.value)}
                 type="date"
                 value={localTo}
                 min={localFrom}
                 max={today}
-                onChange={(e) => setLocalTo(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (!val) return; // ignore invalid/incomplete typing
+                  setLocalTo(val);
+                }}
                 className="box-border w-full rounded-lg border-0 bg-white/20 px-3 py-2 text-sm text-white outline-none [color-scheme:dark] placeholder:text-white/70"
               />
             </div>
@@ -96,10 +116,17 @@ export default function DateRangePicker({
             {/* Apply */}
             <button
               onClick={handleApply}
+              disabled={isRangeInvalid}
               className="mt-1 rounded-lg bg-white py-2 text-sm font-bold text-cyan-700 transition-opacity hover:opacity-85"
             >
               Apply
             </button>
+
+            {isRangeInvalid && (
+              <p className="text-xs text-red-100 -mt-1">
+                "To" date cannot be before "From" date
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -323,10 +323,13 @@ const Sidebar = () => {
                 </p>
                 <nav className="space-y-1">
                   {sectionItems.map((item) => {
+                    // const isActive =
+                    //   item.path === "/payments"
+                    //     ? location.pathname.startsWith("/payments")
+                    //     : location.pathname === item.path;
                     const isActive =
-                      item.path === "/payments"
-                        ? location.pathname.startsWith("/payments")
-                        : location.pathname === item.path;
+                      location.pathname === item.path ||
+                      location.pathname.startsWith(`${item.path}/`);
 
                     return (
                       <NavLink

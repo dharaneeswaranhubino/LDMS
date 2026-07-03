@@ -72,7 +72,7 @@ const CustomerNotifications = () => {
   return (
     <div className="rounded-2xl bg-gradient-to-br from-slate-50 via-sky-200 to-purple-50 p-4 sm:p-5">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div className="flex sm:flex-col justify-center items-center gap-3">
+        {/* <div className="flex sm:flex-col justify-center items-center gap-3">
           <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
             Notifications
           </h1>
@@ -87,6 +87,25 @@ const CustomerNotifications = () => {
               </span>
             )}
           </p>
+        </div> */}
+        <div className="flex sm:flex-col justify-center items-center gap-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
+            Notifications
+          </h1>
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 border border-slate-200 shadow-sm">
+            <i className="fa-solid fa-bell text-xs text-slate-400" />
+            <span className="text-sm text-slate-600 font-medium">
+              {total} total
+            </span>
+            {unreadCount > 0 && (
+              <span className="ml-1 inline-flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block animate-pulse" />
+                <span className="text-blue-600 font-semibold">
+                  {unreadCount} unread
+                </span>
+              </span>
+            )}
+          </div>
         </div>
 
         {unreadCount > 0 && (

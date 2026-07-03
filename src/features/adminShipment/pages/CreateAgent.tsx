@@ -108,7 +108,8 @@ const CreateAgent = () => {
           </p>
         </div>
 
-        <Link to={"/agentManagement"}
+        <Link
+          to={"/agentManagement"}
           className="flex h-[44px] w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 text-[13px] font-medium text-white shadow-md"
         >
           {/* <i className="fa-solid fa-plus text-[11px]"></i> */}
@@ -168,7 +169,7 @@ const CreateAgent = () => {
 
             <div className="flex flex-col gap-2">
               <label className="text-[13px] font-medium text-slate-700">
-                phone Number
+                Phone Number
                 <i className="fa-solid fa-asterisk ml-1 text-red-700 text-[10px]"></i>
               </label>
 
@@ -346,7 +347,7 @@ const CreateAgent = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              className="w-full h-11 bg-sky-400 hover:bg-sky-500 text-white rounded-lg text-[14px] font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full h-11 bg-sky-400 hover:bg-sky-500 text-white rounded-lg text-[14px] font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               <i className="fa-solid fa-arrow-right-to-bracket mr-2"></i>
               Submit
